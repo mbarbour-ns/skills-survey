@@ -1,0 +1,138 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="index.css" />
+		<script src="../../lib/tag.js"></script>
+	</head>
+
+	<body id='1'>
+		<script>
+			let dropDownSet = []
+			let divIds = []
+			let divCtr = 0
+
+			// LAYOUT
+			let tblId = tag('table','1','',{} )
+			let tr1Id = tag( 'tr', tblId, '', {style:'vertical-align: top;'} )
+			let td1Id = tag( 'td', tr1Id, '', {} )
+			let td2Id = tag( 'td', tr1Id, '', {} )
+			let td3Id = tag( 'td', tr1Id, '', {} )
+
+			let makeCheckBoxList = function( pCheckBoxListItems) {
+				divCtr++
+				divIds[ divCtr ] = tag('div', pCheckBoxListItems.parentId, '',{
+					id:"list"+divCtr, 
+					class:"dropdown-checkbox-list", 
+					tabindex:"100"
+				})
+				pCheckBoxListItems.id = divId = divIds[ divCtr ]
+				tag('span', divId, 'Select '+pCheckBoxListItems.type,{ class:"anchor"} )
+				let ulId = tag('ul', divId,'',{ class:'items' })
+				let li = []
+				let inputsId = []
+				for( let i in pCheckBoxListItems.list ){
+					li[ i ] = tag( 'li', ulId,'',{})
+					pCheckBoxListItems.checkboxIds[ i ] = tag( 'input', li[ i ], '', { 
+						type:"checkbox",
+						//THIS WORKS: onclick:'console.log("ping");'
+						// THIS WORKS: onclick:"dropDownSet[ 'fruit ' ].getValues();"
+						onclick:pCheckBoxListItems.name + ".getValues();"
+					})
+					tag('label',li[ i ],pCheckBoxListItems.list[ i ],{})
+				}
+			}
+
+			let mapBits = function( pThis ){
+				pThis.bitmap = 0;
+					for(let i in pThis.list){
+						if( document.getElementById( pThis.checkboxIds[ i ] ).checked ){
+							pThis.bitmap = pThis.bitmap + (1<<i)
+						}
+					}
+					console.log( pThis.type + ": "+ pThis.bitmap )
+			}
+
+			dropDownSet[ 'levelList' ] = {
+				id:'',
+				parentId:td1Id,
+				type:'levelList',
+				name:"dropDownSet[ 'levelList' ]",
+				//type:'levelList',//"+this.type+"
+				list:[
+					'unknown',
+					'know_what_its_for',
+					'used_and_understood',
+					'used_in_custom_project',
+					'used_frequently',
+					'used_frequently_and_in_depth',
+				],
+				checkboxIds:[],
+				bitmap:0,
+				getValues:function(){
+					this.bitmap = 0;
+					for(let i in this.list){
+						if( document.getElementById( this.checkboxIds[ i ] ).checked ){
+							this.bitmap = this.bitmap + (1<<i)
+						}
+					}
+					console.log( this.type + ": "+ this.bitmap )
+				}
+			}
+
+			dropDownSet[ 'methodList' ] = {
+				id:'',
+				parentId:td2Id,
+				name:"dropDownSet[ 'methodList' ]",
+				type:'methodList',
+				list:[
+					'unused',
+					'can_use_via_console',
+					'can_use_via_CLI',
+					'can_use_via_IaC',
+					'can_integrate_with_Tooling',
+					'can_configure_via_console',
+					'can_configure_via_CLI',
+					'can_configure_via_IaC',
+					'can_configure_in_multi_regions',	
+					'can_extend_with_custom_tools',
+				],
+				checkboxIds:[],
+				bitmap:0,
+				getValues:function(){
+					this.bitmap = 0;
+					for(let i in this.list){
+						if( document.getElementById( this.checkboxIds[ i ] ).checked ){
+							this.bitmap = this.bitmap + (1<<i)
+						}
+					}
+					console.log( this.type + ": "+ this.bitmap )
+				}
+			}
+
+			
+
+
+
+
+			makeCheckBoxList( dropDownSet[ 'levelList' ] )	
+			tag('br','1','',{})		
+			makeCheckBoxList( dropDownSet[ 'methodList' ] )			
+
+			var checkList1 = document.getElementById('list1');
+			checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) {
+				if (checkList1.classList.contains('visible'))
+					checkList1.classList.remove('visible');
+				else
+					checkList1.classList.add('visible');
+			}
+
+			var checkList2 = document.getElementById('list2');
+			checkList2.getElementsByClassName('anchor')[0].onclick = function(evt) {
+				if (checkList2.classList.contains('visible'))
+					checkList2.classList.remove('visible');
+				else
+					checkList2.classList.add('visible');
+			}
+
+		</script>
+	</body>
+</html>

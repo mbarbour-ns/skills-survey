@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Skills Survey</title>
+		<link rel="stylesheet" href="index.css" />
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<script src="../../lib/tag.js"></script>
+		<script src="databaseLists.js"></script>
+		<script src="makeAWSServicesTable.js"></script>
+		<script src="makeAWSCertificationsTable.js"></script>
+		<script src="makeDevLangTable.js"></script>
+		<script src="makeDevToolTable.js"></script>
+		<script src="makeDevOpsTable.js"></script>
+		<script src="makeDevSecOpsTable.js"></script>
+		<script src="makeDataOpsTable.js"></script>
+		<script src="makeMLOpsTable.js"></script>
+		<script src="makeConsultingTable.js"></script>
+		<script src="makeMissionsTable.js"></script>
+		<script src="makeDevOpsImplementationMatrix.js"></script>
+		<script src="makeDevOpsAutoIntegrationTable.js"></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+		<script>
+
+			var mainTableId = ''
+			var selId
+			var consultantId
+
+			let cl = console.log
+			let getElxId = function( pId ){ return document.getElementById( pId ) }
+
+
+			let loadConsultant = function(){ 
+				cl("Loading " + getElxId( selId ).value )
+				getElxId( consultantId ).innerHTML = getElxId( selId ).value + " Profile"
+
+			}
+
+
+
+			let bulidMainMenu = function( targetParentId ){
+				mainTableId = tag('table', targetParentId, '', {width:"75%;"} )
+				let tr1Id = tag('tr', mainTableId, '', {} )
+				tag('td', tr1Id, '', {} )
+				let menuAreaId = tag('td', tr1Id, '', {} )
+				tag('td', tr1Id, '', {} )
+
+				tag('H3',menuAreaId,"STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
+				tag('button', menuAreaId, 'Add Users',{style:" width: 33%;", class:"menuButton"} )
+				tag('button', menuAreaId, 'Update from Harvest',{style:" width: 33%;", class:"menuButton"} )
+				tag('button', menuAreaId, 'Reports',{style:" width: 33%;", class:"menuButton"} )
+
+				tag('br',menuAreaId,'',{} )
+				tag('label',menuAreaId,'Select User for Survey data loading:',{} )
+				selId = tag('select',menuAreaId,'',{class:"menuButton"})
+				// use ConsultantsList to populate drop down
+				for( let i in dbResults.ConsultantsList ){
+					tag('option', selId, dbResults.ConsultantsList[ i ],{ 
+						'value': dbResults.ConsultantsList[ i ]
+					})
+				}
+				tag('button', menuAreaId, 'Load Data for the selected Consultant',{
+					onclick: "loadConsultant();",
+					class:"menuButton"
+				})
+
+				let tr2Id = tag('tr', mainTableId, '', {} )
+				tag('td', tr2Id, '', {} )
+				let surveyAreaId = tag('td', tr2Id, '', { class:'ocean'} )
+				tag('td', tr2Id, '', {} )
+
+				return surveyAreaId
+			}
+
+			let buildSurveyLayout = function( targetParentId ){				
+				consultantId = tag('h4', targetParentId, '[Resource Name] Profile',
+					{'style':"color:white; text-align: center;"} )
+				tag('h5', targetParentId, 'created(date), last update(date) ',
+					{'style':"color:white;"} )
+				tag('button', targetParentId, '[Resource Name Details]',{'class':"collapsible"} )
+
+				let p1 = tag('div', targetParentId, '', {'class':"content"} )
+				tag('p',p1,'Current Engagement',{} )
+				tag('p',p1,'Engagement End Date',{} )
+
+				tag('p', targetParentId, '',{} )
+
+				makeAWSCertificationsTable( targetParentId, '3', 'AWS Certifications', dbResults.certList,"35%" )
+				makeConsultingTable( targetParentId, '8', 'Consulting Expertise', dbResults.consultingList,"35%" )
+
+				makeMissionsTable( targetParentId, '1', 'Roles', dbResults.missionList, "100%" )
+				makeDevLangTable( targetParentId, '2', 'Dev Tools Expertise (containerized IDE, basic repo, secrets management)', dbResults.devToolList,"30%" )
+				makeAWSServicesTable( targetParentId, '1', 'AWS Services', dbResults.serviceList, "100%" )
+				makeDevToolsTable( targetParentId, '4', 'Dev Language Expertise (language sets and Operating Systems)', dbResults.devLanguageList,"30%" )
+				makeDevOpsTable( targetParentId, '5', 'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)', dbResults.devOpsList,"60%" )
+				makeDevSecOpsTable( targetParentId, '6', 'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)', dbResults.devSecOpsList,"45%" )
+				makeDataOpsTable( targetParentId, '7', 'DataOps Expertise', dbResults.dataOpsList,"22%" )
+				makeMLOpsTable( targetParentId, '8', 'MLOps Expertise', dbResults.mlOpsList,"29%" )
+
+				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );
+				makeDevOpsAutoIntegrationTable( targetParentId,'9',"DevOps Automated Integration", dbResults.DevOpsAutoIntegrationList,"25%" );
+				setupCollapsibles()// apply collapsible to all of the newly created elements
+				showSummaryGraph( targetParentId, dbResults )
+				makeChart( targetParentId )
+			}
+
+			let setupCollapsibles = function(){
+				let coll = document.getElementsByClassName("collapsible");
+				for (let i = 0; i < coll.length; i++) {
+					coll[i].addEventListener("click", function() {
+						this.classList.toggle("active");
+						let content = this.nextElementSibling;
+						if (content.style.display === "block") {
+							content.style.display = "none";
+						} else {
+							content.style.display = "block";
+						}
+					});
+				}
+			}
+
+			let makeChart = function( pId )
+			{
+				const data = {
+					labels: [
+						'Eating',
+						'Drinking',
+						'Sleeping',
+						'Designing',
+						'Coding',
+						'Cycling',
+						'Running'
+					],
+					datasets: [{
+						label: 'My First Dataset',
+						data: [65, 59, 90, 81, 56, 55, 40],
+						fill: true,
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgb(255, 99, 132)',
+						pointBackgroundColor: 'rgb(255, 99, 132)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(255, 99, 132)'
+					}, {
+						label: 'My Second Dataset',
+						data: [28, 48, 40, 19, 96, 27, 100],
+						fill: true,
+						backgroundColor: 'rgba(54, 162, 235, 0.2)',
+						borderColor: 'rgb(54, 162, 235)',
+						pointBackgroundColor: 'rgb(54, 162, 235)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(54, 162, 235)'
+					}]
+				};
+
+				const config = {
+					type: 'radar',
+					data: data,
+					options: {
+						elements: {
+						line: {
+							borderWidth: 3
+						}
+						}
+					},
+				};
+
+				let chart1Id = tag('div', pId, '', {} )
+				tag( 'canvas', chart1Id, '', { id:"myChart1" })
+
+				var myChart = new Chart(
+					document.getElementById('myChart1'),
+					config
+				);
+			}
+
+
+			let renderGraph = function( pChartId, pTargetId, pConfig )
+			{
+				let chartId = tag('div', pTargetId, '', {} )
+				tag( 'canvas', chartId, '', { id: pChartId })
+
+				var myChart = new Chart(
+					document.getElementById( pChartId ),
+					pConfig
+				);
+			}
+
+
+			let showSummaryGraph = function( g_rulesAndResultsContainerId, resultsObject )
+			{// resultsObject is normally an XHR read from a database returning json
+				let labelNames = {}
+				for( let idx in resultsObject ){
+					labelNames[ resultsObject[ idx ] ] = {}
+					labelNames[ resultsObject[ idx ] ].name = idx
+					let cntr = 0;
+					for( let n in resultsObject[ idx ] ){
+						//console.log(idx + ' has ' + resultsObject[ idx ][ n ] + " " + cntr ) 
+						cntr++
+					}
+					labelNames[ resultsObject[ idx ] ].count = cntr
+				}
+
+				let rotatingFillColors = [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(205, 155, 0, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)',
+				];
+
+				let rotatingBorderColors = [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(205, 155, 0, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)',
+				];
+
+				let nameList = []
+				let countList = []
+				let rotatingIdx = 0
+				let rotatingMaxIdx = 5
+				let barColors = []
+				let barBackgrounds = []
+				for( let idx in labelNames ){
+					//console.log("idx: " + labelNames[ idx ].name + " " +  labelNames[ idx ].count )
+					if( labelNames[ idx ].name != undefined ){
+						nameList.push(labelNames[ idx ].name);  //+= "'"+labelNames[ idx ].name+"',"
+						countList.push(labelNames[ idx ].count) //+= "'"+labelNames[ idx ].count+"',"
+						barColors.push( rotatingFillColors[ rotatingIdx ] )
+						barBackgrounds.push( rotatingBorderColors[ rotatingIdx ] )
+						rotatingIdx++
+						if( rotatingIdx === rotatingMaxIdx) rotatingIdx = 0
+					}
+				}
+				console.log("NAME.LIST: " + nameList )
+
+				const chartData = {
+					labels: nameList,
+					datasets: [{
+						label: '% of Skills',
+						data: countList,
+						backgroundColor: barColors,
+						borderColor: barBackgrounds,
+						borderWidth: 1
+					}]
+				};
+
+				const chartConfig = {
+					type: 'bar',
+					data: chartData,
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero: true
+								}
+							}]
+						}
+					}
+				};
+				renderGraph( 'myChart7', g_rulesAndResultsContainerId, chartConfig )
+			}// end of makeStylesCountGraph
+
+		</script>
+	</head>
+
+<!-- ############################################################################################################ -->
+<!-- ############################################################################################################ -->
+<!-- ############################################################################################################ -->
+<!-- ############################################################################################################ -->
+<!-- ############################################################################################################ -->
+
+	<body id='1'>
+		<script>
+			let x = document.getElementsByTagName('body')
+			let bodyId = x[ 0 ].id
+			
+			let mainSurveyAreaId = bulidMainMenu( bodyId )
+			buildSurveyLayout( mainSurveyAreaId )
+		</script>
+	</body>
+</html>
