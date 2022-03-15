@@ -22,6 +22,10 @@
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 		<script>
+
+			let gotoDashboard = function(){
+				location.href = "dashboard.html";
+			}
 			var mainTableId = ''
 			var selId
 			var consultantId
@@ -45,7 +49,7 @@
 				tag('H3',menuAreaId,"STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
 				tag('button', menuAreaId, 'Add Users',{style:" width: 33%;", class:"menuButton"} )
 				tag('button', menuAreaId, 'Update from Harvest',{style:" width: 33%;", class:"menuButton"} )
-				tag('button', menuAreaId, 'Reports',{style:" width: 33%;", class:"menuButton"} )
+				tag('button', menuAreaId, 'Reports',{style:" width: 33%;", class:"menuButton", onclick:"gotoDashboard();"} )
 
 				tag('br',menuAreaId,'',{} )
 				tag('label',menuAreaId,'Select User for Survey data loading:',{} )
