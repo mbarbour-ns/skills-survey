@@ -1,3 +1,32 @@
+let XHRNESTEDJSONHandler = function( iocfg )
+{ console.log("@: XHRNESTEDJSONHandler()")
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open(iocfg.method, iocfg.url, iocfg.syncMode, iocfg.xhrKey, '');
+    xmlhttp.onreadystatechange = function()
+    {   console.log("<> XMLHTTPRequest: " + this.readyState + ":" + this.status)
+        if( this.readyState == 1){  console.log("XHR:1," + this.status) }
+        if( this.readyState == 2){  console.log("XHR:2," + this.status) }
+        if( this.readyState == 3){  console.log("XHR:3," + this.status) }
+        if (this.readyState == 4 ){ //alert("XHR:4," + this.status);
+            if( this.status == 200) {
+                console.log("Browser-side XHR: " + xmlhttp.responseText );
+                if( sessionStorage.getItem('webn8rSessionLabel') !== "NOT AUTHORIZED"){
+                    iocfg.resultsSetString = xmlhttp.responseText;
+                    let temp = iocfg.resultsSetString.replace("<resultsXML>","");
+                    iocfg.resultsSetString = temp;
+                    temp = iocfg.resultsSetString.replace("</resultsXML>","");
+                    iocfg.resultsSetString = temp;
+
+                    iocfg.callback( iocfg.resultsSetString )
+                }
+            }
+        }
+    };
+    xmlhttp.send( iocfg.dataPackage );
+}// end of XHRNESTEDJSONHandler()
+
+
+
 let readGraphTimeSeriesScoreData = function( pMatrixSize )
 {   console.log("\n@: readGraphTimeSeriesScoreData()")
     let cfg = {

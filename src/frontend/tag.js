@@ -1,15 +1,15 @@
 var idCnt = 1;// BODY ID SHOULD BE SET to = 1
 
-let tag = function( tag, parentId, textNode, attributes )
+let tag = function( pTag, pParentId, pTextNode, pAttributes )
 {
 	idCnt++;
-	let el = document.createElement( tag )
+	let el = document.createElement( pTag )
 	el.id = '"' + idCnt + '"';
-	let tn = document.createTextNode( textNode )
+	let tn = document.createpTextNode( pTextNode )
 	el.append( tn )
-	document.getElementById( parentId ).appendChild( el )
-	for( let a in attributes ){
-		el.setAttribute( a, attributes[a])
+	document.getElementById( pParentId ).appendChild( el )
+	for( let a in pAttributes ){
+		el.setAttribute( a, pAttributes[a])
 	}
 	return el.id
 }
