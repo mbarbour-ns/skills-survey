@@ -5,7 +5,7 @@ let tag = function( pTag, pParentId, pTextNode, pAttributes )
 	idCnt++;
 	let el = document.createElement( pTag )
 	el.id = '"' + idCnt + '"';
-	let tn = document.createpTextNode( pTextNode )
+	let tn = document.createTextNode( pTextNode )
 	el.append( tn )
 	document.getElementById( pParentId ).appendChild( el )
 	for( let a in pAttributes ){

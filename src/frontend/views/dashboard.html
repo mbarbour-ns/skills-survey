@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Dashboard</title>
+		<link rel="stylesheet" href="survey.css" />		
+		<script src="../tag.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+			let gotoSurvey = function(){
+				location.href = "survey.html"
+			}
+
+			let makeDashboard = function( pParentId ){
+				tag('button', pParentId, 'Go to Survey', {
+					width:"5%;",
+					class:"menuButton",
+					onclick:"gotoSurvey();"
+				} )
+				let tableId = tag('table', pParentId, '', { width:'100%;'} )
+				let row1Id = tag('tr', tableId, '', {} )
+				let col1Id = tag('td', row1Id, '', {} )
+				let col2Id = tag('td', row1Id, '', {} )
+				let col3Id = tag('td', row1Id, '', {} )
+
+				showSummaryGraph( col2Id, {} )
+				makeChart( col2Id )
+			}
+
+
+			let makeChart = function( pId )
+			{
+				const data = {
+					labels: [
+						'Eating',
+						'Drinking',
+						'Sleeping',
+						'Designing',
+						'Coding',
+						'Cycling',
+						'Running'
+					],
+					datasets: [{
+						label: 'My First Dataset',
+						data: [65, 59, 90, 81, 56, 55, 40],
+						fill: true,
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgb(255, 99, 132)',
+						pointBackgroundColor: 'rgb(255, 99, 132)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(255, 99, 132)'
+					}, {
+						label: 'My Second Dataset',
+						data: [28, 48, 40, 19, 96, 27, 100],
+						fill: true,
+						backgroundColor: 'rgba(54, 162, 235, 0.2)',
+						borderColor: 'rgb(54, 162, 235)',
+						pointBackgroundColor: 'rgb(54, 162, 235)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(54, 162, 235)'
+					}]
+				};
+
+				const config = {
+					type: 'radar',
+					data: data,
+					options: {
+						elements: {
+						line: {
+							borderWidth: 3
+						}
+						}
+					},
+				};
+
+				let chart1Id = tag('div', pId, '', {} )
+				tag( 'canvas', chart1Id, '', { id:"myChart1" })
+
+				var myChart = new Chart(
+					document.getElementById('myChart1'),
+					config
+				);
+			}
+
+
+			let renderGraph = function( pChartId, pTargetId, pConfig )
+			{
+				let chartId = tag('div', pTargetId, '', {} )
+				tag( 'canvas', chartId, '', { id: pChartId })
+
+				var myChart = new Chart(
+					document.getElementById( pChartId ),
+					pConfig
+				);
+			}
+
+			let showSummaryGraph = function( g_rulesAndResultsContainerId, resultsObject )
+			{// resultsObject is normally an XHR read from a database returning json
+				let labelNames = {}
+				for( let idx in resultsObject ){
+					labelNames[ resultsObject[ idx ] ] = {}
+					labelNames[ resultsObject[ idx ] ].name = idx
+					let cntr = 0;
+					for( let n in resultsObject[ idx ] ){
+						//console.log(idx + ' has ' + resultsObject[ idx ][ n ] + " " + cntr ) 
+						cntr++
+					}
+					labelNames[ resultsObject[ idx ] ].count = cntr
+				}
+
+				let rotatingFillColors = [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(205, 155, 0, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)',
+				];
+
+				let rotatingBorderColors = [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(205, 155, 0, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)',
+				];
+
+				let nameList = []
+				let countList = []
+				let rotatingIdx = 0
+				let rotatingMaxIdx = 5
+				let barColors = []
+				let barBackgrounds = []
+				for( let idx in labelNames ){
+					//console.log("idx: " + labelNames[ idx ].name + " " +  labelNames[ idx ].count )
+					if( labelNames[ idx ].name != undefined ){
+						nameList.push(labelNames[ idx ].name);  //+= "'"+labelNames[ idx ].name+"',"
+						countList.push(labelNames[ idx ].count) //+= "'"+labelNames[ idx ].count+"',"
+						barColors.push( rotatingFillColors[ rotatingIdx ] )
+						barBackgrounds.push( rotatingBorderColors[ rotatingIdx ] )
+						rotatingIdx++
+						if( rotatingIdx === rotatingMaxIdx) rotatingIdx = 0
+					}
+				}
+				console.log("NAME.LIST: " + nameList )
+
+				const chartData = {
+					labels: nameList,
+					datasets: [{
+						label: '% of Skills',
+						data: countList,
+						backgroundColor: barColors,
+						borderColor: barBackgrounds,
+						borderWidth: 1
+					}]
+				};
+
+				const chartConfig = {
+					type: 'bar',
+					data: chartData,
+					options: {
+						scales: {
+							yAxes: [{
+								ticks: {
+									beginAtZero: true
+								}
+							}]
+						}
+					}
+				};
+				renderGraph( 'myChart7', g_rulesAndResultsContainerId, chartConfig )
+			}// end of makeStylesCountGraph
+		</script>
+
+	</head>
+	<body id='1'>
+		<script>
+			makeDashboard( document.body.id )
+		</script>
+	</body>
+</html>

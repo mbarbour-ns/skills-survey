@@ -23,6 +23,9 @@
 
 		<script>
 
+			let gotoDashboard = function(){
+				location.href = "dashboard.html";
+			}
 			var mainTableId = ''
 			var selId
 			var consultantId
@@ -30,14 +33,11 @@
 			let cl = console.log
 			let getElxId = function( pId ){ return document.getElementById( pId ) }
 
-
 			let loadConsultant = function(){ 
 				cl("Loading " + getElxId( selId ).value )
 				getElxId( consultantId ).innerHTML = getElxId( selId ).value + " Profile"
 
 			}
-
-
 
 			let bulidMainMenu = function( targetParentId ){
 				mainTableId = tag('table', targetParentId, '', {width:"75%;"} )
@@ -49,7 +49,7 @@
 				tag('H3',menuAreaId,"STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
 				tag('button', menuAreaId, 'Add Users',{style:" width: 33%;", class:"menuButton"} )
 				tag('button', menuAreaId, 'Update from Harvest',{style:" width: 33%;", class:"menuButton"} )
-				tag('button', menuAreaId, 'Reports',{style:" width: 33%;", class:"menuButton"} )
+				tag('button', menuAreaId, 'Reports',{style:" width: 33%;", class:"menuButton", onclick:"gotoDashboard();"} )
 
 				tag('br',menuAreaId,'',{} )
 				tag('label',menuAreaId,'Select User for Survey data loading:',{} )
@@ -101,8 +101,8 @@
 				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );
 				makeDevOpsAutoIntegrationTable( targetParentId,'9',"DevOps Automated Integration", dbResults.DevOpsAutoIntegrationList,"25%" );
 				setupCollapsibles()// apply collapsible to all of the newly created elements
-				showSummaryGraph( targetParentId, dbResults )
-				makeChart( targetParentId )
+//				showSummaryGraph( targetParentId, dbResults )
+//				makeChart( targetParentId )
 			}
 
 			let setupCollapsibles = function(){
@@ -119,7 +119,7 @@
 					});
 				}
 			}
-
+/*
 			let makeChart = function( pId )
 			{
 				const data = {
@@ -187,7 +187,6 @@
 					pConfig
 				);
 			}
-
 
 			let showSummaryGraph = function( g_rulesAndResultsContainerId, resultsObject )
 			{// resultsObject is normally an XHR read from a database returning json
@@ -266,7 +265,7 @@
 				};
 				renderGraph( 'myChart7', g_rulesAndResultsContainerId, chartConfig )
 			}// end of makeStylesCountGraph
-
+*/
 		</script>
 	</head>
 
