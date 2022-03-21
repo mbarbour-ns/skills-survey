@@ -21,7 +21,8 @@
 
 
 
-			let makeCheckBoxList = function( pCheckBoxListItems) {
+			let makeCheckBoxList = function( pParentId, pCheckBoxListItems) {
+				pCheckBoxListItems.parentId = pParentId
 				divCtr++
 				divIds[ divCtr ] = tag('div', pCheckBoxListItems.parentId, '',{
 					id:"list"+divCtr, 
@@ -136,14 +137,40 @@
 						}
 					}
 					console.log( this.type + ": "+ this.bitmap )
+				},
+				showCheckBoxList:function(){
+					cl('showCheckBoxList: ' + this.id )
+					cl('show checkBoxListId: ' + this.checkBoxListSpanId )
+					cl('show checkBoxList ulId: ' +this.checkBoxListUlId )
+
+					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED BELOW
+					let tid = document.getElementById( this.checkBoxListUlId )
+					cl( 'show tid: ' + tid.id )
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( tid.id ).style.display === "block"){
+							document.getElementById( tid.id ).style.display = "none"
+						}else{
+							document.getElementById( tid.id ).style.display = "block"
+						}
+					}
+/* BREAKS!!!!!
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
+							document.getElementById( this.checkBoxListUlId ).style.display = "none"
+						}else{
+							document.getElementById( this.checkBoxListUlId ).style.display = "block"
+						}
+					}
+*/
 				}
 			}
 
 		
-			makeCheckBoxList( dropDownSet[ 'levelList' ] )	
+			makeCheckBoxList( td1Id, dropDownSet[ 'levelList' ] )	
 			dropDownSet[ 'levelList' ].showCheckBoxList();
 			tag('br','1','',{})		
-			//makeCheckBoxList( dropDownSet[ 'methodList' ] )			
+			makeCheckBoxList( td1Id, dropDownSet[ 'methodList' ] )			
+			dropDownSet[ 'methodList' ].showCheckBoxList();
 /*
 			var checkList1 = document.getElementById('list1');
 			checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) {
