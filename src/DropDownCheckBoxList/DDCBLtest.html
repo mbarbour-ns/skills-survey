@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <script src="dropDownCheckBoxList.js"></script>
+        <link rel="stylesheet" href="index.css" />
+        <script src="Tag.js"></script>
+    </head>
+    <body id = '1'>
+        <Script>
+            let fuckya = function(){
+                conosole.log('Fuck ya!');
+            }
+            let cl=console.log
+            let dropCheck = new dropDownCheckBoxList();
+            console.log(dropCheck);
+            console.log(dropCheck.td1Id)
+            console.log("Class Succesfuly Made");
+
+            let listType = 'level'
+            dropCheck.initializeListObject( listType );
+            dropCheck.makeCheckBoxList( listType )	
+
+            let checkList1 = document.getElementById( dropCheck.cblId );
+            cl( "cbl.id = " + checkList1.id );
+            checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) { 
+                if (checkList1.classList.contains('visible'))
+                    checkList1.classList.remove('visible');
+                else
+                    checkList1.classList.add('visible');
+            }
+
+        </Script>
+    </body>
+</html>

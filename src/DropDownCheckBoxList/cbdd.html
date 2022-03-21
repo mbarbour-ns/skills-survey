@@ -1,7 +1,7 @@
 <html>
 	<head>
-		<link rel="stylesheet" href="survey.css" />
-		<script src="../tag.js"></script>
+		<link rel="stylesheet" href="index.css" />
+		<script src="tag.js"></script>
 	</head>
 
 	<body id='1'>
@@ -51,12 +51,12 @@
 					console.log( pThis.type + ": "+ pThis.bitmap )
 			}
 
-			dropDownSet[ 'level' ] = {
+			dropDownSet[ 'levelList' ] = {
 				id:'',
 				parentId:td1Id,
-				type:'level',
-				name:"dropDownSet[ 'level' ]",
-				//type:'level',//"+this.type+"
+				type:'levelList',
+				name:"dropDownSet[ 'levelList' ]",
+				//type:'levelList',//"+this.type+"
 				list:[
 					'unknown',
 					'know_what_its_for',
@@ -78,11 +78,11 @@
 				}
 			}
 
-			dropDownSet[ 'method' ] = {
+			dropDownSet[ 'methodList' ] ={
 				id:'',
 				parentId:td2Id,
-				name:"dropDownSet[ 'method' ]",
-				type:'method',
+				name:"dropDownSet[ 'methodList' ]",
+				type:'methodList',
 				list:[
 					'unused',
 					'can_use_via_console',
@@ -109,10 +109,13 @@
 			}
 
 			
-			makeCheckBoxList( dropDownSet[ 'level' ] )	
-			tag('br','1','',{})		
-			makeCheckBoxList( dropDownSet[ 'method' ] )			
 
+
+
+
+			makeCheckBoxList( dropDownSet[ 'levelList' ] )	
+			tag('br','1','',{})		
+			makeCheckBoxList( dropDownSet[ 'methodList' ] )			
 
 			var checkList1 = document.getElementById('list1');
 			checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) {
