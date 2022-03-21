@@ -27,6 +27,7 @@
 				divIds[ divCtr ] = tag('div', pCheckBoxListItems.parentId, '',{
 					id:"list"+divCtr, 
 					class:"dropdown-checkbox-list", 
+					style:'vertical-align: top;',
 					tabindex:"100"
 				})
 				pCheckBoxListItems.id = divId = divIds[ divCtr ]
@@ -169,7 +170,7 @@
 			makeCheckBoxList( td1Id, dropDownSet[ 'levelList' ] )	
 			dropDownSet[ 'levelList' ].showCheckBoxList();
 			tag('br','1','',{})		
-			makeCheckBoxList( td1Id, dropDownSet[ 'methodList' ] )			
+			makeCheckBoxList( td2Id, dropDownSet[ 'methodList' ] )			
 			dropDownSet[ 'methodList' ].showCheckBoxList();
 /*
 			var checkList1 = document.getElementById('list1');
