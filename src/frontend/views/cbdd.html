@@ -1,7 +1,8 @@
 <html>
 	<head>
+		<title>Remote CBL</title>
 		<link rel="stylesheet" href="survey.css" />
-		<script src="../../lib/tag.js"></script>
+		<script src="../tag.js"></script>
 	</head>
 
 	<body id='1'>
@@ -9,6 +10,7 @@
 			let dropDownSet = []
 			let divIds = []
 			let divCtr = 0
+			let cl = console.log
 
 			// LAYOUT
 			let tblId = tag('table','1','',{} )
@@ -16,6 +18,8 @@
 			let td1Id = tag( 'td', tr1Id, '', {} )
 			let td2Id = tag( 'td', tr1Id, '', {} )
 			let td3Id = tag( 'td', tr1Id, '', {} )
+
+
 
 			let makeCheckBoxList = function( pCheckBoxListItems) {
 				divCtr++
@@ -25,8 +29,8 @@
 					tabindex:"100"
 				})
 				pCheckBoxListItems.id = divId = divIds[ divCtr ]
-				tag('span', divId, 'Select '+pCheckBoxListItems.type,{ class:"anchor"} )
-				let ulId = tag('ul', divId,'',{ class:'items' })
+				pCheckBoxListItems.checkBoxListSpanId = tag('span', divId, 'Select '+pCheckBoxListItems.type,{ class:"anchor"} )
+				let ulId = pCheckBoxListItems.checkBoxListUlId = tag('ul', divId,'',{ class:'items' })
 				let li = []
 				let inputsId = []
 				for( let i in pCheckBoxListItems.list ){
@@ -52,8 +56,10 @@
 			}
 
 			dropDownSet[ 'levelList' ] = {
-				id:'',
 				parentId:td1Id,
+				id:'',
+				checkBoxListSpanId:'',
+				checkBoxListUlId:'',
 				type:'levelList',
 				name:"dropDownSet[ 'levelList' ]",
 				//type:'levelList',//"+this.type+"
@@ -75,6 +81,31 @@
 						}
 					}
 					console.log( this.type + ": "+ this.bitmap )
+				},
+				showCheckBoxList:function(){
+					cl('showCheckBoxList: ' + this.id )
+					cl('show checkBoxListId: ' + this.checkBoxListSpanId )
+					cl('show checkBoxList ulId: ' +this.checkBoxListUlId )
+
+					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED BELOW
+					let tid = document.getElementById( this.checkBoxListUlId )
+					cl( 'show tid: ' + tid.id )
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( tid.id ).style.display === "block"){
+							document.getElementById( tid.id ).style.display = "none"
+						}else{
+							document.getElementById( tid.id ).style.display = "block"
+						}
+					}
+/* BREAKS!!!!!
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
+							document.getElementById( this.checkBoxListUlId ).style.display = "none"
+						}else{
+							document.getElementById( this.checkBoxListUlId ).style.display = "block"
+						}
+					}
+*/
 				}
 			}
 
@@ -108,15 +139,12 @@
 				}
 			}
 
-			
-
-
-
-
+		
 			makeCheckBoxList( dropDownSet[ 'levelList' ] )	
+			dropDownSet[ 'levelList' ].showCheckBoxList();
 			tag('br','1','',{})		
-			makeCheckBoxList( dropDownSet[ 'methodList' ] )			
-
+			//makeCheckBoxList( dropDownSet[ 'methodList' ] )			
+/*
 			var checkList1 = document.getElementById('list1');
 			checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) {
 				if (checkList1.classList.contains('visible'))
@@ -124,7 +152,8 @@
 				else
 					checkList1.classList.add('visible');
 			}
-
+*/
+/*
 			var checkList2 = document.getElementById('list2');
 			checkList2.getElementsByClassName('anchor')[0].onclick = function(evt) {
 				if (checkList2.classList.contains('visible'))
@@ -132,7 +161,7 @@
 				else
 					checkList2.classList.add('visible');
 			}
-
+*/
 		</script>
 	</body>
 </html>
