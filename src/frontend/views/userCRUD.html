@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Skills Survey: User CRUD</title>
+		<link rel="stylesheet" href="survey.css" />		
+		<script src="../tag.js"></script>
+		<script>
+			let gotoSurvey = function(){	location.href = "survey.html"	}
+
+			let makeUserForm = function( pParentId ){
+				tag('button', pParentId, 'User CRUD',{
+						style:" width: 33%;", 
+						class:"menuButton",
+						onclick:"gotoUserCRUD();",
+				})
+				tag('button', pParentId, 'Update Users from Harvest',{
+					style:" width: 33%;", 
+					class:"menuButton"
+				})
+				tag('button', pParentId, 'Go to Survey', {
+					style:" width: 33%;", 
+					class:"menuButton", 
+					onclick:"gotoSurvey();"
+				})
+				
+				getUsersFromDatabase()
+				
+			}
+
+			let getUsersFromDatabase = function(){
+
+			}
+
+		</script>
+	</head>
+
+	<body id='1'>
+		<script>
+			makeUserForm( document.body.id )
+		</script>
+	</body>
+</html>

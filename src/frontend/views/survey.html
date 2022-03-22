@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Skills Survey</title>
+		<title>Skills Survey: MAIN</title>
 		<link rel="stylesheet" href="survey.css" />
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 		<script src="../tag.js"></script>
@@ -26,6 +26,9 @@
 			let gotoDashboard = function(){
 				location.href = "dashboard.html";
 			}
+			let gotoUserCRUD = function(){
+				location.href = "userCRUD.html";
+			}
 			var mainTableId = ''
 			var selId
 			var consultantId
@@ -47,9 +50,16 @@
 				tag('td', tr1Id, '', {} )
 
 				tag('H3',menuAreaId,"STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
-				tag('button', menuAreaId, 'Add Users',{style:" width: 33%;", class:"menuButton"} )
-				tag('button', menuAreaId, 'Update from Harvest',{style:" width: 33%;", class:"menuButton"} )
-				tag('button', menuAreaId, 'Reports',{style:" width: 33%;", class:"menuButton", onclick:"gotoDashboard();"} )
+				tag('button', menuAreaId, 'User CRUD',{
+					style:" width: 33%;", 
+					class:"menuButton",
+					onclick:"gotoUserCRUD();",
+				})
+				tag('button', menuAreaId, 'Reports',{
+					style:" width: 33%;", 
+					class:"menuButton", 
+					onclick:"gotoDashboard();"
+				})
 
 				tag('br',menuAreaId,'',{} )
 				tag('label',menuAreaId,'Select User for Survey data loading:',{} )
