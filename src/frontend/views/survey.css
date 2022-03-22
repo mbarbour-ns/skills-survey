@@ -90,6 +90,7 @@ h1 {
 	display: inline-block;
 	padding: 5px 50px 5px 10px;
 	border: 1px solid #ccc;
+	background-color: #aaaaaa;
 }
 
 .dropdown-checkbox-list .anchor:after {
@@ -122,6 +123,7 @@ h1 {
 
 .dropdown-checkbox-list ul.items li {
 	list-style: none;
+	border: 1px solid #ccc;
 }
 
 .dropdown-checkbox-list.visible .anchor {

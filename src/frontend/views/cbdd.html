@@ -13,11 +13,11 @@
 			let cl = console.log
 
 			// LAYOUT
-			let tblId = tag('table','1','',{} )
+			let tblId = tag('table','1','',{width:'100%'} )
 			let tr1Id = tag( 'tr', tblId, '', {style:'vertical-align: top;'} )
-			let td1Id = tag( 'td', tr1Id, '', {} )
-			let td2Id = tag( 'td', tr1Id, '', {} )
-			let td3Id = tag( 'td', tr1Id, '', {} )
+			let td1Id = tag( 'td', tr1Id, '', {width:'40%'} )
+			let td2Id = tag( 'td', tr1Id, '', {width:'10%'} )
+			let td3Id = tag( 'td', tr1Id, '', {width:'40%'} )
 
 
 
@@ -89,7 +89,18 @@
 					cl('show checkBoxListId: ' + this.checkBoxListSpanId )
 					cl('show checkBoxList ulId: ' +this.checkBoxListUlId )
 
-					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED BELOW
+/* BREAKS!!!!!  There's not obvious reason why I needed to create a local variable tid.id that has been 
+assigned the same value as this.checkBoxListUlId and use THAT in this code block.  HOWEVER, at this time
+it is required to allow it to function.  Otherwise document.getElementById( this.checkBoxListUlId ) 
+returns null. ... ?WTF
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
+							document.getElementById( this.checkBoxListUlId ).style.display = "none"
+						}else{
+							document.getElementById( this.checkBoxListUlId ).style.display = "block"
+						}
+					}*/
+					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED ABOVE
 					let tid = document.getElementById( this.checkBoxListUlId )
 					cl( 'show tid: ' + tid.id )
 					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
@@ -99,15 +110,6 @@
 							document.getElementById( tid.id ).style.display = "block"
 						}
 					}
-/* BREAKS!!!!!
-					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
-						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
-							document.getElementById( this.checkBoxListUlId ).style.display = "none"
-						}else{
-							document.getElementById( this.checkBoxListUlId ).style.display = "block"
-						}
-					}
-*/
 				}
 			}
 
@@ -144,7 +146,18 @@
 					cl('show checkBoxListId: ' + this.checkBoxListSpanId )
 					cl('show checkBoxList ulId: ' +this.checkBoxListUlId )
 
-					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED BELOW
+/* BREAKS!!!!!  There's not obvious reason why I needed to create a local variable tid.id that has been 
+assigned the same value as this.checkBoxListUlId and use THAT in this code block.  HOWEVER, at this time
+it is required to allow it to function.  Otherwise document.getElementById( this.checkBoxListUlId ) 
+returns null. ... ?WTF
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
+							document.getElementById( this.checkBoxListUlId ).style.display = "none"
+						}else{
+							document.getElementById( this.checkBoxListUlId ).style.display = "block"
+						}
+					}*/
+					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED ABOVE
 					let tid = document.getElementById( this.checkBoxListUlId )
 					cl( 'show tid: ' + tid.id )
 					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
@@ -154,42 +167,14 @@
 							document.getElementById( tid.id ).style.display = "block"
 						}
 					}
-/* BREAKS!!!!!
-					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
-						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
-							document.getElementById( this.checkBoxListUlId ).style.display = "none"
-						}else{
-							document.getElementById( this.checkBoxListUlId ).style.display = "block"
-						}
-					}
-*/
 				}
 			}
-
 		
 			makeCheckBoxList( td1Id, dropDownSet[ 'levelList' ] )	
 			dropDownSet[ 'levelList' ].showCheckBoxList();
-			tag('br','1','',{})		
-			makeCheckBoxList( td2Id, dropDownSet[ 'methodList' ] )			
+			makeCheckBoxList( td3Id, dropDownSet[ 'methodList' ] )			
 			dropDownSet[ 'methodList' ].showCheckBoxList();
-/*
-			var checkList1 = document.getElementById('list1');
-			checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) {
-				if (checkList1.classList.contains('visible'))
-					checkList1.classList.remove('visible');
-				else
-					checkList1.classList.add('visible');
-			}
-*/
-/*
-			var checkList2 = document.getElementById('list2');
-			checkList2.getElementsByClassName('anchor')[0].onclick = function(evt) {
-				if (checkList2.classList.contains('visible'))
-					checkList2.classList.remove('visible');
-				else
-					checkList2.classList.add('visible');
-			}
-*/
+
 		</script>
 	</body>
 </html>
