@@ -40,6 +40,13 @@
                         'can_configure_in_multi_regions',	
                         'can_extend_with_custom_tools',]
             });	
+
+            tag('button',td2Id,'get bitmaps',{
+                onclick:"func();"
+            })
+            let func = function(){
+                console.log("bmap = " +  dropCheck1.getBitmap() + " , " + dropCheck2.getBitmap() )
+            }
         </script>
     </body>
 </html>

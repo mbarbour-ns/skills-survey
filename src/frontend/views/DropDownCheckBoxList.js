@@ -2,7 +2,6 @@ class DropDownCheckBoxList
 {
     constructor(pOBJ) 
     {
-        //create and define objects
         this.dropDownSet
         this.domName = pOBJ.domName
         this.listHeader = pOBJ.listHeader
@@ -15,7 +14,6 @@ class DropDownCheckBoxList
 
         this.makeCheckBoxList(pOBJ.pParentId)
         this.dropDownSet.showCheckBoxList()
-
     }
 
     makeCheckBoxList(pParentId) 
@@ -46,18 +44,8 @@ class DropDownCheckBoxList
         }
     }
 
-    mapBits( pThis )
-    {
-        console.log( "mapBits: ")
-        pThis.bitmap = 0;
-            for(let i in pThis.list)
-            {
-                if( document.getElementById( pThis.checkboxIds[ i ] ).checked )
-                {
-                    pThis.bitmap = pThis.bitmap + (1<<i)
-                }
-            }
-            console.log( pThis.type + ": "+ pThis.bitmap )
+    getBitmap() {
+        return this.dropDownSet.bitmap;
     }
 
     setDropDown(pList)
