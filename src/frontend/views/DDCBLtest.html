@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <script src="DropDownCheckBoxList.js"></script>    
+        <link rel="stylesheet" href="survey.css" />
+        <script src="../tag.js"></script>
+    </head>
+    <body id = '1'>
+        <script>
+            let tblId = tag('table','1','',{width:"100%;"} );
+            let tr1Id = tag( 'tr', tblId, '', {style:'vertical-align: top;'} );
+            let td1Id = tag( 'td', tr1Id, '', {width:"40%;"} );
+            let td2Id = tag( 'td', tr1Id, '', {width:"20%;"} );
+            let td3Id = tag( 'td', tr1Id, '', {width:"40%;"} );
+
+            let dropCheck1 = new DropDownCheckBoxList({
+                'pParentId': td1Id,
+                'domName': 'dropCheck1',
+                'listHeader':'level', 
+                'list':['unknown',
+                    'know_what_its_for',
+                    'used_and_understood',
+                    'used_in_custom_project',
+                    'used_frequently',
+                    'used_frequently_and_in_depth']
+            });
+	
+
+            let dropCheck2 = new DropDownCheckBoxList({
+                'pParentId': td3Id,
+                'domName': 'dropCheck2',
+                'listHeader':'method', 
+                'list':['unused',
+                        'can_use_via_console',
+                        'can_use_via_CLI',
+                        'can_use_via_IaC',
+                        'can_integrate_with_Tooling',
+                        'can_configure_via_console',
+                        'can_configure_via_CLI',
+                        'can_configure_via_IaC',
+                        'can_configure_in_multi_regions',	
+                        'can_extend_with_custom_tools',]
+            });	
+
+            tag('button',td2Id,'get bitmaps',{
+                onclick:"func();"
+            })
+            let func = function(){
+                console.log("bmap = " +  dropCheck1.getBitmap() + " , " + dropCheck2.getBitmap() )
+            }
+        </script>
+    </body>
+</html>
