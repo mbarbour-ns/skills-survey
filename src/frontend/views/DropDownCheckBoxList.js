@@ -28,7 +28,11 @@ class DropDownCheckBoxList
             class:"dropdown-checkbox-list", 
             tabindex:"100"
         })
-        this.dropDownSet.checkBoxListSpanId = tag('span', this.divIds, 'Select '+this.dropDownSet.type,{ class:"anchor"} )
+        this.dropDownSet.checkBoxListSpanId = tag('span', this.divIds, 'Select '+this.dropDownSet.type,{ 
+            width:"90%;",
+            class:"anchor",
+            style:"background-color: #aaaaaa;"
+        } )
         let ulId = this.dropDownSet.checkBoxListUlId = tag('ul', this.divIds,'',{ class:'items' })
         let li = []
         for( let i in this.dropDownSet.list )

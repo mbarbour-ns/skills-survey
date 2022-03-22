@@ -6,11 +6,11 @@
     </head>
     <body id = '1'>
         <script>
-            let tblId = tag('table','1','',{} );
+            let tblId = tag('table','1','',{width:"100%;"} );
             let tr1Id = tag( 'tr', tblId, '', {style:'vertical-align: top;'} );
-            let td1Id = tag( 'td', tr1Id, '', {} );
-            let td2Id = tag( 'td', tr1Id, '', {} );
-            let td3Id = tag( 'td', tr1Id, '', {} );
+            let td1Id = tag( 'td', tr1Id, '', {width:"40%;"} );
+            let td2Id = tag( 'td', tr1Id, '', {width:"20%;"} );
+            let td3Id = tag( 'td', tr1Id, '', {width:"40%;"} );
 
             let dropCheck1 = new DropDownCheckBoxList({
                 'pParentId': td1Id,
