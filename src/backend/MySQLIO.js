@@ -21,7 +21,7 @@ const dbConnectionDetails = require('./dbConnectionDetails.js').dbConnectionDeta
 
 //---------------------------------------------------------
 // THIS IS APP/PROJECT SPECIFIC
-const queryList = require('./linkerQueryList.js').QueryList;
+const queryList = require('./SkillsSurveyQueryList.js').QueryList;
 // THIS IS APP/PROJECT SPECIFIC
 //---------------------------------------------------------
 
