@@ -15,7 +15,7 @@ sessionStorage data to it.
 //---------------------------------------------------------
 // THIS IS COMPUTER SPECIFIC
 //const dbInstanceConnectionDetails = require('./linkTo_DBInstanceConnectionDetails.js').DBInstanceConnectionDetails;
-const dbConnectionDetails = require('./dbConnectionDetails.js').dbConnectionDetails;
+const dbConnectionDetails = require('./dbConnectionDetails.js.js').dbConnectionDetails;
 // THIS IS APP/PROJECT SPECIFIC
 //---------------------------------------------------------
 
@@ -26,9 +26,10 @@ const queryList = require('./SkillsSurveyQueryList.js').QueryList;
 //---------------------------------------------------------
 
 let sandboxRequestFile = "MySQLIO.js:"
-let cl=console.log;
+let cl = console.log;
 cl("\nLoading "+sandboxRequestFile+" ... ");
 let HTTP_good_status = 200;
+
 const mysql = require('mysql');
 const async = require('async');
 
