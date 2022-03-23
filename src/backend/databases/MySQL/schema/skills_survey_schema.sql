@@ -11,7 +11,7 @@ CREATE TABLE `level_list` (
 );
 
 DROP TABLE IF EXISTS `method_list`;
-CREATE TABLE `level_list` (
+CREATE TABLE `method_list` (
 	rid			integer unsigned AUTO_INCREMENT,
 	method_text	varchar(2048),
 	method_date	DATETIME,
@@ -33,7 +33,7 @@ CREATE TABLE `user` (
 );
 
 DROP TABLE IF EXISTS `role`;
-CREATE TABLE `user` (
+CREATE TABLE `role` (
 	rid			integer unsigned AUTO_INCREMENT,
 	label		CHAR(255),
 	admin		boolean,
@@ -43,13 +43,5 @@ CREATE TABLE `user` (
 	currentcy	DATETIME,
 	active		boolean,
 	deleted		boolean,
-	PRIMARY KEY(`rid`)
-);
-
-
-
-DROP TABLE IF EXISTS ``;
-CREATE TABLE `` (
-	rid		integer unsigned AUTO_INCREMENT,
 	PRIMARY KEY(`rid`)
 );
