@@ -55,6 +55,7 @@ class DropDownCheckBoxList
 
     setDropDown(pList)
     {
+        let tag = this.domName
         this.dropDownSet = {
             parentId:'',
             id:'',
@@ -74,7 +75,7 @@ class DropDownCheckBoxList
                         this.bitmap = this.bitmap + (1<<i)
                     }
                 }
-                console.log( this.type + ": "+ this.bitmap )
+                console.log( tag + "." + this.type + ": "+ this.bitmap )
             },
             showCheckBoxList:function()
             {
