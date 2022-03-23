@@ -160,7 +160,7 @@ let dbResults = {
 		'Security Assessment',
 	],
 
-	missionList : [
+	rolesList : [
 		'AppDev - Desktop',
 		'FirmwareDev',
 		'IoT Dev',

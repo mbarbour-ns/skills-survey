@@ -56,13 +56,18 @@ let addDevSecOpsScore = function( pId, score ){
 
 let devSecOpsCells = []
 devSecOpsCells.row = []
-let makeDevSecOpsTable = function(pId, idx, title, itemList, pct ){
+let makeDevSecOpsTable = function( pOBJ ){
+    let idx = pOBJ.index
+    let itemList = pOBJ.dbList
+    levels[ pOBJ.title ] = []
+    methods[ pOBJ.title ] = []
+
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table', pOBJ.pParentId, '', {'width':"100%"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
-	let btn = tag('button', tbl[idx].Tr1Td1, title,
+	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[idx].Tr1Td1, '', {'class':"content"})
 
@@ -78,14 +83,29 @@ let makeDevSecOpsTable = function(pId, idx, title, itemList, pct ){
 		devSecOpsCells.row[ idx ] = {}
 		devSecOpsCells.row[ idx ].Id = tag('tr', devSecOpsCells.Id, '', {'width':"100%"})
 		devSecOpsCells.row[ idx ].Td1 = tag('td', devSecOpsCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
+
 		devSecOpsCells.row[ idx ].Td2 = tag('td', devSecOpsCells.row[ idx ].Id,'', {'width':"25%"} )
-		devSecOpsCells.row[ idx ].Td2dataId = addDevSecOpLevelSelector( devSecOpsCells.row[ idx ].Td2, idx ) 
+		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': devSecOpsCells.row[ idx ].Td2,
+            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'level', 
+            'list': dbResults.levelList
+        })
+//		devSecOpsCells.row[ idx ].Td2dataId = addDevSecOpLevelSelector( devSecOpsCells.row[ idx ].Td2, idx ) 
+
 		devSecOpsCells.row[ idx ].Td3 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"25%"} )
-		devSecOpsCells.row[ idx ].Td3dataId = addDevSecOpMethodSelector( devSecOpsCells.row[ idx ].Td3, idx ) 
+		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': devSecOpsCells.row[ idx ].Td3,
+            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'method', 
+            'list': dbResults.methodList
+        })
+//		devSecOpsCells.row[ idx ].Td3dataId = addDevSecOpMethodSelector( devSecOpsCells.row[ idx ].Td3, idx ) 
+
 		devSecOpsCells.row[ idx ].Td4 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"15%"} )
 		devSecOpsCells.row[ idx ].Td4dataId = addDevSecOpCurrencySelector( devSecOpsCells.row[ idx ].Td4, idx ) 
 		devSecOpsCells.row[ idx ].Td5 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		devSecOpsCells.row[ idx ].Td5dataId = addDevSecOpsScore( devSecOpsCells.row[ idx ].Td5, pct )
+		devSecOpsCells.row[ idx ].Td5dataId = addDevSecOpsScore( devSecOpsCells.row[ idx ].Td5, pOBJ.percentage )
 	}
 }
 

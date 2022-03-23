@@ -16,7 +16,7 @@
 		<script src="makeDataOpsTable.js"></script>
 		<script src="makeMLOpsTable.js"></script>
 		<script src="makeConsultingTable.js"></script>
-		<script src="makeMissionsTable.js"></script>
+		<script src="makeRolesTable.js"></script>
 		<script src="makeDevOpsImplementationMatrix.js"></script>
 		<script src="makeDevOpsAutoIntegrationTable.js"></script>
 
@@ -112,20 +112,54 @@
                  } )
 				makeConsultingTable( targetParentId, '8', 'Consulting Expertise', dbResults.consultingList,"35%" )
 
-				makeMissionsTable( targetParentId, '1', 'Roles', dbResults.missionList, "100%" )
-				makeDevToolsTable( targetParentId, '2', 'Dev Tools Expertise (containerized IDE, basic repo, secrets management)', dbResults.devToolList,"30%",{
+				makeRolesTable({
+                    'title':'RolesTable',
+                    'label':'Roles',
+                    'pParentId':targetParentId,
+                    'index':'1',
+                    'dbList':dbResults.rolesList,
+                    'percentage':"100%"
+                } )
+				makeDevToolsTable({
                     'title':'DevToolsTable',
                     'label':'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
                     'pParentId':targetParentId,
                     'index':'2',
-                    'dbList':dbResults.devLanguageList,
+                    'dbList':dbResults.devToolList,
                     'percentage':"30%"
                 })
-				makeAWSServicesTable( targetParentId, '1', 'AWS Services', dbResults.serviceList, "100%" )
-				makeDevLangTable( targetParentId, '4', 'Dev Language Expertise (language sets and Operating Systems)', dbResults.devLanguageList,"30%" )
-
-				makeDevOpsTable( targetParentId, '5', 'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)', dbResults.devOpsList,"60%" )
-				makeDevSecOpsTable( targetParentId, '6', 'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)', dbResults.devSecOpsList,"45%" )
+				makeAWSServicesTable({
+                    'title':'AWSServicesTable',
+                    'label':'AWS Services',
+                    'pParentId':targetParentId,
+                    'index':'1',
+                    'dbList':dbResults.serviceList,
+                    'percentage':"100%"
+                })
+				makeDevLangTable({
+                    'title':'DevLangTable',
+                    'label':'Dev Language Expertise (language sets and Operating Systems)',
+                    'pParentId':targetParentId,
+                    'index':'4',
+                    'dbList':dbResults.devLanguageList,
+                    'percentage':"30%"
+                } )
+				makeDevOpsTable({
+                    'title':'DevOpsTable',
+                    'label':'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)',
+                    'pParentId':targetParentId,
+                    'index':'5',
+                    'dbList':dbResults.devOpsList,
+                    'percentage':"60%"
+                 } )
+				makeDevSecOpsTable({
+                    'title':'DevSecOpsTable',
+                    'label':'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)',
+                    'pParentId':targetParentId,
+                    'index':'6',
+                    'dbList':dbResults.devSecOpsList,
+                    'percentage':"45%"
+                })
 				makeDataOpsTable({
                     'title':'DataOpsTable',
                     'label':'DataOps Expertise',
@@ -134,7 +168,14 @@
                     'dbList':dbResults.dataOpsList,
                     'percentage':"22%"
                  } )
-				makeMLOpsTable( targetParentId, '8', 'MLOps Expertise', dbResults.mlOpsList,"29%" )
+				makeMLOpsTable({
+                    'title':'MLOpsTable',
+                    'label':'MLOps Expertise',
+                    'pParentId':targetParentId,
+                    'index':'8',
+                    'dbList':dbResults.mlOpsList,
+                    'percentage':"29%"
+                })
 
 				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );
 				makeDevOpsAutoIntegrationTable( targetParentId,'9',"DevOps Automated Integration", dbResults.DevOpsAutoIntegrationList,"25%" );

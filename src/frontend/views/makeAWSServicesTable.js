@@ -56,13 +56,18 @@ let addServicesScore = function( pId, score ){
 
 let serviceCells = []
 serviceCells.row = []
-let makeAWSServicesTable = function(pId, idx, title, itemList, pct ){
+let makeAWSServicesTable = function( pOBJ ){
+    let idx = pOBJ.index
+    let itemList = pOBJ.dbList
+    levels[ pOBJ.title ] = []
+    methods[ pOBJ.title ] = []
+
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table',  pOBJ.pParentId, '', {'width':"100%"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
-	let btn = tag('button', tbl[idx].Tr1Td1, title,
+	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[idx].Tr1Td1, '', {'class':"content"})
 
@@ -78,14 +83,29 @@ let makeAWSServicesTable = function(pId, idx, title, itemList, pct ){
 		serviceCells.row[ idx ] = {}
 		serviceCells.row[ idx ].Id = tag('tr', serviceCells.Id, '', {'width':"100%"})
 		serviceCells.row[ idx ].Td1 = tag('td', serviceCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
+
 		serviceCells.row[ idx ].Td2 = tag('td', serviceCells.row[ idx ].Id,'', {'width':"25%"} )
-		serviceCells.row[ idx ].Td2dataId = addServiceLevelSelector( serviceCells.row[ idx ].Td2, idx ) 
+		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': serviceCells.row[ idx ].Td2,
+            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'level', 
+            'list': dbResults.levelList
+        })
+//		serviceCells.row[ idx ].Td2dataId = addServiceLevelSelector( serviceCells.row[ idx ].Td2, idx ) 
+
 		serviceCells.row[ idx ].Td3 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"25%"} )
-		serviceCells.row[ idx ].Td3dataId = addServiceMethodSelector( serviceCells.row[ idx ].Td3, idx ) 
+		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': serviceCells.row[ idx ].Td3,
+            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'method', 
+            'list': dbResults.methodList
+        })
+//		serviceCells.row[ idx ].Td3dataId = addServiceMethodSelector( serviceCells.row[ idx ].Td3, idx ) 
+
 		serviceCells.row[ idx ].Td4 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"15%"} )
 		serviceCells.row[ idx ].Td4dataId = addServiceCurrencySelector( serviceCells.row[ idx ].Td4, idx ) 
 		serviceCells.row[ idx ].Td5 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"15%"} )
-		serviceCells.row[ idx ].Td5dataId = addServicesScore( serviceCells.row[ idx ].Td5, pct )
+		serviceCells.row[ idx ].Td5dataId = addServicesScore( serviceCells.row[ idx ].Td5, pOBJ.percentage )
 	}
 }
 

@@ -56,13 +56,18 @@ let addDevLangScore = function( pId, score ){
 
 let devLangCells = []
 devLangCells.row = []
-let makeDevLangTable = function(pId, idx, title, itemList, pct ){
+let makeDevLangTable = function( pOBJ ){
+    let idx = pOBJ.index
+    let itemList = pOBJ.dbList
+    levels[ pOBJ.title ] = []
+    methods[ pOBJ.title ] = []
+
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table', pOBJ.pParentId, '', {'width':"100%"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
-	let btn = tag('button', tbl[idx].Tr1Td1, title,
+	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[idx].Tr1Td1, '', {'class':"content"})
 
@@ -78,14 +83,31 @@ let makeDevLangTable = function(pId, idx, title, itemList, pct ){
 		devLangCells.row[ idx ] = {}
 		devLangCells.row[ idx ].Id = tag('tr', devLangCells.Id, '', {'width':"100%"})
 		devLangCells.row[ idx ].Td1 = tag('td', devLangCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
+
+
 		devLangCells.row[ idx ].Td2 = tag('td', devLangCells.row[ idx ].Id,'', {'width':"25%"} )
-		devLangCells.row[ idx ].Td2dataId = addDevLangLevelSelector( devLangCells.row[ idx ].Td2, idx ) 
+		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': devLangCells.row[ idx ].Td2,
+            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'level', 
+            'list': dbResults.levelList
+        })
+//		devLangCells.row[ idx ].Td2dataId = addDevLangLevelSelector( devLangCells.row[ idx ].Td2, idx ) 
+
 		devLangCells.row[ idx ].Td3 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"25%"} )
-		devLangCells.row[ idx ].Td3dataId = addDevLangMethodSelector( devLangCells.row[ idx ].Td3, idx ) 
+		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': devLangCells.row[ idx ].Td3,
+            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'method', 
+            'list': dbResults.methodList
+        })
+//		devLangCells.row[ idx ].Td3dataId = addDevLangMethodSelector( devLangCells.row[ idx ].Td3, idx ) 
+
+
 		devLangCells.row[ idx ].Td4 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"15%"} )
 		devLangCells.row[ idx ].Td4dataId = addDevLangCurrencySelector( devLangCells.row[ idx ].Td4, idx ) 
 		devLangCells.row[ idx ].Td5 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"15%"} )
-		devLangCells.row[ idx ].Td5dataId = addDevLangScore( devLangCells.row[ idx ].Td5, pct )
+		devLangCells.row[ idx ].Td5dataId = addDevLangScore( devLangCells.row[ idx ].Td5, pOBJ.percentage )
 	}
 }
 

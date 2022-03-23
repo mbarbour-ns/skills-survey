@@ -56,13 +56,18 @@ let addMLOpsScore = function( pId, score ){
 
 let MLOpsCells = []
 MLOpsCells.row = []
-let makeMLOpsTable = function(pId, idx, title, itemList, pct ){
+let makeMLOpsTable = function( pOBJ ){
+    let idx = pOBJ.index
+    let itemList = pOBJ.dbList
+    levels[ pOBJ.title ] = []
+    methods[ pOBJ.title ] = []
+
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table', pOBJ.pParentId, '', {'width':"100%"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
-	let btn = tag('button', tbl[idx].Tr1Td1, title,
+	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[idx].Tr1Td1, '', {'class':"content"})
 
@@ -78,14 +83,30 @@ let makeMLOpsTable = function(pId, idx, title, itemList, pct ){
 		MLOpsCells.row[ idx ] = {}
 		MLOpsCells.row[ idx ].Id = tag('tr', MLOpsCells.Id, '', {'width':"100%"})
 		MLOpsCells.row[ idx ].Td1 = tag('td', MLOpsCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
+
 		MLOpsCells.row[ idx ].Td2 = tag('td', MLOpsCells.row[ idx ].Id,'', {'width':"25%"} )
-		MLOpsCells.row[ idx ].Td2dataId = addMLOpLevelSelector( MLOpsCells.row[ idx ].Td2, idx ) 
+		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': MLOpsCells.row[ idx ].Td2,
+            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'level', 
+            'list': dbResults.levelList
+        })
+//		MLOpsCells.row[ idx ].Td2dataId = addMLOpLevelSelector( MLOpsCells.row[ idx ].Td2, idx ) 
+
 		MLOpsCells.row[ idx ].Td3 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"25%"} )
-		MLOpsCells.row[ idx ].Td3dataId = addMLOpMethodSelector( MLOpsCells.row[ idx ].Td3, idx ) 
+		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': MLOpsCells.row[ idx ].Td3,
+            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'method', 
+            'list': dbResults.methodList
+        })
+//		MLOpsCells.row[ idx ].Td3dataId = addMLOpMethodSelector( MLOpsCells.row[ idx ].Td3, idx ) 
+
+
 		MLOpsCells.row[ idx ].Td4 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"15%"} )
 		MLOpsCells.row[ idx ].Td4dataId = addMLOpCurrencySelector( MLOpsCells.row[ idx ].Td4, idx ) 
 		MLOpsCells.row[ idx ].Td5 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		MLOpsCells.row[ idx ].Td5dataId = addMLOpsScore( MLOpsCells.row[ idx ].Td5, pct )
+		MLOpsCells.row[ idx ].Td5dataId = addMLOpsScore( MLOpsCells.row[ idx ].Td5, pOBJ.percentage )
 	}
 }
 

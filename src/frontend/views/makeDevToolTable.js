@@ -57,7 +57,7 @@ let addDevToolsScore = function( pId, score ){
 
 let devToolCells = []
 devToolCells.row = []
-let makeDevToolsTable = function(pId, idx2, title2, itemList2, pct2, pOBJ ){
+let makeDevToolsTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
     levels[ pOBJ.title ] = []
