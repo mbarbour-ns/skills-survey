@@ -22,7 +22,9 @@
 
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-		<script>
+		<script>            
+            let levels = {}
+            let methods = {}
 
 			let gotoDashboard = function(){
 				location.href = "dashboard.html";
@@ -97,16 +99,41 @@
 
 				tag('p', targetParentId, '',{} )
 
-				makeAWSCertificationsTable( targetParentId, '3', 'AWS Certifications', dbResults.certList,"35%" )
+                let level = []
+                let method = []
+
+				makeAWSCertificationsTable( targetParentId, '3', 'AWS Certifications', dbResults.certList,"35%",{
+                    'title':'AWSCertificationsTable',
+                    'label':'AWS Certifications',
+                    'pParentId':targetParentId,
+                    'index':'3',
+                    'dbList':dbResults.certList,
+                    'percentage':"35%"
+                 } )
 				makeConsultingTable( targetParentId, '8', 'Consulting Expertise', dbResults.consultingList,"35%" )
 
 				makeMissionsTable( targetParentId, '1', 'Roles', dbResults.missionList, "100%" )
-				makeDevLangTable( targetParentId, '2', 'Dev Tools Expertise (containerized IDE, basic repo, secrets management)', dbResults.devToolList,"30%" )
+				makeDevToolsTable( targetParentId, '2', 'Dev Tools Expertise (containerized IDE, basic repo, secrets management)', dbResults.devToolList,"30%",{
+                    'title':'DevToolsTable',
+                    'label':'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
+                    'pParentId':targetParentId,
+                    'index':'2',
+                    'dbList':dbResults.devLanguageList,
+                    'percentage':"30%"
+                })
 				makeAWSServicesTable( targetParentId, '1', 'AWS Services', dbResults.serviceList, "100%" )
-				makeDevToolsTable( targetParentId, '4', 'Dev Language Expertise (language sets and Operating Systems)', dbResults.devLanguageList,"30%" )
+				makeDevLangTable( targetParentId, '4', 'Dev Language Expertise (language sets and Operating Systems)', dbResults.devLanguageList,"30%" )
+
 				makeDevOpsTable( targetParentId, '5', 'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)', dbResults.devOpsList,"60%" )
 				makeDevSecOpsTable( targetParentId, '6', 'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)', dbResults.devSecOpsList,"45%" )
-				makeDataOpsTable( targetParentId, '7', 'DataOps Expertise', dbResults.dataOpsList,"22%" )
+				makeDataOpsTable({
+                    'title':'DataOpsTable',
+                    'label':'DataOps Expertise',
+                    'pParentId':targetParentId,
+                    'index':'7',
+                    'dbList':dbResults.dataOpsList,
+                    'percentage':"22%"
+                 } )
 				makeMLOpsTable( targetParentId, '8', 'MLOps Expertise', dbResults.mlOpsList,"29%" )
 
 				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );

@@ -2,6 +2,7 @@ class DropDownCheckBoxList
 {
     constructor(pOBJ) 
     {
+        console.log('pOBJ.domName: ' + pOBJ.domName)
         this.dropDownSet
         this.domName = pOBJ.domName
         this.listHeader = pOBJ.listHeader

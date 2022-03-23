@@ -56,13 +56,18 @@ let addDataOpsScore = function( pId, score ){
 
 let dataOpsCells = []
 dataOpsCells.row = []
-let makeDataOpsTable = function(pId, idx, title, itemList, pct ){
+let makeDataOpsTable = function( pOBJ ){
+    let idx = pOBJ.index
+    let itemList = pOBJ.dbList
+    levels[ pOBJ.title ] = []
+    methods[ pOBJ.title ] = []
+
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table', pOBJ.pParentId, '', {'width':"100%"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
-	let btn = tag('button', tbl[idx].Tr1Td1, title,
+	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[idx].Tr1Td1, '', {'class':"content"})
 
@@ -74,41 +79,34 @@ let makeDataOpsTable = function(pId, idx, title, itemList, pct ){
 	dataOpsCells.Th1Td4 = tag('th', dataOpsCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
 	dataOpsCells.Th1Td5 = tag('th', dataOpsCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
-	let levels = []
-	let methods = []
 	for( let idx in itemList ){
 		dataOpsCells.row[ idx ] = {}
-		dataOpsCells.row[ idx ].Id = tag('tr', dataOpsCells.Id, '', {'width':"100%"})
+		dataOpsCells.row[ idx ].Id = tag('tr', dataOpsCells.Id, '', {'width':"100%",style:'vertical-align: top;'})
 		dataOpsCells.row[ idx ].Td1 = tag('td', dataOpsCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
 
-
 		dataOpsCells.row[ idx ].Td2 = tag('td', dataOpsCells.row[ idx ].Id,'', {'width':"25%"} )
-		level[ idx ] = new DropDownCheckBoxList(
-			{
-                'pParentId': dataOpsCells.row[ idx ].Td2,
-                'domName': 'dropCheck1',
-                'listHeader':'level', 
-                'list': dbResults.levelList
-            }
-		)
+		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': dataOpsCells.row[ idx ].Td2,
+            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'level', 
+            'list': dbResults.levelList
+        })
 //		dataOpsCells.row[ idx ].Td2dataId = addDataOpLevelSelector( dataOpsCells.row[ idx ].Td2, idx ) 
 
 		dataOpsCells.row[ idx ].Td3 = tag('td', dataOpsCells.row[ idx ].Id, '', {'width':"25%"} )		
-		method[ idx ] = new DropDownCheckBoxList(
-			{
-                'pParentId': dataOpsCells.row[ idx ].Td3,
-                'domName': 'dropCheck1',
-                'listHeader':'method', 
-                'list': dbResults.methodList
-            }
-		)
+		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': dataOpsCells.row[ idx ].Td3,
+            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'method', 
+            'list': dbResults.methodList
+        })
 //		dataOpsCells.row[ idx ].Td3dataId = addDataOpMethodSelector( dataOpsCells.row[ idx ].Td3, idx ) 
 
 
 		dataOpsCells.row[ idx ].Td4 = tag('td', dataOpsCells.row[ idx ].Id, '', {'width':"15%"} )		
 		dataOpsCells.row[ idx ].Td4dataId = addDataOpCurrencySelector( dataOpsCells.row[ idx ].Td4, idx ) 
 		dataOpsCells.row[ idx ].Td5 = tag('td', dataOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		dataOpsCells.row[ idx ].Td5dataId = addDataOpsScore( dataOpsCells.row[ idx ].Td5, pct )
+		dataOpsCells.row[ idx ].Td5dataId = addDataOpsScore( dataOpsCells.row[ idx ].Td5, pOBJ.percentage )
 	}
 }
 
