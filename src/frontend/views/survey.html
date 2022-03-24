@@ -32,6 +32,9 @@
 			let gotoUserCRUD = function(){
 				location.href = "userCRUD.html";
 			}
+			let gotoHealthCheck = function(){
+				location.href = "healthCheck.html";
+			}
 			var mainTableId = ''
 			var selId
 			var consultantId
@@ -62,6 +65,11 @@
 					style:" width: 33%;", 
 					class:"menuButton", 
 					onclick:"gotoDashboard();"
+				})
+				tag('button', menuAreaId, 'HealthCheck',{
+					style:" width: 33%;", 
+					class:"menuButton", 
+					onclick:"gotoHealthCheck();"
 				})
 
 				tag('br',menuAreaId,'',{} )
