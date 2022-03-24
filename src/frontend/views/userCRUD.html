@@ -80,7 +80,8 @@
                         let i = tag('input', t,'', { type: inputType })
                         document.getElementById( i ).value = dbResults.user[ rowIdx ][ hdr ] 
                     }
-                    let t = tag('td', row[ rowIdx ], '...', {} )
+					let t = tag('td', row[ rowIdx ], '', {} )
+					tag('a', t, '...',{href:'www.google.com'})
                 }
             }
 
