@@ -4,6 +4,7 @@
 		<title>Skills Survey: User CRUD</title>
 		<link rel="stylesheet" href="survey.css" />		
 		<script src="../tag.js"></script>
+        <script src="databaseLists.js"></script>
 		<script>
 			let gotoSurvey = function(){	location.href = "survey.html"	}
 
@@ -24,12 +25,55 @@
 				})
 				
 				getUsersFromDatabase()
-				
+                makeUserCrudForm( pParentId )
 			}
 
 			let getUsersFromDatabase = function(){
-
 			}
+
+            let cl = console.log
+
+            let getMaxDataWidth = function(){
+                let maxRecLength = 0;
+                let hdrLength = 0;
+                for( let idx in dbResults.users ){
+                    let recLength = 0;
+                    hdrLength = 0;
+                    for( let rec in dbResults.users[ idx ] ){
+                        cl( idx + ":" + rec + ": " + dbResults.users[ idx ][ rec ].length + "  " + dbResults.users[ idx ][ rec ] )
+                        recLength += dbResults.users[ idx ][ rec ].length 
+                        hdrLength += rec.length
+                    }
+                    if( recLength > maxRecLength ) maxRecLength = recLength
+                }
+                cl("MaxRecLength: " + maxRecLength );
+                cl("HdrLength    : " + hdrLength );
+                return {'MaxRecLength':maxRecLength, 'HdrLength':hdrLength}
+            }
+
+            let setScreenWidth = function ( pWidths ){}
+
+            let makeUserCrudForm = function( pParentId ){
+                // mae a table w/ columns per data.  if too big, set page width > 100%
+                // find max record width
+                let widths = getMaxDataWidth();
+                setScreenWidth( widths )
+
+                let tableId = tag('table', pParentId, '', {} )
+                let tableHdrRowId = tag('tr', tableId, '', {} )
+                for( let hdr in dbResults.users[ 0 ] ){
+                    tag('th', tableHdrRowId, hdr, {} )
+                }
+                let row = []
+                for( let rowIdx in  dbResults.users ){
+                    row[ rowIdx ] = tag('tr', tableId, '', {} )
+                    for( let hdr in dbResults.users[ rowIdx ] ){
+                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.users[ rowIdx ][ hdr ], {} )
+                        let i = tag('input', t,'', {} )
+                        document.getElementById( i ).value = dbResults.users[ rowIdx ][ hdr ] 
+                    }
+                }
+            }
 
 		</script>
 	</head>
