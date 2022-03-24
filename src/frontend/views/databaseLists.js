@@ -41,6 +41,15 @@ let dbResults = {
 		'can_configure_in_multi_regions',	
 		'can_extend_with_custom_tools',
 	],
+	aquiredByList : [
+		'none',
+		'personal/tutorial',
+		'OJT',
+		'BootCamp',
+		'Stelligent U',
+		'Certificate',
+		'Degree'
+	],
 	currencyList : [
 		'never',
 		'stale',

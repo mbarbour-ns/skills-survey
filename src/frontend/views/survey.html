@@ -23,6 +23,9 @@
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 		<script>            
+            let gLevels = {}
+            let gMethods = {}
+            let gAquiredBy = {}
             let levels = {}
             let methods = {}
 
@@ -44,8 +47,7 @@
 
 			let loadConsultant = function(){ 
 				cl("Loading " + getElxId( selId ).value )
-				getElxId( consultantId ).innerHTML = getElxId( selId ).value + " Profile"
-
+				getElxId( consultantId ).innerHTML = getElxId( selId ).value + " Survey"
 			}
 
 			let bulidMainMenu = function( targetParentId ){
@@ -57,34 +59,39 @@
 
 				tag('H3',menuAreaId,"STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
 				tag('button', menuAreaId, 'User CRUD',{
-					style:" width: 33%;", 
+					style:" width: 25%;", 
 					class:"menuButton",
 					onclick:"gotoUserCRUD();",
 				})
+				tag('button', menuAreaId, 'Generate Profile',{
+					style:" width: 25%;", 
+					class:"menuButton", 
+					onclick:"gotoGenerateProfile();"
+				})
 				tag('button', menuAreaId, 'Reports',{
-					style:" width: 33%;", 
+					style:" width: 25%;", 
 					class:"menuButton", 
 					onclick:"gotoDashboard();"
 				})
 				tag('button', menuAreaId, 'HealthCheck',{
-					style:" width: 33%;", 
+					style:" width: 25%;", 
 					class:"menuButton", 
 					onclick:"gotoHealthCheck();"
 				})
 
 				tag('br',menuAreaId,'',{} )
-				tag('label',menuAreaId,'Select User for Survey data loading:',{} )
-				selId = tag('select',menuAreaId,'',{class:"menuButton"})
+				tag('label',menuAreaId,'Select Consultant for Survey data loading:',{} )
+				selId = tag('select',menuAreaId,'',{
+					class:"menuButton",
+					width:"25%",
+					onchange:"loadConsultant();"
+				})
 				// use ConsultantsList to populate drop down
 				for( let i in dbResults.ConsultantsList ){
 					tag('option', selId, dbResults.ConsultantsList[ i ],{ 
 						'value': dbResults.ConsultantsList[ i ]
 					})
 				}
-				tag('button', menuAreaId, 'Load Data for the selected Consultant',{
-					onclick: "loadConsultant();",
-					class:"menuButton"
-				})
 
 				let tr2Id = tag('tr', mainTableId, '', {} )
 				tag('td', tr2Id, '', {} )
@@ -95,10 +102,13 @@
 			}
 
 			let buildSurveyLayout = function( targetParentId ){				
-				consultantId = tag('h4', targetParentId, '[Resource Name] Profile',
+				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',
 					{'style':"color:white; text-align: center;"} )
 				tag('h5', targetParentId, 'created(date), last update(date) ',
 					{'style':"color:white;"} )
+				let startSurveyButtonId = tag('button', targetParentId, 'Start New Survey',{class:'menuButton'})
+				getElxId( startSurveyButtonId ).visible
+
 				tag('button', targetParentId, '[Resource Name Details]',{'class':"collapsible"} )
 
 				let p1 = tag('div', targetParentId, '', {'class':"content"} )

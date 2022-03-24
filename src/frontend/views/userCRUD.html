@@ -9,19 +9,14 @@
 			let gotoSurvey = function(){	location.href = "survey.html"	}
 
 			let makeUserForm = function( pParentId ){
-				tag('button', pParentId, 'User CRUD',{
-						style:" width: 33%;", 
-						class:"menuButton",
-						onclick:"gotoUserCRUD();",
-				})
-				tag('button', pParentId, 'Update Users from Harvest',{
-					style:" width: 33%;", 
-					class:"menuButton"
-				})
 				tag('button', pParentId, 'Go to Survey', {
 					style:" width: 33%;", 
 					class:"menuButton", 
 					onclick:"gotoSurvey();"
+				})
+				tag('button', pParentId, 'Update Users from Harvest',{
+					style:" width: 33%;", 
+					class:"menuButton"
 				})
 				
 				getUsersFromDatabase()

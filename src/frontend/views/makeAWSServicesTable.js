@@ -59,7 +59,7 @@ serviceCells.row = []
 let makeAWSServicesTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
-    levels[ pOBJ.title ] = []
+    gLevels[ pOBJ.title ] = []
     methods[ pOBJ.title ] = []
 
 	let tbl = []
@@ -76,8 +76,11 @@ let makeAWSServicesTable = function( pOBJ ){
 	serviceCells.Th1Td1 = tag('th', serviceCells.Th1Id, 'Service', {'width':"25%", 'align':'left'} )
 	serviceCells.Th1Td2 = tag('th', serviceCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	serviceCells.Th1Td3 = tag('th', serviceCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	serviceCells.Th1Td4 = tag('th', serviceCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
-	serviceCells.Th1Td5 = tag('th', serviceCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
+	serviceCells.Th1Td4 = tag('th', serviceCells.Th1Id, 'AquiredBy', {'width':"15%", 'align':'left'} )
+	serviceCells.Th1Td5 = tag('th', serviceCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
+	serviceCells.Th1Td6 = tag('th', serviceCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
+//	serviceCells.Th1Td4 = tag('th', serviceCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
+//	serviceCells.Th1Td5 = tag('th', serviceCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
 	for( let idx in itemList ){
 		serviceCells.row[ idx ] = {}
@@ -85,13 +88,12 @@ let makeAWSServicesTable = function( pOBJ ){
 		serviceCells.row[ idx ].Td1 = tag('td', serviceCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
 
 		serviceCells.row[ idx ].Td2 = tag('td', serviceCells.row[ idx ].Id,'', {'width':"25%"} )
-		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': serviceCells.row[ idx ].Td2,
-            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
             'list': dbResults.levelList
         })
-//		serviceCells.row[ idx ].Td2dataId = addServiceLevelSelector( serviceCells.row[ idx ].Td2, idx ) 
 
 		serviceCells.row[ idx ].Td3 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"25%"} )
 		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
@@ -100,12 +102,22 @@ let makeAWSServicesTable = function( pOBJ ){
             'listHeader':'method', 
             'list': dbResults.methodList
         })
-//		serviceCells.row[ idx ].Td3dataId = addServiceMethodSelector( serviceCells.row[ idx ].Td3, idx ) 
 
-		serviceCells.row[ idx ].Td4 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"15%"} )
-		serviceCells.row[ idx ].Td4dataId = addServiceCurrencySelector( serviceCells.row[ idx ].Td4, idx ) 
+		serviceCells.row[ idx ].Td4 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"25%"} )
+
+		cl( ">>idx="+idx+", "+ pOBJ.title )
+
+		gAquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+			'pParentId': serviceCells.row[ idx ].Td4,
+			'domName': "gAquiredBy['"+pOBJ.title+"']['"+idx+"']",
+			'listHeader':'aquiredBy', 
+			'list': dbResults.aquiredByList
+		})
+
 		serviceCells.row[ idx ].Td5 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"15%"} )
-		serviceCells.row[ idx ].Td5dataId = addServicesScore( serviceCells.row[ idx ].Td5, pOBJ.percentage )
+		serviceCells.row[ idx ].Td5dataId = addServiceCurrencySelector( serviceCells.row[ idx ].Td5, idx ) 
+		serviceCells.row[ idx ].Td6 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"15%"} )
+		serviceCells.row[ idx ].Td6dataId = addServicesScore( serviceCells.row[ idx ].Td6, pOBJ.percentage )
 	}
 }
 
