@@ -64,6 +64,8 @@
                 for( let hdr in dbResults.user[ 0 ] ){
                     tag('th', tableHdrRowId, hdr, {} )
                 }
+                tag('th', tableHdrRowId, 'menu', {} )
+
                 let row = []
                 for( let rowIdx in  dbResults.user ){
                     row[ rowIdx ] = tag('tr', tableId, '', {} )
@@ -78,6 +80,7 @@
                         let i = tag('input', t,'', { type: inputType })
                         document.getElementById( i ).value = dbResults.user[ rowIdx ][ hdr ] 
                     }
+                    let t = tag('td', row[ rowIdx ], '...', {} )
                 }
             }
 
