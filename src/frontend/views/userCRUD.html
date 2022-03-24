@@ -36,12 +36,12 @@
             let getMaxDataWidth = function(){
                 let maxRecLength = 0;
                 let hdrLength = 0;
-                for( let idx in dbResults.users ){
+                for( let idx in dbResults.user ){
                     let recLength = 0;
                     hdrLength = 0;
-                    for( let rec in dbResults.users[ idx ] ){
-                        cl( idx + ":" + rec + ": " + dbResults.users[ idx ][ rec ].length + "  " + dbResults.users[ idx ][ rec ] )
-                        recLength += dbResults.users[ idx ][ rec ].length 
+                    for( let rec in dbResults.user[ idx ] ){
+                        cl( idx + ":" + rec + ": " + dbResults.user[ idx ][ rec ].length + "  " + dbResults.user[ idx ][ rec ] )
+                        recLength += dbResults.user[ idx ][ rec ].length 
                         hdrLength += rec.length
                     }
                     if( recLength > maxRecLength ) maxRecLength = recLength
@@ -61,16 +61,22 @@
 
                 let tableId = tag('table', pParentId, '', {} )
                 let tableHdrRowId = tag('tr', tableId, '', {} )
-                for( let hdr in dbResults.users[ 0 ] ){
+                for( let hdr in dbResults.user[ 0 ] ){
                     tag('th', tableHdrRowId, hdr, {} )
                 }
                 let row = []
-                for( let rowIdx in  dbResults.users ){
+                for( let rowIdx in  dbResults.user ){
                     row[ rowIdx ] = tag('tr', tableId, '', {} )
-                    for( let hdr in dbResults.users[ rowIdx ] ){
-                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.users[ rowIdx ][ hdr ], {} )
-                        let i = tag('input', t,'', {} )
-                        document.getElementById( i ).value = dbResults.users[ rowIdx ][ hdr ] 
+                    for( let hdr in dbResults.user[ rowIdx ] ){
+                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
+                        cl("switch on " + hdr )
+                        let inputType = 'text';
+                        switch( dbResults.user_type_map[hdr] ){
+                            case 'tinyint(1)':  inputType = 'checkbox'; break;
+                            default:            inputtype = 'text';     break;
+                        }
+                        let i = tag('input', t,'', { type: inputType })
+                        document.getElementById( i ).value = dbResults.user[ rowIdx ][ hdr ] 
                     }
                 }
             }

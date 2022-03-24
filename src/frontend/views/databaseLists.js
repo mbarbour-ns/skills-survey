@@ -1,10 +1,25 @@
 // This is a stub for actually database table reads
 let dbResults = {
-    users:[
+    user:[
         {name_first:"Candice", name_last:"Whiskey",employee_no:"123455", active:"Y", deleted:"N", role:'manager'},
         {name_first:"Mike", name_last:"Barbour",employee_no:"123456", active:"Y", deleted:"N", role:'admin'},
         {name_first:"Patrick", name_last:"Gallagher",employee_no:"123457", active:"Y", deleted:"N", role:'resource'}
     ],
+    user_type:[
+        {field:'employee_no',type:'char(20)' },
+        {field:'name_last',type:'char(255)' },
+        {field:'name_first',type:'char(255)' },
+        {field:'name_middle',type:'char(255)' },
+        {field:'active',type:'tinyint(1)' },
+        {field:'deleted',type:'tinyint(1)' },
+    ],
+    user_type_map:{
+        'employee_no':'char(20)',
+        'name_last':'char(20)',
+        'employee_no':'char(20)',
+        'active':'tinyint(1)',
+        'deleted':'tinyint(1)',
+    },
 	levelList : [
 		'unknown',
 		'know_what_its_for',
