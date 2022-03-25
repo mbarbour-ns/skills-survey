@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Skills Survey: Dashboard</title>
+		<title>Skills Survey: Reports</title>
 		<link rel="stylesheet" href="survey.css" />		
 		<script src="../tag.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script>
 			let gotoSurvey = function(){	location.href = "survey.html"	}
 
-			let makeDashboard = function( pParentId ){
-				tag('button', pParentId, 'Go to Survey', {
-					width:"5%;",
+			let makeReport = function( pParentId ){
+                let divId = tag('div', pParentId, '', {width:"100%"})
+				tag('button', divId, 'Go to Survey', {
+					width:"5%",
 					class:"menuButton",
 					onclick:"gotoSurvey();"
-				} )
+				})
+				tag('button', divId, 'Show Individual', {
+					width:"25%",
+					class:"menuButton",
+					onclick:"gotoSurvey();"
+				})
+				tag('button', divId, 'Show All', {
+					width:"25%",
+					class:"menuButton",
+					onclick:"gotoSurvey();"
+				})
+
 				let tableId = tag('table', pParentId, '', { width:'100%;'} )
 				let row1Id = tag('tr', tableId, '', {} )
 				let col1Id = tag('td', row1Id, '', {} )
@@ -173,9 +185,9 @@
 		</script>
 
 	</head>
-	<body id='1'>
+	<body id='1' width="100%;">
 		<script>
-			makeDashboard( document.body.id )
+			makeReport( document.body.id )
 		</script>
 	</body>
 </html>

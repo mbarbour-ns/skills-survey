@@ -30,7 +30,7 @@
             let methods = {}
 
 			let gotoDashboard = function(){
-				location.href = "dashboard.html";
+				location.href = "reports.html";
 			}
 			let gotoUserCRUD = function(){
 				location.href = "userCRUD.html";
@@ -114,11 +114,9 @@
 				let p1 = tag('div', targetParentId, '', {'class':"content"} )
 				tag('p',p1,'Current Engagement',{} )
 				tag('p',p1,'Engagement End Date',{} )
+				tag('p',p1,'Education',{} )
 
 				tag('p', targetParentId, '',{} )
-
-                let level = []
-                let method = []
 
 				makeAWSCertificationsTable( targetParentId, '3', 'AWS Certifications', dbResults.certList,"35%",{
                     'title':'AWSCertificationsTable',
@@ -129,7 +127,6 @@
                     'percentage':"35%"
                  } )
 				makeConsultingTable( targetParentId, '8', 'Consulting Expertise', dbResults.consultingList,"35%" )
-
 				makeRolesTable({
                     'title':'RolesTable',
                     'label':'Roles',

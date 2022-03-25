@@ -8,9 +8,12 @@ body {
 	/*background-image:linear-gradient(to bottom right, #000044, #000088);*/
 	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006688, #888888);
 	background-size: 300% 100%;
+    /*animation: gradientBG 40s ease infinite;*/
 }
 .ocean {
 	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006688, #888888);
+	background-size: 300% 100%;
+    /*animation: gradientBG 20s ease infinite;*/
 }
 .menuButton {
 	width:"33%";
