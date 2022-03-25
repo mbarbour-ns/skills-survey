@@ -59,8 +59,9 @@ rolesCells.row = []
 let makeRolesTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
-    levels[ pOBJ.title ] = []
-    methods[ pOBJ.title ] = []
+    gLevels[ pOBJ.title ] = []
+    gMethods[ pOBJ.title ] = []
+    gAcquiredBy[ pOBJ.title ] = []
 
 	let tbl = []
 	tbl[idx] = {}
@@ -76,8 +77,9 @@ let makeRolesTable = function( pOBJ ){
 	rolesCells.Th1Td1 = tag('th', rolesCells.Th1Id, 'Roles', {'width':"25%", 'align':'left'} )
 	rolesCells.Th1Td2 = tag('th', rolesCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	rolesCells.Th1Td3 = tag('th', rolesCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	rolesCells.Th1Td4 = tag('th', rolesCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
-	rolesCells.Th1Td5 = tag('th', rolesCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
+    rolesCells.Th1Td4 = tag('th', rolesCells.Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )
+	rolesCells.Th1Td5 = tag('th', rolesCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
+	rolesCells.Th1Td6 = tag('th', rolesCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
 	for( let idx in itemList ){
 		rolesCells.row[ idx ] = {}
@@ -86,28 +88,33 @@ let makeRolesTable = function( pOBJ ){
 
 
 		rolesCells.row[ idx ].Td2 = tag('td', rolesCells.row[ idx ].Id,'', {'width':"25%"} )
-		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': rolesCells.row[ idx ].Td2,
-            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
             'list': dbResults.levelList
         })
-//		rolesCells.row[ idx ].Td2dataId = addRolesLevelSelector( rolesCells.row[ idx ].Td2, idx ) 
 
 		rolesCells.row[ idx ].Td3 = tag('td', rolesCells.row[ idx ].Id, '', {'width':"25%"} )
-		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': rolesCells.row[ idx ].Td3,
-            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
             'list': dbResults.methodList
         })
-//		rolesCells.row[ idx ].Td3dataId = addRolesMethodSelector( rolesCells.row[ idx ].Td3, idx ) 
 
+		rolesCells.row[ idx ].Td4 = tag('td', rolesCells.row[ idx ].Id, '', {'width':"25%"} )
+		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': rolesCells.row[ idx ].Td4,
+            'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'acquiredBy', 
+            'list': dbResults.acquiredByList
+        })
 
-		rolesCells.row[ idx ].Td4 = tag('td', rolesCells.row[ idx ].Id, '', {'width':"15%"} )
-		rolesCells.row[ idx ].Td4dataId = addRolesCurrencySelector( rolesCells.row[ idx ].Td4, idx ) 
 		rolesCells.row[ idx ].Td5 = tag('td', rolesCells.row[ idx ].Id, '', {'width':"15%"} )
-		rolesCells.row[ idx ].Td5dataId = addRolessScore( rolesCells.row[ idx ].Td5, pOBJ.percentage )
+		rolesCells.row[ idx ].Td5dataId = addRolesCurrencySelector( rolesCells.row[ idx ].Td5, idx ) 
+		rolesCells.row[ idx ].Td6 = tag('td', rolesCells.row[ idx ].Id, '', {'width':"15%"} )
+		rolesCells.row[ idx ].Td6dataId = addRolessScore( rolesCells.row[ idx ].Td6, pOBJ.percentage )
 	}
 }
 

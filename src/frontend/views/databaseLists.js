@@ -41,7 +41,7 @@ let dbResults = {
 		'can_configure_in_multi_regions',	
 		'can_extend_with_custom_tools',
 	],
-	aquiredByList : [
+	acquiredByList : [
 		'none',
 		'personal/tutorial',
 		'OJT',

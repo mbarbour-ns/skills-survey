@@ -62,7 +62,7 @@ let makeDevToolsTable = function( pOBJ ){
     let itemList = pOBJ.dbList
     gLevels[ pOBJ.title ] = []
     gMethods[ pOBJ.title ] = []
-    gAquiredBy[ pOBJ.title ] = []
+    gAcquiredBy[ pOBJ.title ] = []
 
 	let tbl = []
 	tbl[idx] = {}
@@ -78,7 +78,7 @@ let makeDevToolsTable = function( pOBJ ){
 	devToolCells.Th1Td1 = tag('th', devToolCells.Th1Id, 'DevTool', {'width':"25%", 'align':'left'} )
 	devToolCells.Th1Td2 = tag('th', devToolCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	devToolCells.Th1Td3 = tag('th', devToolCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	devToolCells.Th1Td4 = tag('th', devToolCells.Th1Id, 'AquiredBy', {'width':"15%", 'align':'left'} )
+	devToolCells.Th1Td4 = tag('th', devToolCells.Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )
 	devToolCells.Th1Td5 = tag('th', devToolCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
 	devToolCells.Th1Td6 = tag('th', devToolCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
@@ -104,16 +104,15 @@ let makeDevToolsTable = function( pOBJ ){
         })
 
 		devToolCells.row[ idx ].Td4 = tag('td', devToolCells.row[ idx ].Id, '', {'width':"25%"} )
-		gAquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
 			'pParentId': devToolCells.row[ idx ].Td4,
-			'domName': "gAquiredBy['"+pOBJ.title+"']['"+idx+"']",
-			'listHeader':'aquiredBy', 
-			'list': dbResults.aquiredByList
+			'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
+			'listHeader':'acquiredBy', 
+			'list': dbResults.acquiredByList
 		})
 
 		devToolCells.row[ idx ].Td5 = tag('td', devToolCells.row[ idx ].Id, '', {'width':"15%"} )
 		devToolCells.row[ idx ].Td5dataId = addDevToolCurrencySelector( devToolCells.row[ idx ].Td5, idx ) 
-
 		devToolCells.row[ idx ].Td6 = tag('td', devToolCells.row[ idx ].Id, '', {'width':"15%"} )
 		devToolCells.row[ idx ].Td6dataId = addDevToolsScore( devToolCells.row[ idx ].Td6, pOBJ.percentage )
 	}

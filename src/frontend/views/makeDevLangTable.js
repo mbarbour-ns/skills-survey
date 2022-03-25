@@ -59,8 +59,9 @@ devLangCells.row = []
 let makeDevLangTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
-    levels[ pOBJ.title ] = []
-    methods[ pOBJ.title ] = []
+    gLevels[ pOBJ.title ] = []
+    gMethods[ pOBJ.title ] = []
+    gAcquiredBy[ pOBJ.title ] = []
 
 	let tbl = []
 	tbl[idx] = {}
@@ -76,8 +77,9 @@ let makeDevLangTable = function( pOBJ ){
 	devLangCells.Th1Td1 = tag('th', devLangCells.Th1Id, 'DevItem', {'width':"25%", 'align':'left'} )
 	devLangCells.Th1Td2 = tag('th', devLangCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	devLangCells.Th1Td3 = tag('th', devLangCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	devLangCells.Th1Td4 = tag('th', devLangCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
-	devLangCells.Th1Td5 = tag('th', devLangCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
+	devLangCells.Th1Td4 = tag('th', devLangCells.Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )
+	devLangCells.Th1Td5 = tag('th', devLangCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
+	devLangCells.Th1Td6 = tag('th', devLangCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
 	for( let idx in itemList ){
 		devLangCells.row[ idx ] = {}
@@ -86,28 +88,37 @@ let makeDevLangTable = function( pOBJ ){
 
 
 		devLangCells.row[ idx ].Td2 = tag('td', devLangCells.row[ idx ].Id,'', {'width':"25%"} )
-		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': devLangCells.row[ idx ].Td2,
-            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
             'list': dbResults.levelList
         })
 //		devLangCells.row[ idx ].Td2dataId = addDevLangLevelSelector( devLangCells.row[ idx ].Td2, idx ) 
 
 		devLangCells.row[ idx ].Td3 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"25%"} )
-		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': devLangCells.row[ idx ].Td3,
-            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
             'list': dbResults.methodList
         })
 //		devLangCells.row[ idx ].Td3dataId = addDevLangMethodSelector( devLangCells.row[ idx ].Td3, idx ) 
 
+		devLangCells.row[ idx ].Td4 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"25%"} )
+		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+			'pParentId': devLangCells.row[ idx ].Td4,
+			'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
+			'listHeader':'acquiredBy', 
+			'list': dbResults.acquiredByList
+		})
 
-		devLangCells.row[ idx ].Td4 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"15%"} )
-		devLangCells.row[ idx ].Td4dataId = addDevLangCurrencySelector( devLangCells.row[ idx ].Td4, idx ) 
+
 		devLangCells.row[ idx ].Td5 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"15%"} )
-		devLangCells.row[ idx ].Td5dataId = addDevLangScore( devLangCells.row[ idx ].Td5, pOBJ.percentage )
+		devLangCells.row[ idx ].Td5dataId = addDevLangCurrencySelector( devLangCells.row[ idx ].Td5, idx ) 
+
+		devLangCells.row[ idx ].Td6 = tag('td', devLangCells.row[ idx ].Id, '', {'width':"15%"} )
+		devLangCells.row[ idx ].Td6dataId = addDevLangScore( devLangCells.row[ idx ].Td6, pOBJ.percentage )
 	}
 }
 

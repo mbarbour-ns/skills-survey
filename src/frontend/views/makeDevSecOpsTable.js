@@ -59,8 +59,9 @@ devSecOpsCells.row = []
 let makeDevSecOpsTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
-    levels[ pOBJ.title ] = []
-    methods[ pOBJ.title ] = []
+    gLevels[ pOBJ.title ] = []
+    gMethods[ pOBJ.title ] = []
+    gAcquiredBy[ pOBJ.title ] = []
 
 	let tbl = []
 	tbl[idx] = {}
@@ -76,8 +77,9 @@ let makeDevSecOpsTable = function( pOBJ ){
 	devSecOpsCells.Th1Td1 = tag('th', devSecOpsCells.Th1Id, 'DevSecOp', {'width':"25%", 'align':'left'} )
 	devSecOpsCells.Th1Td2 = tag('th', devSecOpsCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	devSecOpsCells.Th1Td3 = tag('th', devSecOpsCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	devSecOpsCells.Th1Td4 = tag('th', devSecOpsCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
-	devSecOpsCells.Th1Td5 = tag('th', devSecOpsCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
+	devSecOpsCells.Th1Td4 = tag('th', devSecOpsCells.Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )    
+	devSecOpsCells.Th1Td5 = tag('th', devSecOpsCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
+	devSecOpsCells.Th1Td6 = tag('th', devSecOpsCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
 	for( let idx in itemList ){
 		devSecOpsCells.row[ idx ] = {}
@@ -85,27 +87,33 @@ let makeDevSecOpsTable = function( pOBJ ){
 		devSecOpsCells.row[ idx ].Td1 = tag('td', devSecOpsCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
 
 		devSecOpsCells.row[ idx ].Td2 = tag('td', devSecOpsCells.row[ idx ].Id,'', {'width':"25%"} )
-		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': devSecOpsCells.row[ idx ].Td2,
-            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
             'list': dbResults.levelList
         })
-//		devSecOpsCells.row[ idx ].Td2dataId = addDevSecOpLevelSelector( devSecOpsCells.row[ idx ].Td2, idx ) 
 
 		devSecOpsCells.row[ idx ].Td3 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"25%"} )
-		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': devSecOpsCells.row[ idx ].Td3,
-            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
             'list': dbResults.methodList
         })
-//		devSecOpsCells.row[ idx ].Td3dataId = addDevSecOpMethodSelector( devSecOpsCells.row[ idx ].Td3, idx ) 
 
-		devSecOpsCells.row[ idx ].Td4 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		devSecOpsCells.row[ idx ].Td4dataId = addDevSecOpCurrencySelector( devSecOpsCells.row[ idx ].Td4, idx ) 
+		devSecOpsCells.row[ idx ].Td4 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"25%"} )
+		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': devSecOpsCells.row[ idx ].Td4,
+            'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'acquiredBy', 
+            'list': dbResults.acquiredByList
+        })
+
 		devSecOpsCells.row[ idx ].Td5 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		devSecOpsCells.row[ idx ].Td5dataId = addDevSecOpsScore( devSecOpsCells.row[ idx ].Td5, pOBJ.percentage )
+		devSecOpsCells.row[ idx ].Td5dataId = addDevSecOpCurrencySelector( devSecOpsCells.row[ idx ].Td5, idx ) 
+		devSecOpsCells.row[ idx ].Td6 = tag('td', devSecOpsCells.row[ idx ].Id, '', {'width':"15%"} )
+		devSecOpsCells.row[ idx ].Td6dataId = addDevSecOpsScore( devSecOpsCells.row[ idx ].Td6, pOBJ.percentage )
 	}
 }
 

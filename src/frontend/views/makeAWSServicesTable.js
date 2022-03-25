@@ -60,7 +60,8 @@ let makeAWSServicesTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
     gLevels[ pOBJ.title ] = []
-    methods[ pOBJ.title ] = []
+    gMethods[ pOBJ.title ] = []
+    gAcquiredBy[ pOBJ.title ] = []
 
 	let tbl = []
 	tbl[idx] = {}
@@ -76,11 +77,9 @@ let makeAWSServicesTable = function( pOBJ ){
 	serviceCells.Th1Td1 = tag('th', serviceCells.Th1Id, 'Service', {'width':"25%", 'align':'left'} )
 	serviceCells.Th1Td2 = tag('th', serviceCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	serviceCells.Th1Td3 = tag('th', serviceCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	serviceCells.Th1Td4 = tag('th', serviceCells.Th1Id, 'AquiredBy', {'width':"15%", 'align':'left'} )
+	serviceCells.Th1Td4 = tag('th', serviceCells.Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )
 	serviceCells.Th1Td5 = tag('th', serviceCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
 	serviceCells.Th1Td6 = tag('th', serviceCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
-//	serviceCells.Th1Td4 = tag('th', serviceCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
-//	serviceCells.Th1Td5 = tag('th', serviceCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
 	for( let idx in itemList ){
 		serviceCells.row[ idx ] = {}
@@ -96,22 +95,19 @@ let makeAWSServicesTable = function( pOBJ ){
         })
 
 		serviceCells.row[ idx ].Td3 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"25%"} )
-		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': serviceCells.row[ idx ].Td3,
-            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
             'list': dbResults.methodList
         })
 
 		serviceCells.row[ idx ].Td4 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"25%"} )
-
-		cl( ">>idx="+idx+", "+ pOBJ.title )
-
-		gAquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
 			'pParentId': serviceCells.row[ idx ].Td4,
-			'domName': "gAquiredBy['"+pOBJ.title+"']['"+idx+"']",
-			'listHeader':'aquiredBy', 
-			'list': dbResults.aquiredByList
+			'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
+			'listHeader':'acquiredBy', 
+			'list': dbResults.acquiredByList
 		})
 
 		serviceCells.row[ idx ].Td5 = tag('td', serviceCells.row[ idx ].Id, '', {'width':"15%"} )

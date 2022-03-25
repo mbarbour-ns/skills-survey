@@ -59,8 +59,9 @@ MLOpsCells.row = []
 let makeMLOpsTable = function( pOBJ ){
     let idx = pOBJ.index
     let itemList = pOBJ.dbList
-    levels[ pOBJ.title ] = []
-    methods[ pOBJ.title ] = []
+    gLevels[ pOBJ.title ] = []
+    gMethods[ pOBJ.title ] = []
+    gAcquiredBy[ pOBJ.title ] = []
 
 	let tbl = []
 	tbl[idx] = {}
@@ -76,8 +77,9 @@ let makeMLOpsTable = function( pOBJ ){
 	MLOpsCells.Th1Td1 = tag('th', MLOpsCells.Th1Id, 'MLOp', {'width':"25%", 'align':'left'} )
 	MLOpsCells.Th1Td2 = tag('th', MLOpsCells.Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	MLOpsCells.Th1Td3 = tag('th', MLOpsCells.Th1Id, 'Method', {'width':"15%", 'align':'left'} )
-	MLOpsCells.Th1Td4 = tag('th', MLOpsCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
-	MLOpsCells.Th1Td5 = tag('th', MLOpsCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
+    MLOpsCells.Th1Td4 = tag('th', MLOpsCells.Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )
+	MLOpsCells.Th1Td5 = tag('th', MLOpsCells.Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
+	MLOpsCells.Th1Td6 = tag('th', MLOpsCells.Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
 	for( let idx in itemList ){
 		MLOpsCells.row[ idx ] = {}
@@ -85,28 +87,33 @@ let makeMLOpsTable = function( pOBJ ){
 		MLOpsCells.row[ idx ].Td1 = tag('td', MLOpsCells.row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
 
 		MLOpsCells.row[ idx ].Td2 = tag('td', MLOpsCells.row[ idx ].Id,'', {'width':"25%"} )
-		levels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': MLOpsCells.row[ idx ].Td2,
-            'domName': "levels['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
             'list': dbResults.levelList
         })
-//		MLOpsCells.row[ idx ].Td2dataId = addMLOpLevelSelector( MLOpsCells.row[ idx ].Td2, idx ) 
 
 		MLOpsCells.row[ idx ].Td3 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"25%"} )
-		methods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'pParentId': MLOpsCells.row[ idx ].Td3,
-            'domName': "methods['"+pOBJ.title+"']['"+idx+"']",
+            'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
             'list': dbResults.methodList
         })
-//		MLOpsCells.row[ idx ].Td3dataId = addMLOpMethodSelector( MLOpsCells.row[ idx ].Td3, idx ) 
 
+		MLOpsCells.row[ idx ].Td4 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"25%"} )
+		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'pParentId': MLOpsCells.row[ idx ].Td4,
+            'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
+            'listHeader':'acquiredBy', 
+            'list': dbResults.acquiredByList
+        })
 
-		MLOpsCells.row[ idx ].Td4 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		MLOpsCells.row[ idx ].Td4dataId = addMLOpCurrencySelector( MLOpsCells.row[ idx ].Td4, idx ) 
 		MLOpsCells.row[ idx ].Td5 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"15%"} )
-		MLOpsCells.row[ idx ].Td5dataId = addMLOpsScore( MLOpsCells.row[ idx ].Td5, pOBJ.percentage )
+		MLOpsCells.row[ idx ].Td5dataId = addMLOpCurrencySelector( MLOpsCells.row[ idx ].Td5, idx ) 
+		MLOpsCells.row[ idx ].Td6 = tag('td', MLOpsCells.row[ idx ].Id, '', {'width':"15%"} )
+		MLOpsCells.row[ idx ].Td6dataId = addMLOpsScore( MLOpsCells.row[ idx ].Td6, pOBJ.percentage )
 	}
 }
 

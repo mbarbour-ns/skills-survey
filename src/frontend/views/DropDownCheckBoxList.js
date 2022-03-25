@@ -85,11 +85,9 @@ class DropDownCheckBoxList
 
                 let tid = document.getElementById( this.checkBoxListUlId )
                 console.log( 'show tid: ' + tid.id )
-                console.log( 'typeof : ' +  typeof document.getElementById( this.checkBoxListSpanId ) )
 
                 document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) 
                 {
-                    console.log( 'in onclick typeof : ' +  typeof document.getElementById( tid.id ) )
                     if (document.getElementById( tid.id ).style.display === "block")
                     {
                         document.getElementById( tid.id ).style.display = "none"
