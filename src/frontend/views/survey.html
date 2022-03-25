@@ -57,7 +57,7 @@
 				let menuAreaId = tag('td', tr1Id, '', {} )
 				tag('td', tr1Id, '', {} )
 
-				tag('H3',menuAreaId,"STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
+				tag('H3',menuAreaId,"MPHASIS-STELLIGENT SKILLS SURVEY",{style:"text-align:center;"})
 				tag('button', menuAreaId, 'User CRUD',{
 					style:" width: 25%;", 
 					class:"menuButton",
@@ -112,7 +112,9 @@
 				tag('button', targetParentId, '[Resource Name Details]',{'class':"collapsible"} )
 
 				let p1 = tag('div', targetParentId, '', {'class':"content"} )
-				tag('p',p1,'Current Engagement',{} )
+				let d1 = tag('div',p1,'',{width:"90%" })
+				tag('p',d1,'Current Engagement: Project Code#',{} )
+				tag('input',d1,'',{align:"right;",size:8})
 				tag('p',p1,'Engagement End Date',{} )
 				tag('p',p1,'Education',{} )
 
