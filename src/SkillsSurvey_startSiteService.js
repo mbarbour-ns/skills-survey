@@ -20,7 +20,6 @@ let configServer = function( port )
     console.log("\nsiteService Running!\n")
     let server =    require( __dirname + '/backend/webServer.js');
     let router =    require( __dirname + "/backend/webRouter.js");
-    let dbIO  =     require( __dirname + "/backend/databases/MySQL/MySQLIO.js");
 
     let listOfHandles = [
         { title:'HOST_IP_ADDRESS', mime:'text/javascript', filepath:'../HOST_IP_ADDRESS.js'},
@@ -78,8 +77,11 @@ let configServer = function( port )
         handle[ "/" + h ] = theExports[ h ];
     }
 
+//    let dbIO  =     require( __dirname + "/backend/databases/MySQL/MySQLIO.js");
+//    handle['/MySQLIO'] = dbIO.MySQLIO;
+
     let dbRequestHandlers = {}
-    dbRequestHandlers['MySQLIO'] = require( __dirname + "/backend/databases/MySQL/MySQLIO");
+    dbRequestHandlers['MySQLIO'] = require( __dirname + "/backend/databases/MySQL/MySQLIO.js");
     cl("Now for dbRequestHandlers ... ")
     // got to load all of the files, and then consume their exports into the handle array
     for( let db in dbRequestHandlers ){
@@ -88,10 +90,6 @@ let configServer = function( port )
             handle['/' + db ] = dbRequestHandlers[ db ][ db2 ];
         }
     }// end of running through the request handlers
-
-
-
-    handle['/MySQLIO'] = dbIO.MySQLIO;
 
     server.start( port, router.route, handle );
 }

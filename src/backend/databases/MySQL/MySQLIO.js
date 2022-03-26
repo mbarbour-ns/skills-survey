@@ -81,9 +81,9 @@ let fpQueryMySQL = function( callback, pParameterObject, response, postData )
 let fpGetMySQLConnection = function( callback, pParameterObject, response, postData )
 {   cl("@: "+sandboxRequestFile+":fpGetMySQLConnection() ..." );
     connection = mysql.createConnection({
-        user:process.env.DBInstanceConnectionDetails_user,
-        password:process.env.DBInstanceConnectionDetails_password,
-        database:DBInstanceConnectionDetails_database.database
+        user:       process.env.DBInstanceConnectionDetails_user,
+        password:   process.env.DBInstanceConnectionDetails_password,
+        database:   process.env.DBInstanceConnectionDetails_database
     });
     callback( null );
 }// end of fpGetMySQLConnection()
@@ -99,14 +99,14 @@ let extractAndDecode = function ( postData )
         console.log("  parm "+t+": " + token[0] + " = " + sessionStorage[ token[ 0 ] ] ) 
     }
 
-    let temp = sessionStorage['webn8rSessionInfo'].split('+')
-    sessionStorage['preference_code'] = temp[1]
-    let temp1 = temp[0].split('O')
-    sessionStorage['rid'] = temp1[1]
+//    let temp = sessionStorage['webn8rSessionInfo'].split('+')
+//    sessionStorage['preference_code'] = temp[1]
+//    let temp1 = temp[0].split('O')
+//    sessionStorage['rid'] = temp1[1]
 
-    console.log("webn8rSessionInfo: " + sessionStorage['webn8rSessionInfo'] 
-        + ", rid: " + sessionStorage['rid'] 
-        + ", code: " + sessionStorage['preference_code'] )
+//    console.log("webn8rSessionInfo: " + sessionStorage['webn8rSessionInfo'] 
+//        + ", rid: " + sessionStorage['rid'] 
+//        + ", code: " + sessionStorage['preference_code'] )
 }
 //--------------------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------------------
