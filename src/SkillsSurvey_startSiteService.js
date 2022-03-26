@@ -54,6 +54,11 @@ let configServer = function( port )
 		{ title:'healthCheckHTML', mime:'text/html',  filepath:"frontend/views/healthCheck.html" },
 
 		{ title:'userCRUDHTML', mime:'text/html',  filepath:"frontend/views/userCRUD.html" },
+
+		{ title:'dbAdminHTML', mime:'text/html',  filepath:"frontend/views/dbAdmin.html" },
+		{ title:'DecodeTokenJS', mime:'text/javascript',  filepath:"frontend/views/DecodeToken.js" },
+		{ title:'DecodeTokenJS', mime:'text/javascript',  filepath:"frontend/views/DecodeToken.js" },
+
     ]
 
     let theExports = []
@@ -72,6 +77,19 @@ let configServer = function( port )
     for( let h in theExports ){
         handle[ "/" + h ] = theExports[ h ];
     }
+
+    let dbRequestHandlers = {}
+    dbRequestHandlers['MySQLIO'] = require( __dirname + "/backend/databases/MySQL/MySQLIO");
+    cl("Now for dbRequestHandlers ... ")
+    // got to load all of the files, and then consume their exports into the handle array
+    for( let db in dbRequestHandlers ){
+        for( let db2 in dbRequestHandlers[ db ]){
+            cl("Finding " + db + " " )
+            handle['/' + db ] = dbRequestHandlers[ db ][ db2 ];
+        }
+    }// end of running through the request handlers
+
+
 
     handle['/MySQLIO'] = dbIO.MySQLIO;
 
