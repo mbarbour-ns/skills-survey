@@ -30,8 +30,8 @@ h1 {
 .logo {
 	background: linear-gradient(-45deg, #888888,#00dd00,#0055dd,#8800dd,#dd0000, #ff8500, #dd0000, #8800dd, #888888);
 /*    background: radial-gradient( farthest-side,#888888,#00dd00,#0055dd,#8800dd,#dd0000, #ff8500, #dd0000, #8800dd, #888888, transparent) center no-repeat;*/
-	background-size: 300% 100%;
-	animation: gradientBG 20s ease infinite;
+	background-size: 400% 100%;
+	animation: gradientBG 12s ease infinite;
 }
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {

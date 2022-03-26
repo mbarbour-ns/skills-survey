@@ -2,23 +2,23 @@
 <html>
 	<head>
 		<title>Skills Survey: MAIN</title>
-		<link rel="stylesheet" href="surveyCSS" />
+		<link rel="stylesheet" href="survey.css" />
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<script src="tagJS"></script>
-		<script src="databaseListsJS"></script>
-		<script src="DropDownCheckBoxListJS"></script>
-		<script src="makeAWSServicesTableJS"></script>
-		<script src="makeAWSCertificationsTableJS"></script>
-		<script src="makeDevLangTableJS"></script>
-		<script src="makeDevToolTableJS"></script>
-		<script src="makeDevOpsTableJS"></script>
-		<script src="makeDevSecOpsTableJS"></script>
-		<script src="makeDataOpsTableJS"></script>
-		<script src="makeMLOpsTableJS"></script>
-		<script src="makeConsultingTableJS"></script>
-		<script src="makeRolesTableJS"></script>
-		<script src="makeDevOpsImplementationMatrixJS"></script>
-		<script src="makeDevOpsAutoIntegrationTableJS"></script>
+		<script src="../tag.js"></script>
+		<script src="databaseLists.js"></script>
+		<script src="DropDownCheckBoxList.js"></script>
+		<script src="makeAWSServicesTable.js"></script>
+		<script src="makeAWSCertificationsTable.js"></script>
+		<script src="makeDevLangTable.js"></script>
+		<script src="makeDevToolTable.js"></script>
+		<script src="makeDevOpsTable.js"></script>
+		<script src="makeDevSecOpsTable.js"></script>
+		<script src="makeDataOpsTable.js"></script>
+		<script src="makeMLOpsTable.js"></script>
+		<script src="makeConsultingTable.js"></script>
+		<script src="makeRolesTable.js"></script>
+		<script src="makeDevOpsImplementationMatrix.js"></script>
+		<script src="makeDevOpsAutoIntegrationTable.js"></script>
 
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -30,13 +30,13 @@
             let methods = {}
 
 			let gotoDashboard = function(){
-				location.href = "reportsHTML";
+				location.href = "reports.html";
 			}
 			let gotoUserCRUD = function(){
-				location.href = "userCRUDHTML";
+				location.href = "userCRUD.html";
 			}
 			let gotoHealthCheck = function(){
-				location.href = "healthCheckHTML";
+				location.href = "healthCheck.html";
 			}
 			var mainTableId = ''
 			var selId
@@ -57,7 +57,7 @@
 				let menuAreaId = tag('td', tr1Id, '', {} )
 				tag('td', tr1Id, '', {} )
                 let logoId = tag('button',menuAreaId,'',{class:'logo', style:"width:185px; height:80px;"})
-                tag('img',logoId,'',{src:'logoPNG', alt:"Girl in a jacket", width:"165", height:"60" })
+                tag('img',logoId,'',{src:'../../static/logo.png', alt:"Girl in a jacket", width:"165", height:"60" })
                 tag('text',menuAreaId,"SKILLS SURVEY",{ style:'font-size:35px; float:right;' })
                 tag('p',menuAreaId,'',{})
 				tag('button', menuAreaId, 'User CRUD',{

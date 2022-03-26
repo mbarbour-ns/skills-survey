@@ -7,7 +7,7 @@ WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
 WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
 ************************************************************************************************************ */
 
-const async = require('async');
+//const async = require('async');
 const getANYFile = require( __dirname + '/backend/getAnyFile.js' ).getAnyFile;
 const LogThis = require( __dirname + '/backend/LogThis.js' );
 
@@ -18,20 +18,42 @@ let lt = new LogThis( 1, true );
 let configServer = function( port )
 {   let authorized = false;
     console.log("\nsiteService Running!\n")
-    let server =        require( __dirname + '/backend/webServer.js');
-    let router =        require( __dirname + "/backend/webRouter.js");
-//    let dbLinkerWrite = require( __dirname + "/backend/dbRequestHandlers/Linker/dbWriteLinkerResults.js");
-//    let dbLinkerRead =  require( __dirname + "/backend/dbRequestHandlers/Linker/dbReadLinkerResults.js");
-    let dbIO  = require( __dirname + "/backend/MySQLIO.js");
+    let server =    require( __dirname + '/backend/webServer.js');
+    let router =    require( __dirname + "/backend/webRouter.js");
+    let dbIO  =     require( __dirname + "/backend/databases/MySQL/MySQLIO.js");
 
     let listOfHandles = [
         { title:'HOST_IP_ADDRESS', mime:'text/javascript', filepath:'../HOST_IP_ADDRESS.js'},
         { title:'favicon.ico', mime:'text/x-ico', filepath:'frontend/favicon.ico' },
-        { title:'tagJS', mime:'text/javascript', filepath:"/froontend/tag.js" },
+        { title:'tagJS', mime:'text/javascript', filepath:"frontend/tag.js" },
 //        { title:'webn8rClientLib_js_DecodeTokenJS', mime:'text/javascript', filepath:"_lib/webn8rClientLib_js/DecodeToken.js"},
 
-        { title:'SurveyStyles', mime:'text/css', filepath: "frontend/views/survey.css" },
+        { title:'surveyCSS', mime:'text/css', filepath: "frontend/views/survey.css" },
+        { title:'surveyHTML', mime:'text/html', filepath: "frontend/views/survey.html" },
         { title:'', mime:'text/html', filepath: "frontend/views/survey.html" },
+        { title:'tagJS', mime:'text/javascript', filepath: "frontend/tag.js" },
+        { title:'logoPNG', mime:'img/png', filepath: "static/logo.png" },
+		{ title:'databaseListsJS', mime:'text/javascript',  filepath:"frontend/views/databaseLists.js" },
+		{ title:'DropDownCheckBoxListJS', mime:'text/javascript',  filepath:"frontend/views/DropDownCheckBoxList.js" },
+		{ title:'makeAWSServicesTableJS', mime:'text/javascript',  filepath:"frontend/views/makeAWSServicesTable.js" },
+		{ title:'makeAWSCertificationsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeAWSCertificationsTable.js" },
+		{ title:'makeDevLangTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevLangTable.js" },
+		{ title:'makeDevToolTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevToolTable.js" },
+		{ title:'makeDevOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsTable.js" },
+		{ title:'makeDevSecOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevSecOpsTable.js" },
+		{ title:'makeDataOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDataOpsTable.js" },
+		{ title:'makeMLOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeMLOpsTable.js" },
+		{ title:'makeConsultingTableJS', mime:'text/javascript',  filepath:"frontend/views/makeConsultingTable.js" },
+		{ title:'makeRolesTableJS', mime:'text/javascript',  filepath:"frontend/views/makeRolesTable.js" },
+		{ title:'makeDevOpsImplementationMatrixJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsImplementationMatrix.js" },
+		{ title:'makeDevOpsAutoIntegrationTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsAutoIntegrationTable.js" },
+
+
+		{ title:'reportsHTML', mime:'text/html',  filepath:"frontend/views/reports.html" },
+
+		{ title:'healthCheckHTML', mime:'text/html',  filepath:"frontend/views/healthCheck.html" },
+
+		{ title:'userCRUDHTML', mime:'text/html',  filepath:"frontend/views/userCRUD.html" },
     ]
 
     let theExports = []
@@ -49,17 +71,10 @@ let configServer = function( port )
     let handle = {};
     for( let h in theExports ){
         handle[ "/" + h ] = theExports[ h ];
-//        console.log("listOfHandles: for " + h  )
     }
 
-    handle['/dbWriteLinkerResultsTable'] = dbLinkerWrite.dbWriteLinkerResultsTable;
-    handle['/dbReadLinkerResultsTable'] = dbLinkerRead.dbReadLinkerResultsTable;
-    handle['/MySQLIO'] = dbLinkerReadIO.MySQLIO;
-    handle['/imageUpload'] = imageUpload.imageUpload;
+    handle['/MySQLIO'] = dbIO.MySQLIO;
 
-    for( let h in handlersCreatedFromFileFolders ){
-      handle[ h ] = handlersCreatedFromFileFolders[ h ]
-    }
     server.start( port, router.route, handle );
 }
 //===========================================================================================================================

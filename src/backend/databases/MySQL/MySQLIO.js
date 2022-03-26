@@ -15,7 +15,7 @@ sessionStorage data to it.
 //---------------------------------------------------------
 // THIS IS COMPUTER SPECIFIC
 //const dbInstanceConnectionDetails = require('./linkTo_DBInstanceConnectionDetails.js').DBInstanceConnectionDetails;
-const dbConnectionDetails = require('./dbConnectionDetails.js.js').dbConnectionDetails;
+//const dbConnectionDetails = require('./dbConnectionDetails.js.js').dbConnectionDetails;
 // THIS IS APP/PROJECT SPECIFIC
 //---------------------------------------------------------
 
@@ -83,7 +83,7 @@ let fpGetMySQLConnection = function( callback, pParameterObject, response, postD
     connection = mysql.createConnection({
         user:process.env.DBInstanceConnectionDetails_user,
         password:process.env.DBInstanceConnectionDetails_password,
-        database:dbConnectionDetails.database
+        database:DBInstanceConnectionDetails_database.database
     });
     callback( null );
 }// end of fpGetMySQLConnection()
