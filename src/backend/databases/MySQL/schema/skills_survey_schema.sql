@@ -60,8 +60,8 @@ CREATE TABLE `global_method_list` (
 DROP TABLE IF EXISTS `global_acquiredby_list`;
 CREATE TABLE `global_acquiredby_list` (
 	rid			integer unsigned AUTO_INCREMENT,
-	method_text	varchar(2048),
-	method_date	DATETIME,
+	acquiredby_text	varchar(2048),
+	acquiredby_date	DATETIME,
 	current		boolean,
 	deleted		boolean,
 	PRIMARY KEY(`rid`)

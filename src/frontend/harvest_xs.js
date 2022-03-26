@@ -36,7 +36,7 @@ let getUsers = function(){
 
 	/* APP Script model
 	var headers = {
-		"User-Agent": "Google Apps Script Harvest API Sample",
+		"User-Agent": "Node.js Harvest API Sample",
 		"Authorization": "Bearer "+ accessToken,
 		"Harvest-Account-ID": accountID
 	};

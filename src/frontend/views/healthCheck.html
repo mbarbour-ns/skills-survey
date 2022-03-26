@@ -3,11 +3,57 @@
 	<head>
 		<title>Skills Survey: HealthCheck</title>
 		<script>
+            let cl = console.log
 			let gotoSurvey = function(){
 				location.href = "surveyHTML"
 			}
             let gotoDbAdmin = function(){
 				location.href = "dbAdminHTML"
+            }
+
+            async function getMeFromAPI() {
+                var headers = {
+                    "User-Agent": "Node.js Harvest API Sample",
+                    "Authorization": "Bearer "+ document.getElementById( 'token' ).value,
+                    "Harvest-Account-ID": document.getElementById( 'accountId' ).value
+                };
+                var options = {
+                    "method": "get",
+                    "headers": headers
+                };
+
+                let url ="https://api.harvestapp.com/v2/users/me"
+                let myObject = await fetch( url, options );
+                let myText = await myObject.text();
+                console.log( typeof myText )
+                console.log( myText )
+
+                let parsedText = JSON.parse( myText )
+                console.log( typeof parsedText )
+                console.log( parsedText )
+            }
+
+            async function getBillingFromAPI() {
+                document.getElementById( accountId ).value
+                var headers = {
+                    "User-Agent": "Node.js Harvest API Sample",
+                    "Authorization": "Bearer "+ document.getElementById( 'token' ).value,
+                    "Harvest-Account-ID": document.getElementById( 'accountId' ).value 
+                };
+                var options = {
+                    "method": "get",
+                    "headers": headers
+                };
+
+                let url ="https://api.harvestapp.com/v2/reports/time/team?from=20211018&to=20211025"
+                let myObject = await fetch( url, options );
+                let myText = await myObject.text();
+                console.log( typeof myText )
+                console.log( myText )
+
+                let parsedText = JSON.parse( myText )
+                console.log( typeof parsedText )
+                console.log( parsedText )
             }
 		</script>
 	</head>
@@ -18,6 +64,12 @@
 		<h5>Database connection:</h5>
         <button onclick="gotoDbAdmin();">dB</button>
 		<h5>API connection:</h5>
+        <label for="accountId">AccountID:</label>
+        <input type="text" id="accountId" name="accountId" value="XXXXXX"><br>
+        <label for="token">Token:</label>
+        <input type="text" id="token" name="token"><br>
+        <button onclick="getMeFromAPI();">getMeFromAPI</button>
+        <button onclick="getBillingFromAPI();">getBillingFromAPI</button>
 		<h5>Unit Test Completion %:</h5>
 	</body>
 </html>

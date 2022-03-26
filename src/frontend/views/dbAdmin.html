@@ -20,9 +20,7 @@
 
     <script>
         const cl = console.log;
-
         let gotoAdminUtils =          function(){ location.href = "dbAdminHTML";}
-
 
         //============================================================================
         // START OF BUTTON:showAllDatabaseTables
@@ -72,7 +70,7 @@
                 url:"/MySQLIO",
                 syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
                 dataPackage:
-                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+//                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
                     "&query=show database tables&database=" + pDatabase,
                 callback:function(obj){ showThatDatabasesTables( obj ) }
             };
@@ -158,7 +156,7 @@
                 url:"/MySQLIO",
                 syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
                 dataPackage:
-                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+//                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
                     "&query=show all database tables",
                 callback:function(obj){ functionToRunAfterGetDatabasesTables( obj ) }
             };
@@ -248,16 +246,6 @@
         }
 
 
-
-
-
-
-
-
-
-
-
-
         //========================================================================
         let XHRNESTEDJSONHandler = function( iocfg )
         { cl("@: XHRNESTEDJSONHandler()")
@@ -265,11 +253,10 @@
             xmlhttp.open(iocfg.method, iocfg.url, iocfg.syncMode, iocfg.xhrKey, '');
             xmlhttp.onreadystatechange = function()
             {  cl("<> XMLHTTPRequest: " + this.readyState + ":" + this.status)
-                if( this.readyState == 1){  cl("XHR:1," + this.status)}
-                if( this.readyState == 2){  cl("XHR:2," + this.status)}
-                if( this.readyState == 3){  cl("XHR:3," + this.status)}
-                if (this.readyState == 4 ){
-                    //alert("XHR:4," + this.status);
+                if( this.readyState == 1 ){  cl("XHR:1," + this.status)}
+                if( this.readyState == 2 ){  cl("XHR:2," + this.status)}
+                if( this.readyState == 3 ){  cl("XHR:3," + this.status)}
+                if( this.readyState == 4 ){  //alert("XHR:4," + this.status);
                     if( this.status == 200) {
                         cl("Browser-side XHR: " + xmlhttp.responseText );
                         if( ( sessionStorage.getItem('webn8rSessionLabel') !== "NOT AUTHORIZED") &&
