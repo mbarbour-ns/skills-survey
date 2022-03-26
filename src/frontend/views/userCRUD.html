@@ -16,7 +16,8 @@
 				})
 				tag('button', pParentId, 'Update Users from Harvest',{
 					style:" width: 33%;", 
-					class:"menuButton"
+					class:"menuButton",
+                    onclick:"getUsersFromAPI();"
 				})
 				
 				getUsersFromDatabase()
@@ -80,10 +81,40 @@
                 }
             }
 
+
+
+            //API
+            async function getUsersFromAPI() {
+                var headers = {
+                    "User-Agent": "Node.js Harvest API Sample",
+                    "Authorization": "Bearer "+ document.getElementById( 'token' ).value,
+                    "Harvest-Account-ID": document.getElementById( 'accountId' ).value 
+                };
+                var options = {
+                    "method": "get",
+                    "headers": headers
+                };
+
+                let url ="https://api.harvestapp.com/v2/reports/time/team?from=20220101&to=20230101"
+                let myObject = await fetch( url, options );
+                let myText = await myObject.text();
+                console.log( typeof myText )
+                console.log( myText )
+
+                let parsedText = JSON.parse( myText )
+                console.log( typeof parsedText )
+                console.log( parsedText )
+            }
+
 		</script>
 	</head>
 
 	<body id='1'>
+        <label for="accountId">AccountID:</label>
+        <input type="text" id="accountId" name="accountId">
+        <label for="token">Token:</label>
+        <input type="text" id="token" name="token"><br>
+
 		<script>
 			makeUserForm( document.body.id )
 		</script>
