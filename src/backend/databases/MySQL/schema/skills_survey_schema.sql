@@ -142,6 +142,14 @@ CREATE TABLE `survey_list_mlops_expertise` (
 );
 
 
+DROP TABLE IF EXISTS `harvest_temp`;
+CREATE TABLE `harvest_temp` (
+	rid			integer unsigned AUTO_INCREMENT,
+    name        char(255),
+    name_last   char(255),
+    name_first  char(255),
+	PRIMARY KEY(`rid`)
+);
 
 
 

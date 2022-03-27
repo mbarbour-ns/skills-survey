@@ -6,6 +6,8 @@
 		<script src="tagJS"></script>
 		<script src="databaseListsJS"></script>
 		<script>
+            let mainTableId
+
 			let gotoSurvey = function(){	location.href = "surveyHTML"	}
 
 			let makeUserForm = function( pParentId ){
@@ -49,22 +51,53 @@
 
             let setScreenWidth = function ( pWidths ){}
 
+            let addRecordsToTable = function( pRecordSetObj ){
+                cl( ">>" + JSON.stringify( pRecordSetObj ))
+                let row = []
+                for( let rowIdx in  pRecordSetObj.userList ){
+                //for( let rowIdx in  dbResults.user ){
+                    cl( ">>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ] ))
+                    row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
+                    //cl( ">>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ] ))
+                    for( let hdr in pRecordSetObj.userList[ rowIdx ] ){
+                    //for( let hdr in dbResults.user[ rowIdx ] ){
+                        cl( ">>>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ][ hdr ] ))
+                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
+                        /*cl("switch on " + hdr )
+                        let inputType = 'text';
+                        switch( dbResults.user_type_map[hdr] ){
+                            case 'tinyint(1)':  inputType = 'checkbox'; break;
+                            default:            inputtype = 'text';     break;
+                        }*/
+                        let i = tag('input', t,'', { type: 'text'})//inputType })
+                        document.getElementById( i ).value = pRecordSetObj.userList[ rowIdx ][ hdr ] 
+                    }
+					let t = tag('td', row[ rowIdx ], '', {} )
+					tag('a', t, '...',{href:'www.google.com'})
+                }
+            }
+
+            // MIKE!!! make function that loads the names in after the fact, either from db or api
             let makeUserCrudForm = function( pParentId ){
                 // mae a table w/ columns per data.  if too big, set page width > 100%
                 // find max record width
                 let widths = getMaxDataWidth();
                 setScreenWidth( widths )
 
-                let tableId = tag('table', pParentId, '', {} )
-                let tableHdrRowId = tag('tr', tableId, '', {} )
+                mainTableId = tag('table', pParentId, '', {} )
+                let tableHdrRowId = tag('tr', mainTableId, '', {} )
                 for( let hdr in dbResults.user[ 0 ] ){
                     tag('th', tableHdrRowId, hdr, {} )
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
-
+                addRecordsToTable({
+                    userList:dbResults.user,
+                    id:mainTableId
+                })
+                /*
                 let row = []
                 for( let rowIdx in  dbResults.user ){
-                    row[ rowIdx ] = tag('tr', tableId, '', {} )
+                    row[ rowIdx ] = tag('tr', mainTableId, '', {} )
                     for( let hdr in dbResults.user[ rowIdx ] ){
                         let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
                         cl("switch on " + hdr )
@@ -78,7 +111,7 @@
                     }
 					let t = tag('td', row[ rowIdx ], '', {} )
 					tag('a', t, '...',{href:'www.google.com'})
-                }
+                }*/
             }
 
 
@@ -95,7 +128,7 @@
                     "headers": headers
                 };
 
-                let url ="https://api.harvestapp.com/v2/reports/time/team?from=20220101&to=20230101"
+                let url ="https://api.harvestapp.com/v2/reports/time/team?from=20210401&to=20220401"
                 let myObject = await fetch( url, options );
                 let myText = await myObject.text();
                 console.log( typeof myText )
@@ -104,6 +137,38 @@
                 let parsedText = JSON.parse( myText )
                 console.log( typeof parsedText )
                 console.log( parsedText )
+
+                let newRecords = []
+                let idx = 0;
+                for( let i in parsedText['results'] ){
+                    console.log( parsedText['results'][ i ].user_name )
+                    let tn = parsedText['results'][ i ].user_name 
+                    let tn2 = tn.split(' ');
+                    switch( tn2.length ){
+                        case 2:
+                            console.log( "  - " + tn2[0] + ',' + tn2[1] )
+                            newRecords[ idx ] = {}
+                            newRecords[ idx ]['name_first'] = tn2[0]
+                            newRecords[ idx ]['name_last'] = tn2[1]
+                            newRecords[ idx ]['eemployee_no' ] = "XXXXXX" 
+                            idx++
+                            break;
+                        case 3:
+                            console.log("  -- " + tn2[0] + ',' + tn2[2] )
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                addRecordsToTable({
+                    userList: newRecords,
+                    id:mainTableId
+                })
+
+                // save in the harvest tamp table
+                // compare this list with existing list, add newbies
+
+
             }
 
 		</script>
