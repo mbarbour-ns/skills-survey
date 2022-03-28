@@ -22,20 +22,18 @@
 
                 let myObject = await fetch( pUrl, options );
                 let myText = await myObject.text();
-                    console.log( typeof myText )
-                    console.log( myText )
-
+                    console.log( typeof myText ); console.log( myText )
                 let parsedText = JSON.parse( myText )
-                    console.log( typeof parsedText )
-                    console.log( parsedText )
+                    console.log( typeof parsedText ); console.log( parsedText )
             }
 
-            let getMeFromBambootAPI = function(){       getFromBambooAPI( "https://api.harvestapp.com/v2/users/me" )}
+            let bamboo_url = "https://api.bamboohr.com/api/gateway.php/stelligent/v1/employees/directory"
+            let getMeFromBambooAPI = function(){       getFromBambooAPI( "https://stelligent.bamboohr.com/reports/custom/Directory/207" )}
             async function getFromBambooAPI( pUrl ){
                 var headers = {
                     "User-Agent": "Node.js Bamboo API Sample",
                     "Authorization": "Bearer "+ document.getElementById( 'BambooToken' ).value,
-                    "Harvest-Account-ID": document.getElementById( 'BambooAccountId' ).value
+                    "Bamboo-Account-ID": document.getElementById( 'BambooAccountId' ).value
                 };
                 var options = {
                     "method": "get",
@@ -44,17 +42,14 @@
 
                 let myObject = await fetch( pUrl, options );
                 let myText = await myObject.text();
-                    console.log( typeof myText )
-                    console.log( myText )
-
+                    console.log( typeof myText ); console.log( myText )
                 let parsedText = JSON.parse( myText )
-                    console.log( typeof parsedText )
-                    console.log( parsedText )
+                    console.log( typeof parsedText ); console.log( parsedText )
             }
 
 		</script>
 	</head>
-	<body style="background-color: #aaaaaa">
+	<body style="background-image: linear-gradient(to bottom right, #999999, #000000);">
 		<button onclick="gotoSurvey();">
 			goto survey
 		</button><br><br>

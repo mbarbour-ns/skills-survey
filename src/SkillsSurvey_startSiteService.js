@@ -58,6 +58,8 @@ let configServer = function( port )
 		{ title:'DecodeTokenJS', mime:'text/javascript',  filepath:"frontend/views/DecodeToken.js" },
 		{ title:'DecodeTokenJS', mime:'text/javascript',  filepath:"frontend/views/DecodeToken.js" },
 
+        { title:'certManagerHTML', mime:'text/html',  filepath:"frontend/views/certManager.html" },
+
     ]
 
     let theExports = []

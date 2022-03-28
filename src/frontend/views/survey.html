@@ -23,21 +23,18 @@
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 		<script>            
+			// route table
+			let gotoDashboard = function(){		location.href = "reportsHTML";}
+			let gotoUserCRUD = function(){		location.href = "userCRUDHTML";}
+			let gotoHealthCheck = function(){	location.href = "healthCheckHTML";}
+			let gotoCertManger = function(){	location.href = "certManagerHTML";}
+
             let gLevels = {}
             let gMethods = {}
             let gAcquiredBy = {}
             let levels = {}
             let methods = {}
 
-			let gotoDashboard = function(){
-				location.href = "reportsHTML";
-			}
-			let gotoUserCRUD = function(){
-				location.href = "userCRUDHTML";
-			}
-			let gotoHealthCheck = function(){
-				location.href = "healthCheckHTML";
-			}
 			var mainTableId = ''
 			var selId
 			var consultantId
@@ -75,6 +72,12 @@
 					class:"menuButton", 
 					onclick:"gotoDashboard();"
 				})
+				tag('button', menuAreaId, 'Certifications Manager',{
+					style:" width: 25%;", 
+					class:"menuButton", 
+					onclick:"gotoCertManger();"
+				})
+				tag('br',menuAreaId,'',{})
 				tag('button', menuAreaId, 'HealthCheck',{
 					style:" width: 25%;", 
 					class:"menuButton", 
