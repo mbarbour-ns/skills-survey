@@ -51,16 +51,16 @@
             let setScreenWidth = function ( pWidths ){}
 
             let addRecordsToTable = function( pRecordSetObj ){
-                cl( ">>" + JSON.stringify( pRecordSetObj ))
+                //cl( ">>" + JSON.stringify( pRecordSetObj ))
                 let row = []
                 for( let rowIdx in  pRecordSetObj.userList ){
                 //for( let rowIdx in  dbResults.user ){
-                    cl( ">>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ] ))
+                    //cl( ">>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ] ))
                     row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
                     //cl( ">>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ] ))
                     for( let hdr in pRecordSetObj.userList[ rowIdx ] ){
                     //for( let hdr in dbResults.user[ rowIdx ] ){
-                        cl( ">>>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ][ hdr ] ))
+                        //cl( ">>>>" + JSON.stringify( pRecordSetObj.userList[ rowIdx ][ hdr ] ))
                         let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
                         /*cl("switch on " + hdr )
                         let inputType = 'text';
@@ -90,7 +90,7 @@
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
                 addRecordsToTable({
-                    userList:dbResults.user,
+                    userList:{},//dbResults.user,
                     id:mainTableId
                 })
                 /*
@@ -127,7 +127,7 @@
                     "headers": headers
                 };
 
-                let url ="https://api.harvestapp.com/v2/reports/time/team?from=20210401&to=20220401"
+                let url ="https://api.harvestapp.com/v2/users"
                 let myObject = await fetch( url, options );
                 let myText = await myObject.text();
                 console.log( typeof myText )
@@ -135,28 +135,27 @@
 
                 let parsedText = JSON.parse( myText )
                 console.log( typeof parsedText )
-                console.log( parsedText )
+                console.log( 'parsedText = ' + parsedText )
 
                 let newRecords = []
                 let idx = 0;
-                for( let i in parsedText['results'] ){
-                    console.log( parsedText['results'][ i ].user_name )
-                    let tn = parsedText['results'][ i ].user_name 
-                    let tn2 = tn.split(' ');
-                    switch( tn2.length ){
-                        case 2:
-                            console.log( "  - " + tn2[0] + ',' + tn2[1] )
-                            newRecords[ idx ] = {}
-                            newRecords[ idx ]['name_first'] = tn2[0]
-                            newRecords[ idx ]['name_last'] = tn2[1]
-                            newRecords[ idx ]['eemployee_no' ] = "XXXXXX" 
-                            idx++
-                            break;
-                        case 3:
-                            console.log("  -- " + tn2[0] + ',' + tn2[2] )
-                            break;
-                        default:
-                            break;
+                for( let i in parsedText['users'] ){
+                    // CAPTURE ONLY THE ACTIVE FOLKS
+                    newRecords[ idx ] = {}
+                    newRecords[ idx ]['name_first'] = parsedText['users'][ i ].first_name
+                    newRecords[ idx ]['name_last'] = parsedText['users'][ i ].last_name
+                    newRecords[ idx ]['employee_no'] = parsedText['users'][ i ][ 'roles' ][0]
+                    newRecords[ idx ]['email'] = parsedText['users'][ i ].email
+                    newRecords[ idx ]['TZ'] = parsedText['users'][ i ].timezone
+                    
+                    console.log( typeof newRecords[ idx ]['employee_no'] + ": " + newRecords[ idx ]['employee_no'] )
+                    if( typeof newRecords[ idx ]['employee_no'] === 'string'){
+                        if( newRecords[ idx ]['employee_no'].search("undefined") === -1 ){
+                            newRecords[ idx ]['active'] = 'Y'
+                            newRecords[ idx ]['role'] = 'DAE'
+                            newRecords[ idx ]['deleted'] = 'N'
+                            idx++;
+                        }
                     }
                 }
                 addRecordsToTable({
@@ -167,14 +166,13 @@
                 // save in the harvest tamp table
                 // compare this list with existing list, add newbies
 
-
             }
 
 		</script>
 	</head>
 
 	<body id='1'>
-        <label for="accountId">AccountID:</label>
+        <label for="accountId">MGR AccountID:</label>
         <input type="text" id="accountId" name="accountId">
         <label for="token">Token:</label>
         <input type="text" id="token" name="token"><br>

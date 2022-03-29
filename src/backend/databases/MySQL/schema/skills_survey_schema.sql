@@ -10,6 +10,7 @@ CREATE TABLE `adm_user` (
 	email		CHAR(255),
 	active		boolean,
 	deleted		boolean,
+	harvest_id	CHAR(20),
 	PRIMARY KEY(`rid`)
 );
 
