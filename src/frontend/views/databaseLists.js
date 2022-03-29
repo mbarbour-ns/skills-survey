@@ -1,9 +1,7 @@
 // This is a stub for actually database table reads
 let dbResults = {
     user:[
-        {name_first:"Candice", name_last:"Whiskey",employee_no:"123455", email:"", active:"Y", deleted:"N", role:'manager'},
-        {name_first:"Mike", name_last:"Barbour",employee_no:"123456", email:"", active:"Y", deleted:"N", role:'admin'},
-        {name_first:"Patrick", name_last:"Gallagher",employee_no:"123457", email:"", active:"Y", deleted:"N", role:'resource'}
+        {name_first:"Candice", name_last:"Whiskey",employee_no:"123455", email:"",TZ:"",active:"Y", role:'',deleted:"N"},
     ],
     user_type:[
         {field:'employee_no',type:'char(20)' },

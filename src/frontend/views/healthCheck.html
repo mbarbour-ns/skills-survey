@@ -8,6 +8,7 @@
             let gotoDbAdmin = function(){   location.href = "dbAdminHTML"   }
 
             let getMeFromHarvestAPI = function(){       getFromHarvestAPI( "https://api.harvestapp.com/v2/users/me" )}
+            let getUsersFromHarvestAPI = function(){    getFromHarvestAPI( "https://api.harvestapp.com/v2/users" )}
             let getBillingFromHarvestAPI = function(){  getFromHarvestAPI( "https://api.harvestapp.com/v2/reports/time/team?from=20211018&to=20211025" )}
             async function getFromHarvestAPI( pUrl ) {
                 var headers = {
@@ -62,6 +63,7 @@
         <label for="HarvestToken">Token:</label>
         <input type="text" id="HarvestToken" name="HarvestToken"><br>
         <button onclick="getMeFromHarvestAPI();">getMeFromHarvestAPI</button>
+        <button onclick="getUsersFromHarvestAPI();">getUsersFromHarvestAPI</button>
         <button onclick="getBillingFromHarvestAPI();">getBillingFromHarvestAPI</button><br><br><br>
 
 		<h5>Bamboo API connection:</h5>

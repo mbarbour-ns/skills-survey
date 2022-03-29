@@ -10,6 +10,7 @@ CREATE TABLE `adm_user` (
 	email		CHAR(255),
 	active		boolean,
 	deleted		boolean,
+	harvest_id	CHAR(20),
 	PRIMARY KEY(`rid`)
 );
 
@@ -145,9 +146,13 @@ CREATE TABLE `survey_list_mlops_expertise` (
 DROP TABLE IF EXISTS `harvest_temp`;
 CREATE TABLE `harvest_temp` (
 	rid			integer unsigned AUTO_INCREMENT,
-    name        char(255),
+    employee_no char(10),
     name_last   char(255),
     name_first  char(255),
+    email       char(255),
+    role        char(255),
+    active      boolean,
+    deleted     boolean,
 	PRIMARY KEY(`rid`)
 );
 
