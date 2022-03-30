@@ -172,6 +172,36 @@
             }// end of mergeUsersToDatabase
 
 
+            // MIKE: UPGRADE MYSQLIO to use the fetch IO protocol
+            let writeUsersToDB = function( dataObject )
+            {   console.log("\n\n#######################################\nwriteScoreDataToDB() ..")
+                // FIRST SENTRY POINT
+                if( 
+                    dataObject.user !== null &&
+                    dataObject.session !== null
+                ){
+                    console.log("Attempting to send data: " + JSON.stringify( dataObject ) );
+                    let cfg = {
+                        method:"POST",
+                        url:"/MySQLIO",
+                        syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                        dataPackage:
+                            "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                            "&query=write linker score to db" + 
+                            "&json=" + JSON.stringify(dataObject),
+
+                        callback:function(obj){ readAllResultsFromDataBase() }
+                    };
+                    cl("SENDING cfg: " + JSON.stringify(cfg));
+                    XHRNESTEDJSONHandler( cfg );
+                }
+            }// end of writeScoreDataToDB
+
+
+
+
+
+
 		</script>
 	</head>
 
