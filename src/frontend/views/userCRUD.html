@@ -7,10 +7,86 @@
         <script src="databaseListsJS"></script>
         <script src="XHR"></script>
 		<script>
+            let cl = console.log
             let mainTableId
             let gNewRecords = []
+            let gHeaderList = []
+            let gUserData = []
 			
             let gotoSurvey = function(){	location.href = "surveyHTML"	}
+
+            // discover the db table schema so we can set column widths
+            let getUserSchema = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserStruct",
+                    callback:function(obj){ parseTableStruct(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseTableStruct = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
+                    gHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                makeUserForm( document.body.id )
+            }
+
+            // discover the db table schema so we can set column widths
+            let getUserData = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserData",
+                    callback:function(obj){ parseTableData(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseTableData = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
+                    gHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                makeUserForm( document.body.id )
+            }
+
+                        // discover the db table schema so we can set column widths
+            let putUserData = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=putUserData"
+                        +"&data="+JSON.stringify( gUserData ),
+                    callback:function(obj){ parseTableStruct(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseTableStruct = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
+                    gHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                makeUserForm( document.body.id )
+            }
 
 			let makeUserForm = function( pParentId ){
 				tag('button', pParentId, 'Go to Survey', {
@@ -33,29 +109,17 @@
 					class:"menuButton",
                     onclick:"getUserSchema();"
 				})
-				
-				getUsersFromDatabase()
                 makeUserCrudForm( pParentId )
 			}
 
-			let getUsersFromDatabase = function(){}
-
-            let cl = console.log
 
             let getMaxDataWidth = function(){
                 let maxRecLength = 0;
                 let hdrLength = 0;
-                for( let idx in dbResults.user ){
-                    let recLength = 0;
-                    hdrLength = 0;
-                    for( let rec in dbResults.user[ idx ] ){
-                        cl( idx + ":" + rec + ": " + dbResults.user[ idx ][ rec ].length + "  " + dbResults.user[ idx ][ rec ] )
-                        recLength += dbResults.user[ idx ][ rec ].length 
-                        hdrLength += rec.length
-                    }
-                    if( recLength > maxRecLength ) maxRecLength = recLength
+                for( let idx in gHeaderList ){
+                    console.log(gHeaderList[idx])
+                    hdrLength += gHeaderList[ idx ].length 
                 }
-                cl("MaxRecLength: " + maxRecLength );
                 cl("HdrLength    : " + hdrLength );
                 return {'MaxRecLength':maxRecLength, 'HdrLength':hdrLength}
             }
@@ -82,28 +146,6 @@
                 }
             }
 
-            // discover the db table schema so we can set column widths
-            let getUserSchema = function(){
-                let cfg = {
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=getUserStruct",
-                    callback:function(obj){ parseTableStruct(obj) }
-                }
-                XHR( cfg )
-            }
-            let parseTableStruct = function( pObj ){
-                console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
-                let newObj = JSON.parse( pObj )
-                for( let idx in newObj ){
-                    cl( JSON.stringify( newObj[ idx ] ) )
-                }
-            }
-
 
             // MIKE!!! make function that loads the names in after the fact, either from db or api
             let makeUserCrudForm = function( pParentId ){
@@ -114,12 +156,12 @@
 
                 mainTableId = tag('table', pParentId, '', {} )
                 let tableHdrRowId = tag('tr', mainTableId, '', {} )
-                for( let hdr in dbResults.user[ 0 ] ){
-                    tag('th', tableHdrRowId, hdr, {} )
+                for( let hdr in gHeaderList ){
+                    tag('th', tableHdrRowId, gHeaderList[ hdr ], {} )
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
                 addRecordsToTable({
-                    userList:{},//dbResults.user,
+                    userList: gUserData ,//dbResults.user,
                     id:mainTableId
                 })
                 /*
@@ -211,7 +253,7 @@
         <input type="text" id="token" name="token"><br>
 
 		<script>
-			makeUserForm( document.body.id )
+            getUserSchema();
 		</script>
 	</body>
 </html>

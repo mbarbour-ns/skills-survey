@@ -36,5 +36,15 @@ exports.QueryList = {// handlers
         func:function(){
             return 'DESC admUser;'
         }
+    },
+    "getUserData":{
+        func:function(){
+            return 'SELECT * from admUser;'
+        }
+    },
+    "putUserData":{
+        func:function(){
+            return 'INSERT INTO harvest_temp;'
+        }
     }
 }// end of QueryList
