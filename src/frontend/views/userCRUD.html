@@ -4,7 +4,8 @@
 		<title>Skills Survey: User CRUD</title>
 		<link rel="stylesheet" href="surveyCSS" />
 		<script src="tagJS"></script>
-		<script src="databaseListsJS"></script>
+        <script src="databaseListsJS"></script>
+        <script src="XHR"></script>
 		<script>
             let mainTableId
             let gNewRecords = []
@@ -26,6 +27,11 @@
 					style:" width: 33%;", 
 					class:"menuButton",
                     onclick:"mergeUsersToDatabase();"
+				})
+				tag('button', pParentId, 'Test Users to Database',{
+					style:" width: 33%;", 
+					class:"menuButton",
+                    onclick:"getUserSchema();"
 				})
 				
 				getUsersFromDatabase()
@@ -75,6 +81,29 @@
 					tag('a', t, '...',{href:'www.google.com'})
                 }
             }
+
+            // discover the db table schema so we can set column widths
+            let getUserSchema = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserStruct",
+                    callback:function(obj){ parseTableStruct(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseTableStruct = function( pObj ){
+                console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( JSON.stringify( newObj[ idx ] ) )
+                }
+            }
+
 
             // MIKE!!! make function that loads the names in after the fact, either from db or api
             let makeUserCrudForm = function( pParentId ){

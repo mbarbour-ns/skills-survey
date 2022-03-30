@@ -47,6 +47,7 @@ let configServer = function( port )
 		{ title:'makeDevOpsImplementationMatrixJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsImplementationMatrix.js" },
 		{ title:'makeDevOpsAutoIntegrationTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsAutoIntegrationTable.js" },
 
+        { title:'XHR', mime:'text/javascript',  filepath:"frontend/XHR.js" },
 
 		{ title:'reportsHTML', mime:'text/html',  filepath:"frontend/views/reports.html" },
 
@@ -59,7 +60,8 @@ let configServer = function( port )
 		{ title:'DecodeTokenJS', mime:'text/javascript',  filepath:"frontend/views/DecodeToken.js" },
 
         { title:'certManagerHTML', mime:'text/html',  filepath:"frontend/views/certManager.html" },
-
+        
+        { title:'MySQLIO', mime:'text/javascript',  filepath:"backend/databases/MySQL/MySQLIO.js" },
     ]
 
     let theExports = []
