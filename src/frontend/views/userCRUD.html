@@ -74,18 +74,9 @@
                         // put session auth here
                         "&query=putUserData"
                         +"&data="+JSON.stringify( gUserData ),
-                    callback:function(obj){ parseTableStruct(obj) }
+                    callback:function(obj){  }
                 }
                 XHR( cfg )
-            }
-            let parseTableStruct = function( pObj ){
-                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
-                let newObj = JSON.parse( pObj )
-                for( let idx in newObj ){
-                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
-                    gHeaderList.push( newObj[ idx ]['Field'] )
-                }
-                makeUserForm( document.body.id )
             }
 
 			let makeUserForm = function( pParentId ){
