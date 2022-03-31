@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Webinnate: Admin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      .lowerTable{
+        border: 1px solid white;
+        font-family: verdana;
+        font-size: 16px;
+        color: white;/* font */
+      }
+    </style>
+
+    <script src="HOST_IP_ADDRESS"></script>
+    <script src="DecodeTokenJS"></script>
+    <!-- script src="LogThisJS"></script -->
+    <script src="tagJS"></script>
+
+    <script>
+        const cl = console.log;
+        let gotoAdminUtils =          function(){ location.href = "dbAdminHTML";}
+
+        //============================================================================
+        // START OF BUTTON:showAllDatabaseTables
+        let getAllDatabases = function(){ 
+            cl("YOU CLICKED showAllDatabases")
+            let cfg = {
+                method:"POST",
+                url:"/MySQLIO",
+                syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                dataPackage:
+//                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                    "&query=show all databases",
+                callback:function(obj){ showAllTheDatabases( obj ) }
+            };
+            cl("SENDING cfg: " + JSON.stringify(cfg));
+            XHRNESTEDJSONHandler( cfg ); 
+        }
+        let showAllTheDatabases = function( pResults )
+        {   cl("@ showAllTheDatabases() .. " + JSON.stringify( JSON.parse( pResults )))
+            let res = JSON.parse( pResults )
+            let title = ""
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( k + ": " + JSON.stringify( res[ p ][ k ]) )
+                    title = k
+                }
+            }
+            cl("\nQUERY for " + title )
+            tag('h4','1','Databases',{})
+            let selectorId = tag('select','1','DATABASES',{ onchange:"getThatDatabaseButton(this.options[this.selectedIndex].text);"})
+            let count = 0;
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( JSON.stringify( res[ p ][ k ]) )
+                    database_tables[ count++ ] = res[ p ][ k ]
+                    tag('option', selectorId, res[ p ][ k ],{value:res[ p ][ k ] });
+                }
+            }
+        }
+
+        let thisDatabase = ""
+        let getThatDatabaseButton = function( pDatabase ){
+            cl("Clicked getThatDatabaseButton( " + pDatabase + " )")
+            thisDatabase = pDatabase
+            let cfg = {
+                method:"POST",
+                url:"/MySQLIO",
+                syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                dataPackage:
+//                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                    "&query=show database tables&database=" + pDatabase,
+                callback:function(obj){ showThatDatabasesTables( obj ) }
+            };
+            cl("SENDING cfg: " + JSON.stringify(cfg));
+            XHRNESTEDJSONHandler( cfg ); 
+        }
+        let showThatDatabasesTables = function( pResults )
+        {   cl("@ showThatDatabasesTables() .. " + JSON.stringify( JSON.parse( pResults )))
+            let res = JSON.parse( pResults )
+            let title = ""
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( k + ": " + JSON.stringify( res[ p ][ k ]) )
+                    title = k
+                }
+            }
+            cl("\nQUERY for " + title )
+            tag('p','1','________________________________________',{})
+            tag('p','1','SHOW DATABASE TABLES: '+ thisDatabase,{})
+
+            let selectId = tag('select','1','',{onchange:"whatDbInfoToSee(this.options[this.selectedIndex].text);"})
+            tag('option',selectId,'data',{value:'data'})
+            tag('option',selectId,'desc',{value:'desc'})
+
+            tag('br','1','',{})
+
+            let count = 0;
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( JSON.stringify( res[ p ][ k ]) )
+                    database_tables[ count++ ] = res[ p ][ k ]
+                    tag('button','1',res[ p ][ k ],{onclick:"doTableButton('"+ res[ p ][ k ] + "')"})
+                }
+            }
+        }
+
+        let infoType = "data"
+        let whatDbInfoToSee = function( pInfoType ){
+            infoType = pInfoType
+            cl("@ whatDbInfoToSee():" + infoType );
+        }
+
+        let showThatDatabasesTablesInTableFormat = function( pResults )
+        {   cl("@ showThatDatabasesTablesInTableFormat() .. " + JSON.stringify( JSON.parse( pResults )))
+            let res = JSON.parse( pResults )
+            let title = ""
+            tag('br','1','',{})
+            tag('br','1','',{})
+            let thisDivId = tag('div', 1, thisTable,{})
+            tag('br',thisDivId,'',{})
+            let thisTableId = tag('table',thisDivId,'',{style:'border:1px solid;'})
+            let firstRowId = tag('tr',thisTableId,'',{style:'border:1px solid;'})
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( k + ": " + JSON.stringify( res[ p ][ k ]) )
+                    title = k
+                    tag('th', firstRowId, k,{style:'border:1px solid;'})
+                }
+                break;
+            }
+
+            let x;
+            let count = 0;
+            let rowsId = []
+            for( let p in res ){
+                rowsId[ count ] = tag('tr',thisTableId,'',{style:'border:1px solid;'})
+                for( let k in res[ p ] ){
+                    cl( JSON.stringify( res[ p ][ k ]) )
+                    tag('td', rowsId[ count ], res[ p ][ k ],{style:'border:1px solid;'})
+                }
+                count++;
+            }
+        }
+        //============================================================================
+
+
+        //============================================================================
+        // START OF BUTTON:showAllDatabaseTables
+        let showAllDatabasesTables = function(){ 
+            cl("YOU CLICKED showAllDatabaseTables")
+            let cfg = {
+                method:"POST",
+                url:"/MySQLIO",
+                syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                dataPackage:
+//                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                    "&query=show all database tables",
+                callback:function(obj){ functionToRunAfterGetDatabasesTables( obj ) }
+            };
+            cl("SENDING cfg: " + JSON.stringify(cfg));
+            XHRNESTEDJSONHandler( cfg ); 
+        }
+        let functionToRunAfterGetDatabasesTables = function( pResults )
+        {   cl("@ functionToRunAfterGetDatabasesTables() .. " + JSON.stringify( JSON.parse( pResults )))
+            let res = JSON.parse( pResults )
+            let title = ""
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( k + ": " + JSON.stringify( res[ p ][ k ]) )
+                    title = k
+                }
+            }
+            cl("\nQUERY for " + title )
+            tag('p','1','_____________________________________<br>SHOW DATABASE TABLES',{})
+            let count = 0;
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( JSON.stringify( res[ p ][ k ]) )
+                    database_tables[ count++ ] = res[ p ][ k ]
+                    tag('button','1',res[ p ][ k ],{onclick:"doTableButton('"+ res[ p ][ k ] + "')"})
+                }
+            }
+        }
+        let thisTable = ""
+        let doTableButton = function( pTable ){
+            cl("Clicked doTableButton( " + pTable + " ), and infoType: " + infoType)
+            thisTable = pTable
+            let thisQuery = 'selectTable'
+            if( infoType === 'desc'){
+                thisQuery = 'descTable'
+            }
+            let cfg = {
+                method:"POST",
+                url:"/MySQLIO",
+                syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                dataPackage:
+                    "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                    "&query="+thisQuery+"&database=" + thisDatabase + "&table=" + thisTable,
+                callback:function(obj){ functionToRunAfterGetIndividualTable( obj ) }
+            };
+            cl("SENDING cfg: " + JSON.stringify(cfg));
+            XHRNESTEDJSONHandler( cfg ); 
+        }
+        let functionToRunAfterGetIndividualTable = function( pResults )
+        {   cl("@ functionToRunAfterGetIndividualTable() .. " + JSON.stringify( JSON.parse( pResults )))
+            let res = JSON.parse( pResults )
+            let title = ""
+            let thisDivId = tag('div', 1, thisTable+' '+infoType,{})
+            let thisTableId = tag('table',thisDivId,'',{style:'border:1px solid;'})
+            let firstRowId = tag('tr',thisTableId,'',{style:'border:1px solid;'})
+            for( let p in res ){
+                for( let k in res[ p ] ){
+                    cl( k + ": " + JSON.stringify( res[ p ][ k ]) )
+                    title = k
+                    tag('th', firstRowId, k,{style:'border:1px solid;'})
+                }
+                break;
+            }
+
+            let x;
+            let count = 0;
+            let rowsId = []
+            for( let p in res ){
+                rowsId[ count ] = tag('tr',thisTableId,'',{style:'border:1px solid;'})
+                for( let k in res[ p ] ){
+                    cl( JSON.stringify( res[ p ][ k ]) )
+                    tag('td', rowsId[ count ], res[ p ][ k ],{style:'border:1px solid;'})
+                }
+                count++;
+            }
+        }
+
+        // END OF BUTTON:showAllDatabaseTables
+        //============================================================================
+
+        let database_tables = []
+        let showAllDatabaseTablesAndData = function(){
+            cl("YOU CLICKED showAllDatabaseTablesAndData") 
+            cl("\nShowing tables: " )
+            for( let i in database_tables ){
+                cl( database_tables[ i ] );
+            }
+        }
+
+
+        //========================================================================
+        let XHRNESTEDJSONHandler = function( iocfg )
+        { cl("@: XHRNESTEDJSONHandler()")
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open(iocfg.method, iocfg.url, iocfg.syncMode, iocfg.xhrKey, '');
+            xmlhttp.onreadystatechange = function()
+            {  cl("<> XMLHTTPRequest: " + this.readyState + ":" + this.status)
+                if( this.readyState == 1 ){  cl("XHR:1," + this.status)}
+                if( this.readyState == 2 ){  cl("XHR:2," + this.status)}
+                if( this.readyState == 3 ){  cl("XHR:3," + this.status)}
+                if( this.readyState == 4 ){  //alert("XHR:4," + this.status);
+                    if( this.status == 200) {
+                        cl("Browser-side XHR: " + xmlhttp.responseText );
+                        if( ( sessionStorage.getItem('webn8rSessionLabel') !== "NOT AUTHORIZED") &&
+                            ( sessionStorage.getItem('webn8rSessionLabel') !== "")){
+                            iocfg.resultsSetString = xmlhttp.responseText;
+                            let temp = iocfg.resultsSetString.replace("<resultsXML>","");
+                            iocfg.resultsSetString = temp;
+                            temp = iocfg.resultsSetString.replace("</resultsXML>","");
+                            iocfg.resultsSetString = temp;
+                            iocfg.callback( iocfg.resultsSetString )
+                        }
+                    }
+                }
+            };
+            xmlhttp.send( iocfg.dataPackage );
+        }// end of XHRNESTEDJSONHandler() ==============================================
+
+    </script>
+  </head>
+
+  <!-- --------------------------------------------------------------------- -->
+
+  <!-- body style="color:white; background-image: linear-gradient(to bottom right, #000000, #000077);"-->
+    <body id="1" onload="getAllDatabases();" style="color:white; font-family: Verdana; background-image: linear-gradient(to bottom right, #000000, #000077);">
+        <!-- script>
+            let auth = decodeToken()
+            console.log('auth = ' + auth)
+            if( auth === 'sign in' ){
+                //let url = "http://"+HOST_IP_ADDRESS+":"+PORT_Innovation+"/"
+                //console.log('Route to init ... '+ url);
+                location.href = "goInitialPage"
+            }else{
+                console.log("\n\nTOKEN: " 
+                    + sessionStorage.getItem('webn8rSessionInfo')
+                    + ", " 
+                    + sessionStorage.getItem('webn8rSession')
+                    + ", " 
+                    + sessionStorage.getItem('rid') 
+                    + ", " 
+                    + sessionStorage.getItem('preference_code') 
+                    + "\n\n")
+                window.name = "true";
+                
+            }
+        </script -->
+        <div id='admin_access' >
+            <!--button onclick="gotoAdminUtils();">
+                <img src="superCity" height="200" width="320">
+            </button -->
+            <!-- button onclick="getAllDatabases();">SHOW ALL DATABASES</button -->
+        </div>
+    </body>
+</html>

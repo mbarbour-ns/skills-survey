@@ -1,0 +1,195 @@
+<html>
+	<head>
+		<title>Remote CBL</title>
+		<link rel="stylesheet" href="survey.css" />
+		<script src="../tag.js"></script>
+	</head>
+
+	<body id='1'>
+		<script>
+			let dropDownSet = []
+			let divIds = []
+			let divCtr = 0
+			let cl = console.log
+
+			// LAYOUT
+			let tblId = tag('table','1','',{} )
+			let tr1Id = tag( 'tr', tblId, '', {style:'vertical-align: top;'} )
+			let td1Id = tag( 'td', tr1Id, '', {} )
+			let td2Id = tag( 'td', tr1Id, '', {} )
+			let td3Id = tag( 'td', tr1Id, '', {} )
+
+
+
+			let makeCheckBoxList = function( pParentId, pCheckBoxListItems) {
+				pCheckBoxListItems.parentId = pParentId
+				divCtr++
+				divIds[ divCtr ] = tag('div', pCheckBoxListItems.parentId, '',{
+					id:"list"+divCtr, 
+					class:"dropdown-checkbox-list", 
+					style:'vertical-align: top;',
+					tabindex:"100"
+				})
+				pCheckBoxListItems.id = divId = divIds[ divCtr ]
+				pCheckBoxListItems.checkBoxListSpanId = tag('span', divId, 'Select '+pCheckBoxListItems.type,{ class:"anchor"} )
+				let ulId = pCheckBoxListItems.checkBoxListUlId = tag('ul', divId,'',{ class:'items' })
+				let li = []
+				let inputsId = []
+				for( let i in pCheckBoxListItems.list ){
+					li[ i ] = tag( 'li', ulId,'',{})
+					pCheckBoxListItems.checkboxIds[ i ] = tag( 'input', li[ i ], '', { 
+						type:"checkbox",
+						//THIS WORKS: onclick:'console.log("ping");'
+						// THIS WORKS: onclick:"dropDownSet[ 'fruit ' ].getValues();"
+						onclick:pCheckBoxListItems.name + ".getValues();"
+					})
+					tag('label',li[ i ],pCheckBoxListItems.list[ i ],{})
+				}
+			}
+
+			let mapBits = function( pThis ){
+				pThis.bitmap = 0;
+					for(let i in pThis.list){
+						if( document.getElementById( pThis.checkboxIds[ i ] ).checked ){
+							pThis.bitmap = pThis.bitmap + (1<<i)
+						}
+					}
+					console.log( pThis.type + ": "+ pThis.bitmap )
+			}
+
+			dropDownSet[ 'levelList' ] = {
+				parentId:td1Id,
+				id:'',
+				checkBoxListSpanId:'',
+				checkBoxListUlId:'',
+				type:'levelList',
+				name:"dropDownSet[ 'levelList' ]",
+				//type:'levelList',//"+this.type+"
+				list:[
+					'unknown',
+					'know_what_its_for',
+					'used_and_understood',
+					'used_in_custom_project',
+					'used_frequently',
+					'used_frequently_and_in_depth',
+				],
+				checkboxIds:[],
+				bitmap:0,
+				getValues:function(){
+					this.bitmap = 0;
+					for(let i in this.list){
+						if( document.getElementById( this.checkboxIds[ i ] ).checked ){
+							this.bitmap = this.bitmap + (1<<i)
+						}
+					}
+					console.log( this.type + ": "+ this.bitmap )
+				},
+				showCheckBoxList:function(){
+					cl('showCheckBoxList: ' + this.id )
+					cl('show checkBoxListId: ' + this.checkBoxListSpanId )
+					cl('show checkBoxList ulId: ' +this.checkBoxListUlId )
+
+					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED BELOW
+					let tid = document.getElementById( this.checkBoxListUlId )
+					cl( 'show tid: ' + tid.id )
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( tid.id ).style.display === "block"){
+							document.getElementById( tid.id ).style.display = "none"
+						}else{
+							document.getElementById( tid.id ).style.display = "block"
+						}
+					}
+/* BREAKS!!!!!
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
+							document.getElementById( this.checkBoxListUlId ).style.display = "none"
+						}else{
+							document.getElementById( this.checkBoxListUlId ).style.display = "block"
+						}
+					}
+*/
+				}
+			}
+
+			dropDownSet[ 'methodList' ] = {
+				id:'',
+				parentId:td2Id,
+				name:"dropDownSet[ 'methodList' ]",
+				type:'methodList',
+				list:[
+					'unused',
+					'can_use_via_console',
+					'can_use_via_CLI',
+					'can_use_via_IaC',
+					'can_integrate_with_Tooling',
+					'can_configure_via_console',
+					'can_configure_via_CLI',
+					'can_configure_via_IaC',
+					'can_configure_in_multi_regions',	
+					'can_extend_with_custom_tools',
+				],
+				checkboxIds:[],
+				bitmap:0,
+				getValues:function(){
+					this.bitmap = 0;
+					for(let i in this.list){
+						if( document.getElementById( this.checkboxIds[ i ] ).checked ){
+							this.bitmap = this.bitmap + (1<<i)
+						}
+					}
+					console.log( this.type + ": "+ this.bitmap )
+				},
+				showCheckBoxList:function(){
+					cl('showCheckBoxList: ' + this.id )
+					cl('show checkBoxListId: ' + this.checkBoxListSpanId )
+					cl('show checkBoxList ulId: ' +this.checkBoxListUlId )
+
+					// THIS IS A WORKAROUND FOR THE BREAK DESCRIBED BELOW
+					let tid = document.getElementById( this.checkBoxListUlId )
+					cl( 'show tid: ' + tid.id )
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( tid.id ).style.display === "block"){
+							document.getElementById( tid.id ).style.display = "none"
+						}else{
+							document.getElementById( tid.id ).style.display = "block"
+						}
+					}
+/* BREAKS!!!!!
+					document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) {
+						if (document.getElementById( this.checkBoxListUlId ).style.display === "block"){
+							document.getElementById( this.checkBoxListUlId ).style.display = "none"
+						}else{
+							document.getElementById( this.checkBoxListUlId ).style.display = "block"
+						}
+					}
+*/
+				}
+			}
+
+		
+			makeCheckBoxList( td1Id, dropDownSet[ 'levelList' ] )	
+			dropDownSet[ 'levelList' ].showCheckBoxList();
+			tag('br','1','',{})		
+			makeCheckBoxList( td2Id, dropDownSet[ 'methodList' ] )			
+			dropDownSet[ 'methodList' ].showCheckBoxList();
+/*
+			var checkList1 = document.getElementById('list1');
+			checkList1.getElementsByClassName('anchor')[0].onclick = function(evt) {
+				if (checkList1.classList.contains('visible'))
+					checkList1.classList.remove('visible');
+				else
+					checkList1.classList.add('visible');
+			}
+*/
+/*
+			var checkList2 = document.getElementById('list2');
+			checkList2.getElementsByClassName('anchor')[0].onclick = function(evt) {
+				if (checkList2.classList.contains('visible'))
+					checkList2.classList.remove('visible');
+				else
+					checkList2.classList.add('visible');
+			}
+*/
+		</script>
+	</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Skills Survey: User CRUD</title>
+		<link rel="stylesheet" href="surveyCSS" />
+		<script src="tagJS"></script>
+        <script src="databaseListsJS"></script>
+        <script src="XHR"></script>
+		<script>
+            let cl = console.log
+            let mainTableId
+            let gNewRecords = []
+            let gHeaderList = []
+            let gUserData = []
+			
+            let gotoSurvey = function(){	location.href = "surveyHTML"	}
+
+            // discover the db table schema so we can set column widths
+            let getUserSchema = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserStruct",
+                    callback:function(obj){ parseTableStruct(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseTableStruct = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
+                    gHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                makeUserForm( document.body.id )
+            }
+
+            // discover the db table schema so we can set column widths
+            let getUserData = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserData",
+                    callback:function(obj){ parseTableData(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseTableData = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
+                    gHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                makeUserForm( document.body.id )
+            }
+
+                        // discover the db table schema so we can set column widths
+            let putUserData = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=putUserData"
+                        +"&data="+JSON.stringify( gUserData ),
+                    callback:function(obj){  }
+                }
+                XHR( cfg )
+            }
+
+			let makeUserForm = function( pParentId ){
+				tag('button', pParentId, 'Go to Survey', {
+					style:" width: 33%;", 
+					class:"menuButton", 
+					onclick:"gotoSurvey();"
+				})
+				tag('button', pParentId, 'Update Users from Harvest',{
+					style:" width: 33%;", 
+					class:"menuButton",
+                    onclick:"getUsersFromAPI();"
+				})
+				tag('button', pParentId, 'Merge Users to Database',{
+					style:" width: 33%;", 
+					class:"menuButton",
+                    onclick:"mergeUsersToDatabase();"
+				})
+				tag('button', pParentId, 'Test Users to Database',{
+					style:" width: 33%;", 
+					class:"menuButton",
+                    onclick:"getUserSchema();"
+				})
+                makeUserCrudForm( pParentId )
+			}
+
+
+            let getMaxDataWidth = function(){
+                let maxRecLength = 0;
+                let hdrLength = 0;
+                for( let idx in gHeaderList ){
+                    console.log(gHeaderList[idx])
+                    hdrLength += gHeaderList[ idx ].length 
+                }
+                cl("HdrLength    : " + hdrLength );
+                return {'MaxRecLength':maxRecLength, 'HdrLength':hdrLength}
+            }
+
+            let setScreenWidth = function ( pWidths ){}
+
+            let addRecordsToTable = function( pRecordSetObj ){
+                let row = []
+                for( let rowIdx in  pRecordSetObj.userList ){
+                    row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
+                    for( let hdr in pRecordSetObj.userList[ rowIdx ] ){
+                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
+                        /*cl("switch on " + hdr )
+                        let inputType = 'text';
+                        switch( dbResults.user_type_map[hdr] ){
+                            case 'tinyint(1)':  inputType = 'checkbox'; break;
+                            default:            inputtype = 'text';     break;
+                        }*/
+                        let i = tag('input', t,'', { type: 'text'})//inputType })
+                        document.getElementById( i ).value = pRecordSetObj.userList[ rowIdx ][ hdr ] 
+                    }
+					let t = tag('td', row[ rowIdx ], '', {} )
+					tag('a', t, '...',{href:'www.google.com'})
+                }
+            }
+
+
+            // MIKE!!! make function that loads the names in after the fact, either from db or api
+            let makeUserCrudForm = function( pParentId ){
+                // mae a table w/ columns per data.  if too big, set page width > 100%
+                // find max record width
+                let widths = getMaxDataWidth();
+                setScreenWidth( widths )
+
+                mainTableId = tag('table', pParentId, '', {} )
+                let tableHdrRowId = tag('tr', mainTableId, '', {} )
+                for( let hdr in gHeaderList ){
+                    tag('th', tableHdrRowId, gHeaderList[ hdr ], {} )
+                }
+                tag('th', tableHdrRowId, 'menu', {} )
+                addRecordsToTable({
+                    userList: gUserData ,//dbResults.user,
+                    id:mainTableId
+                })
+                /*
+                let row = []
+                for( let rowIdx in  dbResults.user ){
+                    row[ rowIdx ] = tag('tr', mainTableId, '', {} )
+                    for( let hdr in dbResults.user[ rowIdx ] ){
+                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
+                        cl("switch on " + hdr )
+                        let inputType = 'text';
+                        switch( dbResults.user_type_map[hdr] ){
+                            case 'tinyint(1)':  inputType = 'checkbox'; break;
+                            default:            inputtype = 'text';     break;
+                        }
+                        let i = tag('input', t,'', { type: inputType })
+                        document.getElementById( i ).value = dbResults.user[ rowIdx ][ hdr ] 
+                    }
+					let t = tag('td', row[ rowIdx ], '', {} )
+					tag('a', t, '...',{href:'www.google.com'})
+                }*/
+            }
+
+            //API
+            async function getUsersFromAPI() {
+                var headers = {
+                    "User-Agent": "Node.js Harvest API Sample",
+                    "Authorization": "Bearer "+ document.getElementById( 'token' ).value,
+                    "Harvest-Account-ID": document.getElementById( 'accountId' ).value 
+                };
+                var options = {
+                    "method": "get",
+                    "headers": headers
+                };
+
+                let url ="https://api.harvestapp.com/v2/users"
+                let myObject = await fetch( url, options );
+                let myText = await myObject.text();
+                console.log( typeof myText )
+                console.log( myText )
+
+                let parsedText = JSON.parse( myText )
+                console.log( typeof parsedText )
+                console.log( 'parsedText = ' + parsedText )
+
+                let idx = 0;
+                for( let i in parsedText['users'] ){
+                    // CAPTURE ONLY THE ACTIVE FOLKS
+                    gNewRecords[ idx ] = {}
+                    gNewRecords[ idx ]['name_first'] = parsedText['users'][ i ].first_name
+                    gNewRecords[ idx ]['name_last'] = parsedText['users'][ i ].last_name
+                    gNewRecords[ idx ]['employee_no'] = parsedText['users'][ i ][ 'roles' ][0]
+                    gNewRecords[ idx ]['email'] = parsedText['users'][ i ].email
+                    gNewRecords[ idx ]['TZ'] = parsedText['users'][ i ].timezone
+                    
+                    console.log( typeof gNewRecords[ idx ]['employee_no'] + ": " + gNewRecords[ idx ]['employee_no'] )
+                    if( typeof gNewRecords[ idx ]['employee_no'] === 'string'){
+                        if( gNewRecords[ idx ]['employee_no'].search("undefined") === -1 ){
+                            gNewRecords[ idx ]['active'] = 'Y'
+                            gNewRecords[ idx ]['role'] = 'DAE'
+                            gNewRecords[ idx ]['deleted'] = 'N'
+                            idx++;
+                        }
+                    }
+                }
+                addRecordsToTable({
+                    userList: gNewRecords,
+                    id:mainTableId
+                })
+
+                // format gNewRecords into INSERT-able info
+                // save in the harvest tamp table
+                // compare this list with existing list, add newbies
+
+            }// end of getUsersFromAPI
+
+
+            async function mergeUsersToDatabase(){
+
+            }// end of mergeUsersToDatabase
+
+
+            // MIKE: UPGRADE MYSQLIO to use the fetch IO protocol
+            let writeUsersToDB = function( dataObject )
+            {   console.log("\n\n#######################################\nwriteScoreDataToDB() ..")
+                // FIRST SENTRY POINT
+                if( 
+                    dataObject.user !== null &&
+                    dataObject.session !== null
+                ){
+                    console.log("Attempting to send data: " + JSON.stringify( dataObject ) );
+                    let cfg = {
+                        method:"POST",
+                        url:"/MySQLIO",
+                        syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                        dataPackage:
+                            "webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                            "&query=write linker score to db" + 
+                            "&json=" + JSON.stringify(dataObject),
+
+                        callback:function(obj){ readAllResultsFromDataBase() }
+                    };
+                    cl("SENDING cfg: " + JSON.stringify(cfg));
+                    XHRNESTEDJSONHandler( cfg );
+                }
+            }// end of writeScoreDataToDB
+
+
+
+
+
+
+		</script>
+	</head>
+
+	<body id='1'>
+        <label for="accountId">MGR AccountID:</label>
+        <input type="text" id="accountId" name="accountId">
+        <label for="token">Token:</label>
+        <input type="text" id="token" name="token"><br>
+
+		<script>
+            getUserSchema();
+		</script>
+	</body>
+</html>
