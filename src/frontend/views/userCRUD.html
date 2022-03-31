@@ -12,11 +12,13 @@
             let gNewRecords = []
             let gHeaderList = []
             let gUserData = []
-			
+            let gHarvestHeaderList = []
+            
             let gotoSurvey = function(){	location.href = "surveyHTML"	}
 
             // discover the db table schema so we can set column widths
             let getUserSchema = function(){
+                cl("\n>>>getUserSchema()\n")
                 let cfg = {
                     method:"POST",
                     url:"/MySQLIO",// this should be "endpoint" not "url"
@@ -25,16 +27,40 @@
                     dataPackage:
                         // put session auth here
                         "&query=getUserStruct",
-                    callback:function(obj){ parseTableStruct(obj) }
+                    callback:function(obj){ parseUserTableStruct(obj) }
                 }
                 XHR( cfg )
             }
-            let parseTableStruct = function( pObj ){
+            let parseUserTableStruct = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">>"+JSON.stringify( newObj[ idx ] ) )
+                    gHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                getHarvestSchema();
+            }
+            // discover the db table schema so we can set column widths
+            let getHarvestSchema = function(){
+                cl("getHarvestSchema()")
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'loud',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getHarvestStruct",
+                    callback:function(obj){ parseHarvestTableStruct(obj) }
+                }
+                XHR( cfg )
+            }
+            let parseHarvestTableStruct = function( pObj ){
                 //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
                     cl( ">"+JSON.stringify( newObj[ idx ] ) )
-                    gHeaderList.push( newObj[ idx ]['Field'] )
+                    gHarvestHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 makeUserForm( document.body.id )
             }
@@ -60,10 +86,15 @@
                     cl( ">"+JSON.stringify( newObj[ idx ] ) )
                     gHeaderList.push( newObj[ idx ]['Field'] )
                 }
+                buildSQLInsert(newObj)
                 makeUserForm( document.body.id )
             }
 
-                        // discover the db table schema so we can set column widths
+            let buildSQLInsert = function( pNnewObj ){
+                // use harvest_temp struct to form records from harverst API data
+            }
+
+            // discover the db table schema so we can set column widths
             let putUserData = function(){
                 let cfg = {
                     method:"POST",
