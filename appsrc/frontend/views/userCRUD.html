@@ -15,6 +15,15 @@
 			
             let gotoSurvey = function(){	location.href = "surveyHTML"	}
 
+            /* TO DO NEXT !!!
+
+            Need a better mapper from API to MySQL. The headeers are ok for mysql, but off for API
+            Need too use the header's as keys for the API info
+
+            */
+
+
+
             // discover the db table schema so we can set column widths
             let getUserSchema = function(){
                 let cfg = {
@@ -117,20 +126,46 @@
 
             let setScreenWidth = function ( pWidths ){}
 
-            let addRecordsToTable = function( pRecordSetObj ){
+            /*let addRecordsToTable = function( pRecordSetObj ){
+                console.log("\naddRecordsToTable(): " + JSON.stringify(pRecordSetObj ) )
                 let row = []
-                for( let rowIdx in  pRecordSetObj.userList ){
+                for( let rowIdx in  pRecordSetObj.dataRecords ){
                     row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
-                    for( let hdr in pRecordSetObj.userList[ rowIdx ] ){
+                    for( let hdr in pRecordSetObj.hdrList[ rowIdx ] ){
                         let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
-                        /*cl("switch on " + hdr )
+                        cl("switch on " + hdr )
                         let inputType = 'text';
                         switch( dbResults.user_type_map[hdr] ){
                             case 'tinyint(1)':  inputType = 'checkbox'; break;
                             default:            inputtype = 'text';     break;
-                        }*/
+                        }
                         let i = tag('input', t,'', { type: 'text'})//inputType })
-                        document.getElementById( i ).value = pRecordSetObj.userList[ rowIdx ][ hdr ] 
+                        document.getElementById( i ).value = pRecordSetObj.dataRecords[ rowIdx ][ hdr ] 
+                    }
+					let t = tag('td', row[ rowIdx ], '', {} )
+					tag('a', t, '...',{href:'www.google.com'})
+                }
+            }*/
+            let addRecordsToTable2 = function( pRecordSetObj ){
+                //{"hdrList":["rid","employee_no","name_last","name_first","name_middle","email","active","deleted","harvest_id"],
+                // "dataRecords":[{"name_first":"Nathan","name_last":"Baker","employee_no":"2506476","email":"nathan.baker@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Desmond","name_last":"Ndambi","employee_no":"2507552","email":"desmond.ndambi@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Zachery","name_last":"Cox","employee_no":"2487025","email":"zachery.cox@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Daniel","name_last":"Whitehead","employee_no":"2486435","email":"daniel.whitehead@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Kenny","name_last":"Adeniji","employee_no":"2487551","email":"kehinde.adeniji@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},
+                //console.log("\naddRecordsToTable(): " + JSON.stringify(pRecordSetObj ) )
+                let row = []
+                for( let rowIdx in  pRecordSetObj.dataRecords ){
+                    row[ rowIdx ] = tag('tr', pRecordSetObj.parentId, '', {} )
+                    
+                    cl("\nrowIdx = " + rowIdx)
+
+                    for( let hdr in pRecordSetObj.hdrList ){
+                        cl(" hdr: " + hdr )
+                        cl(" pRecordSetObj.hdrList[ hdr ]: " + pRecordSetObj.hdrList [ hdr ] )
+                        cl(" pRecordSetObj.dataRecords[ rowIdx ][ pRecordSetObj.hdrList[ hdr ] ]: " + pRecordSetObj.dataRecords[ rowIdx ][  pRecordSetObj.hdrList[ hdr ] ]  )
+
+                        if( typeof pRecordSetObj.dataRecords[ rowIdx ][  pRecordSetObj.hdrList[ hdr ] ] !== 'undefined' ){
+                            let t = tag('td', row[ rowIdx ], '', {} )
+                            let i = tag('input', t,'', { type: 'text' } )//inputType })
+                            document.getElementById( i ).value = pRecordSetObj.dataRecords[ rowIdx ][ pRecordSetObj.hdrList[ hdr ] ]
+                        }
                     }
 					let t = tag('td', row[ rowIdx ], '', {} )
 					tag('a', t, '...',{href:'www.google.com'})
@@ -151,9 +186,10 @@
                     tag('th', tableHdrRowId, gHeaderList[ hdr ], {} )
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
-                addRecordsToTable({
-                    userList: gUserData ,//dbResults.user,
-                    id:mainTableId
+                addRecordsToTable2({
+                    hdrList:        gHeaderList,
+                    dataRecords:    gUserData ,//dbResults.user,
+                    parentId:       mainTableId
                 })
                 /*
                 let row = []
@@ -217,9 +253,10 @@
                         }
                     }
                 }
-                addRecordsToTable({
-                    userList: gNewRecords,
-                    id:mainTableId
+                addRecordsToTable2({
+                    hdrList:        gHeaderList,
+                    dataRecords:    gNewRecords,
+                    parentId:       mainTableId
                 })
 
                 // format gNewRecords into INSERT-able info
