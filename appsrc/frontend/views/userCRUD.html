@@ -10,7 +10,7 @@
             let cl = console.log
             let mainTableId
             let gNewRecords = []
-            let gHeaderList = []
+            let gDbHeaderList = []
             let gUserData = []
             let gHarvestHeaderList = []
             
@@ -26,7 +26,7 @@
                     dataPackage:
                         // put session auth here
                         "&query=getUserStruct",
-                    callback:function(obj){ parseUserTableStruct(obj) }
+                    callback:function(obj){ parseUserTableStruct( obj ) }
                 }
                 XHR( cfg )
             }
@@ -35,7 +35,7 @@
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
                     cl( ">>"+JSON.stringify( newObj[ idx ] ) )
-                    gHeaderList.push( newObj[ idx ]['Field'] )
+                    gDbHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 getHarvestSchema();
             }
@@ -50,7 +50,7 @@
                     dataPackage:
                         // put session auth here
                         "&query=getHarvestStruct",
-                    callback:function(obj){ parseHarvestTableStruct(obj) }
+                    callback:function(obj){ parseHarvestTableStruct( obj ) }
                 }
                 XHR( cfg )
             }
@@ -82,16 +82,46 @@
                 //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
-                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
-                    gHeaderList.push( newObj[ idx ]['Field'] )
+                    cl( ">" + JSON.stringify( newObj[ idx ] ) )
+                    gDbHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 buildSQLInsert(newObj)
                 makeUserForm( document.body.id )
             }
 
-            let buildSQLInsert = function( pNnewObj ){
+            let buildSQLInsert = function( pNewObj ){
+                cl("... buildSQLInsert ... \n")
                 // use harvest_temp struct to form records from harverst API data
-            }
+                // traspose map
+                //"id":4183439,"first_name":"matthew","last_name":"roybal","email":"matthew.roybal@stelligent.com","telephone":"","timezone":"Eastern Time (US & Canada)","weekly_capacity":144000,"has_access_to_all_future_projects":false,"is_contractor":false,"is_admin":false,"is_project_manager":false,"can_see_rates":false,"can_create_projects":false,"can_create_invoices":false,"can_close_account":false,"is_active":true,"calendar_integration_enabled":false,"calendar_integration_source":null,"created_at":"2022-03-23T13:41:34Z","updated_at":"2022-03-23T13:41:35Z","default_hourly_rate":null,"cost_rate":null,"roles":[],"permissions_claims":["expenses:read:own","expenses:write:own","timers:read:own","timers:write:own"],"avatar_url":"https://d3s3969qhosaug.cloudfront.net/v2/default-avatars/4d52.png"},
+
+                // for every record to be transposed
+                for( let r in pNewObj ){
+                    //cl("### " + JSON.stringify( pNewObj[ r ] ) )
+                    let records = []
+                    let tObj = {}
+                    let tEmp = ''
+                    let tActive = 'N'
+                    /*if( typeof pNewObj[ r ][ 'role' ].length !== 0){
+                        tEmp = pNewObj[ r ][ 'role' ][ 0 ]
+                        tActive = 'Y'
+                    }*/
+                    tObj = {
+                        'rid':          '',
+                        'name_first':   pNewObj[ r ][ 'name_first' ],
+                        'name_last':    pNewObj[ r ][ 'name_last' ],
+                        'email':        pNewObj[ r ][ 'email' ],
+                        'harvest_id':   pNewObj[ r ][ 'id' ],
+                        'employee_no':  pNewObj[ r ][ 'employee_no' ],
+                        'active':       pNewObj[ r ][ 'active' ]
+                    }
+                    cl("##: " + JSON.stringify( tObj ) )
+//                    cl(" tObj[ 'name_first' ] = " + tObj[ 'name_first' ] + " vs. " +  pNewObj[ r ][ 'name_first' ] )
+                    records.push( 
+                        JSON.stringify( tObj )
+                    )
+                }
+            }// end of buildSQLInsert
 
             // discover the db table schema so we can set column widths
             let putUserData = function(){
@@ -137,9 +167,9 @@
             let getMaxDataWidth = function(){
                 let maxRecLength = 0;
                 let hdrLength = 0;
-                for( let idx in gHeaderList ){
-                    console.log(gHeaderList[idx])
-                    hdrLength += gHeaderList[ idx ].length 
+                for( let idx in gDbHeaderList ){
+                    console.log(gDbHeaderList[idx])
+                    hdrLength += gDbHeaderList[ idx ].length 
                 }
                 cl("HdrLength    : " + hdrLength );
                 return {'MaxRecLength':maxRecLength, 'HdrLength':hdrLength}
@@ -177,8 +207,8 @@
 
                 mainTableId = tag('table', pParentId, '', {} )
                 let tableHdrRowId = tag('tr', mainTableId, '', {} )
-                for( let hdr in gHeaderList ){
-                    tag('th', tableHdrRowId, gHeaderList[ hdr ], {} )
+                for( let hdr in gDbHeaderList ){
+                    tag('th', tableHdrRowId, gDbHeaderList[ hdr ], {} )
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
                 addRecordsToTable({
@@ -237,7 +267,7 @@
                     gNewRecords[ idx ]['email'] = parsedText['users'][ i ].email
                     gNewRecords[ idx ]['TZ'] = parsedText['users'][ i ].timezone
                     
-                    console.log( typeof gNewRecords[ idx ]['employee_no'] + ": " + gNewRecords[ idx ]['employee_no'] )
+                    //console.log( typeof gNewRecords[ idx ]['employee_no'] + ": " + gNewRecords[ idx ]['employee_no'] )
                     if( typeof gNewRecords[ idx ]['employee_no'] === 'string'){
                         if( gNewRecords[ idx ]['employee_no'].search("undefined") === -1 ){
                             gNewRecords[ idx ]['active'] = 'Y'
@@ -247,11 +277,13 @@
                         }
                     }
                 }
+                buildSQLInsert( gNewRecords )
+/*
                 addRecordsToTable({
                     userList: gNewRecords,
                     id:mainTableId
                 })
-
+*/
                 // format gNewRecords into INSERT-able info
                 // save in the harvest tamp table
                 // compare this list with existing list, add newbies
