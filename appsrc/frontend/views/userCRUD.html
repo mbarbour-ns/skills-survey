@@ -13,6 +13,7 @@
             let gDbHeaderList = []
             let gUserData = []
             let gHarvestHeaderList = []
+            let gMergeToDbData = []
             
             let gotoSurvey = function(){	location.href = "surveyHTML"	}
 
@@ -39,6 +40,7 @@
                 }
                 getHarvestSchema();
             }
+
             // discover the db table schema so we can set column widths
             let getHarvestSchema = function(){
                 cl("getHarvestSchema()")
@@ -65,7 +67,7 @@
             }
 
             // discover the db table schema so we can set column widths
-            let getUserData = function(){
+/*            let getUserData = function(){
                 let cfg = {
                     method:"POST",
                     url:"/MySQLIO",// this should be "endpoint" not "url"
@@ -86,19 +88,19 @@
                     gDbHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 buildSQLInsert(newObj)
-                makeUserForm( document.body.id )
             }
+*/
 
             let buildSQLInsert = function( pNewObj ){
                 cl("... buildSQLInsert ... \n")
+                let records = []
                 // use harvest_temp struct to form records from harverst API data
                 // traspose map
                 //"id":4183439,"first_name":"matthew","last_name":"roybal","email":"matthew.roybal@stelligent.com","telephone":"","timezone":"Eastern Time (US & Canada)","weekly_capacity":144000,"has_access_to_all_future_projects":false,"is_contractor":false,"is_admin":false,"is_project_manager":false,"can_see_rates":false,"can_create_projects":false,"can_create_invoices":false,"can_close_account":false,"is_active":true,"calendar_integration_enabled":false,"calendar_integration_source":null,"created_at":"2022-03-23T13:41:34Z","updated_at":"2022-03-23T13:41:35Z","default_hourly_rate":null,"cost_rate":null,"roles":[],"permissions_claims":["expenses:read:own","expenses:write:own","timers:read:own","timers:write:own"],"avatar_url":"https://d3s3969qhosaug.cloudfront.net/v2/default-avatars/4d52.png"},
 
                 // for every record to be transposed
                 for( let r in pNewObj ){
-                    //cl("### " + JSON.stringify( pNewObj[ r ] ) )
-                    let records = []
+                    cl("### " + JSON.stringify( pNewObj[ r ] ) )
                     let tObj = {}
                     let tEmp = ''
                     let tActive = 'N'
@@ -108,19 +110,27 @@
                     }*/
                     tObj = {
                         'rid':          '',
-                        'name_first':   pNewObj[ r ][ 'name_first' ],
-                        'name_last':    pNewObj[ r ][ 'name_last' ],
-                        'email':        pNewObj[ r ][ 'email' ],
-                        'harvest_id':   pNewObj[ r ][ 'id' ],
                         'employee_no':  pNewObj[ r ][ 'employee_no' ],
-                        'active':       pNewObj[ r ][ 'active' ]
+                        'name_last':    pNewObj[ r ][ 'name_last' ],
+                        'name_first':   pNewObj[ r ][ 'name_first' ],
+                        'name_middle':  '',
+                        'email':        pNewObj[ r ][ 'email' ],
+                        'active':       pNewObj[ r ][ 'active' ],
+                        'deleted':      '',
+                        'harvest_id':   pNewObj[ r ][ 'harvest_id' ],
+                        
                     }
-                    cl("##: " + JSON.stringify( tObj ) )
+//                    cl("##: " + JSON.stringify( tObj ) )
 //                    cl(" tObj[ 'name_first' ] = " + tObj[ 'name_first' ] + " vs. " +  pNewObj[ r ][ 'name_first' ] )
                     records.push( 
-                        JSON.stringify( tObj )
+                        tObj
                     )
                 }
+                //makeUserForm( document.body.id )
+                addRecordsToTable({
+                    userList: records ,
+                    id:mainTableId
+                })
             }// end of buildSQLInsert
 
             // discover the db table schema so we can set column widths
@@ -255,7 +265,7 @@
 
                 let parsedText = JSON.parse( myText )
                 console.log( typeof parsedText )
-                console.log( 'parsedText = ' + parsedText )
+                console.log( '***\nparsedText = ' + JSON.stringify( parsedText ) )
 
                 let idx = 0;
                 for( let i in parsedText['users'] ){
@@ -266,6 +276,7 @@
                     gNewRecords[ idx ]['employee_no'] = parsedText['users'][ i ][ 'roles' ][0]
                     gNewRecords[ idx ]['email'] = parsedText['users'][ i ].email
                     gNewRecords[ idx ]['TZ'] = parsedText['users'][ i ].timezone
+                    gNewRecords[ idx ]['harvest_id'] = parsedText['users'][ i ].id
                     
                     //console.log( typeof gNewRecords[ idx ]['employee_no'] + ": " + gNewRecords[ idx ]['employee_no'] )
                     if( typeof gNewRecords[ idx ]['employee_no'] === 'string'){
@@ -276,6 +287,7 @@
                             idx++;
                         }
                     }
+                    console.log( '\n***\ngNewRecords[ idx ] = ' + JSON.stringify( gNewRecords[ idx ] ) )
                 }
                 buildSQLInsert( gNewRecords )
 /*
