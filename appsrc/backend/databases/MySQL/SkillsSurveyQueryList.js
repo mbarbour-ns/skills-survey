@@ -46,5 +46,13 @@ exports.QueryList = {// handlers
         func:function(){
             return 'INSERT INTO harvest_temp;'
         }
-    }
+    },
+
+    "getHarvestStruct":{
+        func:function(){
+            return 'DESC harvest_temp;'
+        }
+    },
+
+
 }// end of QueryList

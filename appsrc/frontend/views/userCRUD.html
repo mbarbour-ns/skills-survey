@@ -10,9 +10,10 @@
             let cl = console.log
             let mainTableId
             let gNewRecords = []
-            let gHeaderList = []
+            let gDbHeaderList = []
             let gUserData = []
-			
+            let gHarvestHeaderList = []
+            
             let gotoSurvey = function(){	location.href = "surveyHTML"	}
 
             // discover the db table schema so we can set column widths
@@ -25,16 +26,40 @@
                     dataPackage:
                         // put session auth here
                         "&query=getUserStruct",
-                    callback:function(obj){ parseTableStruct(obj) }
+                    callback:function(obj){ parseUserTableStruct( obj ) }
                 }
                 XHR( cfg )
             }
-            let parseTableStruct = function( pObj ){
+            let parseUserTableStruct = function( pObj ){
+                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
+                let newObj = JSON.parse( pObj )
+                for( let idx in newObj ){
+                    cl( ">>"+JSON.stringify( newObj[ idx ] ) )
+                    gDbHeaderList.push( newObj[ idx ]['Field'] )
+                }
+                getHarvestSchema();
+            }
+            // discover the db table schema so we can set column widths
+            let getHarvestSchema = function(){
+                cl("getHarvestSchema()")
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'loud',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getHarvestStruct",
+                    callback:function(obj){ parseHarvestTableStruct( obj ) }
+                }
+                XHR( cfg )
+            }
+            let parseHarvestTableStruct = function( pObj ){
                 //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
                     cl( ">"+JSON.stringify( newObj[ idx ] ) )
-                    gHeaderList.push( newObj[ idx ]['Field'] )
+                    gHarvestHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 makeUserForm( document.body.id )
             }
@@ -57,13 +82,48 @@
                 //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
-                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
-                    gHeaderList.push( newObj[ idx ]['Field'] )
+                    cl( ">" + JSON.stringify( newObj[ idx ] ) )
+                    gDbHeaderList.push( newObj[ idx ]['Field'] )
                 }
+                buildSQLInsert(newObj)
                 makeUserForm( document.body.id )
             }
 
-                        // discover the db table schema so we can set column widths
+            let buildSQLInsert = function( pNewObj ){
+                cl("... buildSQLInsert ... \n")
+                // use harvest_temp struct to form records from harverst API data
+                // traspose map
+                //"id":4183439,"first_name":"matthew","last_name":"roybal","email":"matthew.roybal@stelligent.com","telephone":"","timezone":"Eastern Time (US & Canada)","weekly_capacity":144000,"has_access_to_all_future_projects":false,"is_contractor":false,"is_admin":false,"is_project_manager":false,"can_see_rates":false,"can_create_projects":false,"can_create_invoices":false,"can_close_account":false,"is_active":true,"calendar_integration_enabled":false,"calendar_integration_source":null,"created_at":"2022-03-23T13:41:34Z","updated_at":"2022-03-23T13:41:35Z","default_hourly_rate":null,"cost_rate":null,"roles":[],"permissions_claims":["expenses:read:own","expenses:write:own","timers:read:own","timers:write:own"],"avatar_url":"https://d3s3969qhosaug.cloudfront.net/v2/default-avatars/4d52.png"},
+
+                // for every record to be transposed
+                for( let r in pNewObj ){
+                    //cl("### " + JSON.stringify( pNewObj[ r ] ) )
+                    let records = []
+                    let tObj = {}
+                    let tEmp = ''
+                    let tActive = 'N'
+                    /*if( typeof pNewObj[ r ][ 'role' ].length !== 0){
+                        tEmp = pNewObj[ r ][ 'role' ][ 0 ]
+                        tActive = 'Y'
+                    }*/
+                    tObj = {
+                        'rid':          '',
+                        'name_first':   pNewObj[ r ][ 'name_first' ],
+                        'name_last':    pNewObj[ r ][ 'name_last' ],
+                        'email':        pNewObj[ r ][ 'email' ],
+                        'harvest_id':   pNewObj[ r ][ 'id' ],
+                        'employee_no':  pNewObj[ r ][ 'employee_no' ],
+                        'active':       pNewObj[ r ][ 'active' ]
+                    }
+                    cl("##: " + JSON.stringify( tObj ) )
+//                    cl(" tObj[ 'name_first' ] = " + tObj[ 'name_first' ] + " vs. " +  pNewObj[ r ][ 'name_first' ] )
+                    records.push( 
+                        JSON.stringify( tObj )
+                    )
+                }
+            }// end of buildSQLInsert
+
+            // discover the db table schema so we can set column widths
             let putUserData = function(){
                 let cfg = {
                     method:"POST",
@@ -107,9 +167,9 @@
             let getMaxDataWidth = function(){
                 let maxRecLength = 0;
                 let hdrLength = 0;
-                for( let idx in gHeaderList ){
-                    console.log(gHeaderList[idx])
-                    hdrLength += gHeaderList[ idx ].length 
+                for( let idx in gDbHeaderList ){
+                    console.log(gDbHeaderList[idx])
+                    hdrLength += gDbHeaderList[ idx ].length 
                 }
                 cl("HdrLength    : " + hdrLength );
                 return {'MaxRecLength':maxRecLength, 'HdrLength':hdrLength}
@@ -117,46 +177,20 @@
 
             let setScreenWidth = function ( pWidths ){}
 
-            /*let addRecordsToTable = function( pRecordSetObj ){
-                console.log("\naddRecordsToTable(): " + JSON.stringify(pRecordSetObj ) )
+            let addRecordsToTable = function( pRecordSetObj ){
                 let row = []
-                for( let rowIdx in  pRecordSetObj.dataRecords ){
+                for( let rowIdx in  pRecordSetObj.userList ){
                     row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
-                    for( let hdr in pRecordSetObj.hdrList[ rowIdx ] ){
+                    for( let hdr in pRecordSetObj.userList[ rowIdx ] ){
                         let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
-                        cl("switch on " + hdr )
+                        /*cl("switch on " + hdr )
                         let inputType = 'text';
                         switch( dbResults.user_type_map[hdr] ){
                             case 'tinyint(1)':  inputType = 'checkbox'; break;
                             default:            inputtype = 'text';     break;
-                        }
+                        }*/
                         let i = tag('input', t,'', { type: 'text'})//inputType })
-                        document.getElementById( i ).value = pRecordSetObj.dataRecords[ rowIdx ][ hdr ] 
-                    }
-					let t = tag('td', row[ rowIdx ], '', {} )
-					tag('a', t, '...',{href:'www.google.com'})
-                }
-            }*/
-            let addRecordsToTable2 = function( pRecordSetObj ){
-                //{"hdrList":["rid","employee_no","name_last","name_first","name_middle","email","active","deleted","harvest_id"],
-                // "dataRecords":[{"name_first":"Nathan","name_last":"Baker","employee_no":"2506476","email":"nathan.baker@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Desmond","name_last":"Ndambi","employee_no":"2507552","email":"desmond.ndambi@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Zachery","name_last":"Cox","employee_no":"2487025","email":"zachery.cox@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Daniel","name_last":"Whitehead","employee_no":"2486435","email":"daniel.whitehead@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},{"name_first":"Kenny","name_last":"Adeniji","employee_no":"2487551","email":"kehinde.adeniji@stelligent.com","TZ":"Eastern Time (US & Canada)","active":"Y","role":"DAE","deleted":"N"},
-                //console.log("\naddRecordsToTable(): " + JSON.stringify(pRecordSetObj ) )
-                let row = []
-                for( let rowIdx in  pRecordSetObj.dataRecords ){
-                    row[ rowIdx ] = tag('tr', pRecordSetObj.parentId, '', {} )
-                    
-                    cl("\nrowIdx = " + rowIdx)
-
-                    for( let hdr in pRecordSetObj.hdrList ){
-                        cl(" hdr: " + hdr )
-                        cl(" pRecordSetObj.hdrList[ hdr ]: " + pRecordSetObj.hdrList [ hdr ] )
-                        cl(" pRecordSetObj.dataRecords[ rowIdx ][ pRecordSetObj.hdrList[ hdr ] ]: " + pRecordSetObj.dataRecords[ rowIdx ][  pRecordSetObj.hdrList[ hdr ] ]  )
-
-                        if( typeof pRecordSetObj.dataRecords[ rowIdx ][  pRecordSetObj.hdrList[ hdr ] ] !== 'undefined' ){
-                            let t = tag('td', row[ rowIdx ], '', {} )
-                            let i = tag('input', t,'', { type: 'text' } )//inputType })
-                            document.getElementById( i ).value = pRecordSetObj.dataRecords[ rowIdx ][ pRecordSetObj.hdrList[ hdr ] ]
-                        }
+                        document.getElementById( i ).value = pRecordSetObj.userList[ rowIdx ][ hdr ] 
                     }
 					let t = tag('td', row[ rowIdx ], '', {} )
 					tag('a', t, '...',{href:'www.google.com'})
@@ -173,14 +207,13 @@
 
                 mainTableId = tag('table', pParentId, '', {} )
                 let tableHdrRowId = tag('tr', mainTableId, '', {} )
-                for( let hdr in gHeaderList ){
-                    tag('th', tableHdrRowId, gHeaderList[ hdr ], {} )
+                for( let hdr in gDbHeaderList ){
+                    tag('th', tableHdrRowId, gDbHeaderList[ hdr ], {} )
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
-                addRecordsToTable2({
-                    hdrList:        gHeaderList,
-                    dataRecords:    gUserData ,//dbResults.user,
-                    parentId:       mainTableId
+                addRecordsToTable({
+                    userList: gUserData ,//dbResults.user,
+                    id:mainTableId
                 })
                 /*
                 let row = []
@@ -234,7 +267,7 @@
                     gNewRecords[ idx ]['email'] = parsedText['users'][ i ].email
                     gNewRecords[ idx ]['TZ'] = parsedText['users'][ i ].timezone
                     
-                    console.log( typeof gNewRecords[ idx ]['employee_no'] + ": " + gNewRecords[ idx ]['employee_no'] )
+                    //console.log( typeof gNewRecords[ idx ]['employee_no'] + ": " + gNewRecords[ idx ]['employee_no'] )
                     if( typeof gNewRecords[ idx ]['employee_no'] === 'string'){
                         if( gNewRecords[ idx ]['employee_no'].search("undefined") === -1 ){
                             gNewRecords[ idx ]['active'] = 'Y'
@@ -244,12 +277,13 @@
                         }
                     }
                 }
-                addRecordsToTable2({
-                    hdrList:        gHeaderList,
-                    dataRecords:    gNewRecords,
-                    parentId:       mainTableId
+                buildSQLInsert( gNewRecords )
+/*
+                addRecordsToTable({
+                    userList: gNewRecords,
+                    id:mainTableId
                 })
-
+*/
                 // format gNewRecords into INSERT-able info
                 // save in the harvest tamp table
                 // compare this list with existing list, add newbies

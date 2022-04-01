@@ -32,19 +32,30 @@ exports.QueryList = {// handlers
     "loadSourceData":function( pSourceDataToLoad ){
         sourceData = pSourceDataToLoad
     },
+
+
     "getUserStruct":{
         func:function(){
-            return 'DESC admUser;'
+            return 'DESC adm_user;'
         }
     },
     "getUserData":{
         func:function(){
-            return 'SELECT * from admUser;'
+            return 'SELECT * from adm_user;'
         }
     },
     "putUserData":{
         func:function(){
             return 'INSERT INTO harvest_temp;'
         }
-    }
+    },
+
+
+
+    "getHarvestStruct":{
+        func:function(){
+            return 'DESC harvest_temp;'
+        }
+    },
+
 }// end of QueryList

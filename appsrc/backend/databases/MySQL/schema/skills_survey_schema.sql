@@ -145,14 +145,13 @@ CREATE TABLE `survey_list_mlops_expertise` (
 
 DROP TABLE IF EXISTS `harvest_temp`;
 CREATE TABLE `harvest_temp` (
-	rid			integer unsigned AUTO_INCREMENT,
-    employee_no char(10),
+	harvest_id char(20) UNIQUE,
     name_last   char(255),
     name_first  char(255),
     email       char(255),
-    role        char(255),
-    active      boolean,
-    deleted     boolean,
+    telephone  char(20),
+    timezone  char(255),
+    employee_no char(10),
 	PRIMARY KEY(`rid`)
 );
 
