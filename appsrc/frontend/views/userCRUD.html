@@ -93,22 +93,28 @@
 
             let buildSQLInsert = function( pNewObj ){
                 cl("... buildSQLInsert ... \n")
-                let records = []
+                let dbRecords = []
+                let viewRecords = []
                 // use harvest_temp struct to form records from harverst API data
-                // traspose map
-                //"id":4183439,"first_name":"matthew","last_name":"roybal","email":"matthew.roybal@stelligent.com","telephone":"","timezone":"Eastern Time (US & Canada)","weekly_capacity":144000,"has_access_to_all_future_projects":false,"is_contractor":false,"is_admin":false,"is_project_manager":false,"can_see_rates":false,"can_create_projects":false,"can_create_invoices":false,"can_close_account":false,"is_active":true,"calendar_integration_enabled":false,"calendar_integration_source":null,"created_at":"2022-03-23T13:41:34Z","updated_at":"2022-03-23T13:41:35Z","default_hourly_rate":null,"cost_rate":null,"roles":[],"permissions_claims":["expenses:read:own","expenses:write:own","timers:read:own","timers:write:own"],"avatar_url":"https://d3s3969qhosaug.cloudfront.net/v2/default-avatars/4d52.png"},
-
                 // for every record to be transposed
                 for( let r in pNewObj ){
                     cl("### " + JSON.stringify( pNewObj[ r ] ) )
-                    let tObj = {}
+                    let dbObj = {}
+                    let viewObj = {}
                     let tEmp = ''
                     let tActive = 'N'
-                    /*if( typeof pNewObj[ r ][ 'role' ].length !== 0){
-                        tEmp = pNewObj[ r ][ 'role' ][ 0 ]
-                        tActive = 'Y'
-                    }*/
-                    tObj = {
+                    dbObj = {
+                        //'rid':          '',
+                        'employee_no':  pNewObj[ r ][ 'employee_no' ],
+                        'name_last':    pNewObj[ r ][ 'name_last' ],
+                        'name_first':   pNewObj[ r ][ 'name_first' ],
+                        //'name_middle':  '',
+                        'email':        pNewObj[ r ][ 'email' ],
+                        //'active':       pNewObj[ r ][ 'active' ],
+                        //'deleted':      '',
+                        'harvest_id':   pNewObj[ r ][ 'harvest_id' ],
+                    }
+                    viewObj = {
                         'rid':          '',
                         'employee_no':  pNewObj[ r ][ 'employee_no' ],
                         'name_last':    pNewObj[ r ][ 'name_last' ],
@@ -118,23 +124,36 @@
                         'active':       pNewObj[ r ][ 'active' ],
                         'deleted':      '',
                         'harvest_id':   pNewObj[ r ][ 'harvest_id' ],
-                        
                     }
-//                    cl("##: " + JSON.stringify( tObj ) )
-//                    cl(" tObj[ 'name_first' ] = " + tObj[ 'name_first' ] + " vs. " +  pNewObj[ r ][ 'name_first' ] )
-                    records.push( 
-                        tObj
-                    )
+                    dbRecords.push( dbObj )
+                    viewRecords.push( viewObj )
                 }
                 //makeUserForm( document.body.id )
-                addRecordsToTable({
-                    userList: records ,
+                addRecordsToUITable({
+                    userList: viewRecords ,
                     id:mainTableId
                 })
+
+                // remove the properties of the string
+                let sqlString = ""
+                let rCtr=0;
+                for( let i in dbRecords ){
+                    if( rCtr !== 0 ){ sqlString += ","; }else{ rCtr++; }
+                    sqlString += '('
+                    let pCtr = 0
+                    for( let r in dbRecords[ i ]){
+                        if( pCtr !== 0 ){ sqlString += ","; }else{ pCtr++; } 
+                        sqlString += '"'+ dbRecords[ i ][ r ]+'"'
+                    }
+                    sqlString += ')'
+                }
+                sqlString += ';'
+
+                saveAPIUserDataToDb( sqlString )
             }// end of buildSQLInsert
 
             // discover the db table schema so we can set column widths
-            let putUserData = function(){
+            let saveAPIUserDataToDb = function( pSqlString){
                 let cfg = {
                     method:"POST",
                     url:"/MySQLIO",// this should be "endpoint" not "url"
@@ -142,8 +161,8 @@
                     log:'quiet',
                     dataPackage:
                         // put session auth here
-                        "&query=putUserData"
-                        +"&data="+JSON.stringify( gUserData ),
+                        "&query=saveAPIUserData"
+                        +"&data="+pSqlString,
                     callback:function(obj){  }
                 }
                 XHR( cfg )
@@ -187,7 +206,7 @@
 
             let setScreenWidth = function ( pWidths ){}
 
-            let addRecordsToTable = function( pRecordSetObj ){
+            let addRecordsToUITable = function( pRecordSetObj ){
                 let row = []
                 for( let rowIdx in  pRecordSetObj.userList ){
                     row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
@@ -221,7 +240,7 @@
                     tag('th', tableHdrRowId, gDbHeaderList[ hdr ], {} )
                 }
                 tag('th', tableHdrRowId, 'menu', {} )
-                addRecordsToTable({
+                addRecordsToUITable({
                     userList: gUserData ,//dbResults.user,
                     id:mainTableId
                 })
@@ -291,7 +310,7 @@
                 }
                 buildSQLInsert( gNewRecords )
 /*
-                addRecordsToTable({
+                addRecordsToUITable({
                     userList: gNewRecords,
                     id:mainTableId
                 })

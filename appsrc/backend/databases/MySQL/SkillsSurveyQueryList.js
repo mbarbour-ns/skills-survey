@@ -1,7 +1,9 @@
 'use strict';
 let sessionStorage = {}
 let sourceData = {}
-
+/* IMPORTANT NOTE!!!
+All of the return values MUST use single quotes too obound them, or mysql will NOT execute the query
+*/
 exports.QueryList = {// handlers
     "show all databases":{
         func:function(){
@@ -42,12 +44,24 @@ exports.QueryList = {// handlers
             return 'SELECT * from adm_user;'
         }
     },
-    "putUserData":{
+    "saveAPIUserData":{
         func:function(){
-            return 'INSERT INTO harvest_temp;'
+            let userData = sessionStorage['data']
+            console.log("saveAPIUserData: TYPEOF userData: " + typeof userData )
+            console.log("saveAPIUserData: " + userData )
+            let t1 = userData.replace("[","" );
+            let t2 = t1.replace("]","" );
+            let t3 = t2.replace("{","(" );
+            let t4 = t3.replace("}",")" );
+            console.log("saveAPIUserData(FIXED): " + t4 )
+            console.log("saveAPIUserData SQL: " 
+            + "INSERT INTO harvest_temp (harvest_id,name_last,name_first,email,employee_no) VALUES "
+            + t4 )
+            let query = 'INSERT INTO harvest_temp (harvest_id,name_last,name_first,email,employee_no) VALUES '+ t4 +';'
+
+            return query;
         }
     },
-
     "getHarvestStruct":{
         func:function(){
             return 'DESC harvest_temp;'

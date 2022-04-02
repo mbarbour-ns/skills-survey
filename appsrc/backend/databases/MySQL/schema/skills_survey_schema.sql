@@ -151,8 +151,7 @@ CREATE TABLE `harvest_temp` (
     email       char(255),
     telephone  char(20),
     timezone  char(255),
-    employee_no char(10),
-	PRIMARY KEY(`rid`)
+    employee_no char(10)
 );
 
 
