@@ -64,10 +64,11 @@
                     gHarvestHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 makeUserForm( document.body.id )
+                getUsersFromDB()
             }
 
-            // discover the db table schema so we can set column widths
-/*            let getUserData = function(){
+
+            let getUsersFromDB = function(){
                 let cfg = {
                     method:"POST",
                     url:"/MySQLIO",// this should be "endpoint" not "url"
@@ -76,20 +77,25 @@
                     dataPackage:
                         // put session auth here
                         "&query=getUserData",
-                    callback:function(obj){ parseTableData(obj) }
+                    callback:function(obj){ parseUserDBData( obj ) }
                 }
                 XHR( cfg )
             }
-            let parseTableData = function( pObj ){
-                //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
-                let newObj = JSON.parse( pObj )
-                for( let idx in newObj ){
-                    cl( ">" + JSON.stringify( newObj[ idx ] ) )
-                    gDbHeaderList.push( newObj[ idx ]['Field'] )
-                }
-                buildSQLInsert(newObj)
+            let parseUserDBData = function( pObj ){
+                let users = JSON.parse( pObj )
+                console.log('\n\n\nusers=' + JSON.stringify( users[0]['name_first'] ) )
+/*				for( let i in users ){
+					tag('option', gSelectId, users[ i ]['name_first'] + " " + users[ i ]['name_last'],{ 
+						'value': users[ i ]['name_first'] + " " + users[ i ]['name_last']
+					})
+				}*/
+                addRecordsToUITable({
+                    userList: users ,
+                    id:mainTableId
+                })
+
             }
-*/
+
 
             let buildSQLInsert = function( pNewObj ){
                 cl("... buildSQLInsert ... \n")
