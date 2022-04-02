@@ -3,14 +3,14 @@ USE `skills_survey`;
 DROP TABLE IF EXISTS `adm_user`;
 CREATE TABLE `adm_user` (
 	rid			integer unsigned AUTO_INCREMENT,
-	employee_no	CHAR(20),
+	employee_no	CHAR(20) UNIQUE,
 	name_last	CHAR(255),
 	name_first	CHAR(255),
 	name_middle	CHAR(255),
-	email		CHAR(255),
+	email		CHAR(255) UNIQUE,
 	active		boolean,
 	deleted		boolean,
-	harvest_id	CHAR(20),
+	harvest_id	CHAR(20) UNIQUE,
 	PRIMARY KEY(`rid`)
 );
 
@@ -153,6 +153,3 @@ CREATE TABLE `harvest_temp` (
     timezone  char(255),
     employee_no char(10)
 );
-
-
-

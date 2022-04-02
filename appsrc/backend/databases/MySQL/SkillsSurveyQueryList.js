@@ -41,7 +41,7 @@ exports.QueryList = {// handlers
     },
     "getUserData":{
         func:function(){
-            return 'SELECT * from adm_user;'
+            return 'SELECT * FROM adm_user ORDER BY name_first ASC;'
         }
     },
     "saveAPIUserData":{
@@ -55,11 +55,17 @@ exports.QueryList = {// handlers
             let t4 = t3.replace("}",")" );
             console.log("saveAPIUserData(FIXED): " + t4 )
             console.log("saveAPIUserData SQL: " 
-            + "INSERT INTO harvest_temp (harvest_id,name_last,name_first,email,employee_no) VALUES "
+            + "INSERT IGNORE INTO harvest_temp (harvest_id,name_last,name_first,email,employee_no) VALUES "
             + t4 )
-            let query = 'INSERT INTO harvest_temp (harvest_id,name_last,name_first,email,employee_no) VALUES '+ t4 +';'
+            let query = 'INSERT IGNORE INTO harvest_temp (employee_no,name_last,name_first,email,harvest_id) VALUES '+ t4 +';'
 
             return query;
+        }
+    },
+    "mergeTempIntoUsers":{
+        func:function(){
+            return 'INSERT INTO adm_user (name_last,name_first,employee_no,harvest_id,email) \
+                SELECT name_last,name_first,employee_no,harvest_id,email FROM harvest_temp;'
         }
     },
     "getHarvestStruct":{

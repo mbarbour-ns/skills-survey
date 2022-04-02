@@ -19,6 +19,9 @@
 		<script src="makeRolesTableJS"></script>
 		<script src="makeDevOpsImplementationMatrixJS"></script>
 		<script src="makeDevOpsAutoIntegrationTableJS"></script>
+        
+        <script src="XHR"></script>
+
 
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -36,15 +39,15 @@
             let methods = {}
 
 			var mainTableId = ''
-			var selId
+			var gSelectId
 			var consultantId
 
 			let cl = console.log
 			let getElxId = function( pId ){ return document.getElementById( pId ) }
 
 			let loadConsultant = function(){ 
-				cl("Loading " + getElxId( selId ).value )
-				getElxId( consultantId ).innerHTML = getElxId( selId ).value + " Survey"
+				cl("Loading " + getElxId( gSelectId ).value )
+				getElxId( consultantId ).innerHTML = getElxId( gSelectId ).value + " Survey"
 			}
 
 			let bulidMainMenu = function( targetParentId ){
@@ -86,17 +89,12 @@
 
 				tag('br',menuAreaId,'',{} )
 				tag('label',menuAreaId,'Select Consultant for Survey data loading:',{} )
-				selId = tag('select',menuAreaId,'',{
+				gSelectId = tag('select',menuAreaId,'',{
 					class:"menuButton",
 					width:"25%",
 					onchange:"loadConsultant();"
 				})
-				// use ConsultantsList to populate drop down
-				for( let i in dbResults.ConsultantsList ){
-					tag('option', selId, dbResults.ConsultantsList[ i ],{ 
-						'value': dbResults.ConsultantsList[ i ]
-					})
-				}
+                getUsersFromDB()
 
 				let tr2Id = tag('tr', mainTableId, '', {} )
 				tag('td', tr2Id, '', {} )
@@ -105,6 +103,35 @@
 
 				return surveyAreaId
 			}
+
+
+            let getUsersFromDB = function(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserData",
+                    callback:function(obj){ parseUserDBData( obj ) }
+                }
+                XHR( cfg )
+            }
+            let parseUserDBData = function( pObj ){
+                let users = JSON.parse( pObj )
+                console.log('\n\n\nusers=' + JSON.stringify( users[0]['name_first'] ) )
+				for( let i in users ){
+					tag('option', gSelectId, users[ i ]['name_first'] + " " + users[ i ]['name_last'],{ 
+						'value': users[ i ]['name_first'] + " " + users[ i ]['name_last']
+					})
+				}
+            }
+
+
+
+
+
 
 			let buildSurveyLayout = function( targetParentId ){				
 				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',

@@ -35,7 +35,7 @@
                 //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
-                    cl( ">>"+JSON.stringify( newObj[ idx ] ) )
+                    //cl( ">>"+JSON.stringify( newObj[ idx ] ) )
                     gDbHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 getHarvestSchema();
@@ -60,7 +60,7 @@
                 //console.log("parseTableStruct(): " + JSON.stringify( pObj ) )
                 let newObj = JSON.parse( pObj )
                 for( let idx in newObj ){
-                    cl( ">"+JSON.stringify( newObj[ idx ] ) )
+                    //cl( ">"+JSON.stringify( newObj[ idx ] ) )
                     gHarvestHeaderList.push( newObj[ idx ]['Field'] )
                 }
                 makeUserForm( document.body.id )
@@ -98,7 +98,7 @@
                 // use harvest_temp struct to form records from harverst API data
                 // for every record to be transposed
                 for( let r in pNewObj ){
-                    cl("### " + JSON.stringify( pNewObj[ r ] ) )
+                    //cl("### " + JSON.stringify( pNewObj[ r ] ) )
                     let dbObj = {}
                     let viewObj = {}
                     let tEmp = ''
@@ -170,22 +170,22 @@
 
 			let makeUserForm = function( pParentId ){
 				tag('button', pParentId, 'Go to Survey', {
-					style:" width: 33%;", 
+					style:" width: 25%;", 
 					class:"menuButton", 
 					onclick:"gotoSurvey();"
 				})
-				tag('button', pParentId, 'Update Users from Harvest',{
-					style:" width: 33%;", 
+				tag('button', pParentId, 'Update Temp Users from Harvest',{
+					style:" width: 25%;", 
 					class:"menuButton",
                     onclick:"getUsersFromAPI();"
 				})
-				tag('button', pParentId, 'Merge Users to Database',{
-					style:" width: 33%;", 
+				tag('button', pParentId, 'Merge Temp Users to User Database',{
+					style:" width: 25%;", 
 					class:"menuButton",
-                    onclick:"mergeUsersToDatabase();"
+                    onclick:"mergeTempUsersToUserDatabase();"
 				})
 				tag('button', pParentId, 'Test Users to Database',{
-					style:" width: 33%;", 
+					style:" width: 25%;", 
 					class:"menuButton",
                     onclick:"getUserSchema();"
 				})
@@ -309,21 +309,21 @@
                     console.log( '\n***\ngNewRecords[ idx ] = ' + JSON.stringify( gNewRecords[ idx ] ) )
                 }
                 buildSQLInsert( gNewRecords )
-/*
-                addRecordsToUITable({
-                    userList: gNewRecords,
-                    id:mainTableId
-                })
-*/
-                // format gNewRecords into INSERT-able info
-                // save in the harvest tamp table
-                // compare this list with existing list, add newbies
-
             }// end of getUsersFromAPI
 
 
-            async function mergeUsersToDatabase(){
-
+            async function mergeTempUsersToUserDatabase(){
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",
+                    syncMode:true,//xhrKey:sessionStorage.getItem('webn8rSession'),
+                    dataPackage:
+                        //"webn8rSessionInfo=" + sessionStorage.getItem('webn8rSessionInfo')+
+                        "&query=mergeTempIntoUsers" ,
+                    callback:function(obj){  }
+                };
+                cl("SENDING cfg: " + JSON.stringify(cfg));
+                XHR( cfg )
             }// end of mergeUsersToDatabase
 
 
@@ -348,7 +348,7 @@
                         callback:function(obj){ readAllResultsFromDataBase() }
                     };
                     cl("SENDING cfg: " + JSON.stringify(cfg));
-                    XHRNESTEDJSONHandler( cfg );
+                    XHR( cfg );
                 }
             }// end of writeScoreDataToDB
 
