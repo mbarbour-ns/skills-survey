@@ -41,7 +41,11 @@ exports.QueryList = {// handlers
     },
     "getUserData":{
         func:function(){
-            return 'SELECT * FROM adm_user ORDER BY name_first ASC;'
+            let retString = 'SELECT * FROM adm_user WHERE active=' + sessionStorage['filter'] + ' ORDER BY name_first ASC;'
+            if( sessionStorage['filter'] === 'ALL' || sessionStorage['filter'] === '' ){
+                retString ='SELECT * FROM adm_user ORDER BY name_first ASC;'
+            }
+            return retString;
         }
     },
     "saveAPIUserData":{

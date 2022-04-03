@@ -39,7 +39,9 @@
             let methods = {}
 
 			var mainTableId = ''
-			var gSelectId
+			var gSelectId = 0
+            var gFilterId = 0
+            
 			var consultantId
 
 			let cl = console.log
@@ -94,7 +96,17 @@
 					width:"25%",
 					onchange:"loadConsultant();"
 				})
-                getUsersFromDB()
+                getUsersFromDB('all')
+
+				tag('label',menuAreaId,'Filter:',{} )
+				gFilterId = tag('select',menuAreaId,'',{
+					class:"menuButton",
+					width:"25%",
+                    onchange:'getUsersFromDB();'
+				})
+                tag('option', gFilterId, 'all',{            'value': 'ALL' })
+                tag('option', gFilterId, 'only active',{    'value': '1' })
+                tag('option', gFilterId, 'only inactive',{  'value': '0' })
 
 				let tr2Id = tag('tr', mainTableId, '', {} )
 				tag('td', tr2Id, '', {} )
@@ -106,6 +118,20 @@
 
 
             let getUsersFromDB = function(){
+                // YET ANOTHER Fn MYSTERY I can't reference getElxId( gFilterId ).value here ... but I can in the loop. 
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).value )
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).['value'] )
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).getAttribute('value') )
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).getAttribute(value) )
+                // FOR WHATEVER GOD FORSAKEN REASON, I HAVE TO SEARCH AND REFERENCE 'VALUE' THIS WAY.  FUCK!!!!!
+                let filter = ''
+                for(let i in getElxId( gFilterId ) ){
+                    cl("  " + i )
+                    if( i === 'value' ){
+                        cl("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + getElxId( gFilterId )[ i ] );
+                        filter = getElxId( gFilterId )[ i ]
+                    }
+                }
                 let cfg = {
                     method:"POST",
                     url:"/MySQLIO",// this should be "endpoint" not "url"
@@ -113,14 +139,20 @@
                     log:'quiet',
                     dataPackage:
                         // put session auth here
-                        "&query=getUserData",
-                    callback:function(obj){ parseUserDBData( obj ) }
+                        "&query=getUserData" 
+                        +"&filter=" + filter
+                    ,callback:function(obj){ parseUserDBData( obj ) }
                 }
                 XHR( cfg )
             }
             let parseUserDBData = function( pObj ){
                 let users = JSON.parse( pObj )
-                console.log('\n\n\nusers=' + JSON.stringify( users[0]['name_first'] ) )
+                // remove the old list
+                while ( getElxId( gSelectId ).lastChild ) {
+                    cl( ".. removing an entry") 
+                    getElxId( gSelectId ).removeChild( getElxId( gSelectId ).lastChild);
+                }
+                // add the new list
 				for( let i in users ){
 					tag('option', gSelectId, users[ i ]['name_first'] + " " + users[ i ]['name_last'],{ 
 						'value': users[ i ]['name_first'] + " " + users[ i ]['name_last']
