@@ -51,6 +51,8 @@ let configServer = function( port )
 
 		{ title:'reportsHTML', mime:'text/html',  filepath:"frontend/views/reports.html" },
 
+        { title:'searchSkillsHTML', mime:'text/html',  filepath:"frontend/views/searchSkills.html" },
+
 		{ title:'healthCheckHTML', mime:'text/html',  filepath:"frontend/views/healthCheck.html" },
 
 		{ title:'userCRUDHTML', mime:'text/html',  filepath:"frontend/views/userCRUD.html" },

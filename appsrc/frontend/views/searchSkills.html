@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Skills Survey: MAIN</title>
+		<title>Skills Survey: Search</title>
 		<link rel="stylesheet" href="surveyCSS" />
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 		<script src="tagJS"></script>
@@ -27,11 +27,13 @@
 
 		<script>            
 			// route table
-			let gotoDashboard = function(){			location.href = "reportsHTML";}
-			let gotoUserCRUD = function(){			location.href = "userCRUDHTML";}
-			let gotoHealthCheck = function(){		location.href = "healthCheckHTML";}
-			let gotoCertManger = function(){		location.href = "certManagerHTML";}
-			let gotoSearchForSkills = function(){	location.href = "searchSkillsHTML";}
+			let gotoDashboard = function(){		location.href = "reportsHTML";}
+			let gotoUserCRUD = function(){		location.href = "userCRUDHTML";}
+			let gotoHealthCheck = function(){	location.href = "healthCheckHTML";}
+			let gotoCertManger = function(){	location.href = "certManagerHTML";}
+
+			let gotoSurvey = function(){		location.href = "surveyHTML"	}
+
             let gLevels = {}
             let gMethods = {}
             let gAcquiredBy = {}
@@ -60,43 +62,29 @@
 				tag('td', tr1Id, '', {} )
                 let logoId = tag('button',menuAreaId,'',{class:'logo', style:"width:185px; height:80px;"})
                 tag('img',logoId,'',{src:'logoPNG', alt:"Girl in a jacket", width:"165", height:"60" })
-                tag('text',menuAreaId,"SKILLS SURVEY",{ style:'font-size:35px; float:right;' })
+                tag('text',menuAreaId,"SEARCH FOR SKILLS",{ style:'font-size:35px; float:right;' })
                 tag('p',menuAreaId,'',{})
 				tag('button', menuAreaId, 'Search for Skills',{
 					style:" width: 25%;", 
 					class:"menuButton",
-					onclick:"gotoSearchForSkills();",
+					onclick:"gotoUserCRUD();",
 				})
 				tag('button', menuAreaId, 'Customize JDs',{
 					style:" width: 25%;", 
 					class:"menuButton",
 					onclick:"gotoUserCRUD();",
 				})
-				tag('button', menuAreaId, 'Generate Profiles',{
-					style:" width: 25%;", 
-					class:"menuButton", 
-					onclick:"gotoGenerateProfile();"
-				})
 				tag('button', menuAreaId, 'Reports',{
 					style:" width: 25%;", 
 					class:"menuButton", 
 					onclick:"gotoDashboard();"
 				})
-				tag('button', menuAreaId, 'Certifications Manager',{
+				tag('button', menuAreaId, 'Go to Survey', {
 					style:" width: 25%;", 
 					class:"menuButton", 
-					onclick:"gotoCertManger();"
+					onclick:"gotoSurvey();"
 				})
-				tag('button', menuAreaId, 'User CRUD',{
-					style:" width: 25%;", 
-					class:"menuButton",
-					onclick:"gotoUserCRUD();",
-				})
-				tag('button', menuAreaId, 'HealthCheck',{
-					style:" width: 25%;", 
-					class:"menuButton2", 
-					onclick:"gotoHealthCheck();"
-				})
+
 
 				tag('br',menuAreaId,'',{} )
 				tag('label',menuAreaId,'Select Consultant for Survey data loading:',{} )

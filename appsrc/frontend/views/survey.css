@@ -21,6 +21,12 @@ body {
 	background-size: 300% 100%;
 	animation: gradientBG 20s ease infinite;
 }
+.menuButton2 {
+	width:"33%";
+	background: linear-gradient(-45deg, #888888, #bbbb00, #ff8500,#dd0000, #888888);
+	background-size: 300% 100%;
+	animation: gradientBG 20s ease infinite;
+}
 h1 { 
 	font-family:verdana; 
 	color: var(--blueSky); 
