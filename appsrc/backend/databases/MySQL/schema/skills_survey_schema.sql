@@ -33,7 +33,7 @@ CREATE TABLE `adm_xs` (
 	rid			integer unsigned AUTO_INCREMENT,
 	user_rid	integer unsigned,
 	user_xs		CHAR(255),
-	currentcy	DATETIME,
+	currency	DATETIME,
 	active		boolean,
 	deleted		boolean,
 	PRIMARY KEY(`rid`)
@@ -142,7 +142,7 @@ CREATE TABLE `survey_list_mlops_expertise` (
 	PRIMARY KEY(`rid`)
 );
 
-
+-- THIS IS THE TEMP IMPORT TABLE
 DROP TABLE IF EXISTS `harvest_temp`;
 CREATE TABLE `harvest_temp` (
 	harvest_id char(20) UNIQUE,
@@ -153,3 +153,35 @@ CREATE TABLE `harvest_temp` (
     timezone  char(255),
     employee_no char(10)
 );
+
+
+-- MASTER CONTROL FOR ALL SURVEYS: DIRECTORY OF SURVEYS
+DROP TABLE IF EXISTS `survey_control`;
+CREATE TABLE `survey_control` (
+	rid			integer unsigned AUTO_INCREMENT,
+
+	PRIMARY KEY(`rid`)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

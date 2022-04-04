@@ -8,6 +8,8 @@
         <script src="XHR"></script>
 		<script>
             let cl = console.log
+            let getElxId = function( pId ){ return document.getElementById( pId ) }
+
             let mainTableId
             let gNewRecords = []
             let gDbHeaderList = []
@@ -216,20 +218,28 @@
                 let row = []
                 for( let rowIdx in  pRecordSetObj.userList ){
                     row[ rowIdx ] = tag('tr', pRecordSetObj.id, '', {} )
+                    let tdId = []
+                    let idx = 0
                     for( let hdr in pRecordSetObj.userList[ rowIdx ] ){
-                        let t = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
+                        tdId[ idx ] = tag('td', row[ rowIdx ], '', {} )//dbResults.user[ rowIdx ][ hdr ], {} )
                         /*cl("switch on " + hdr )
                         let inputType = 'text';
                         switch( dbResults.user_type_map[hdr] ){
                             case 'tinyint(1)':  inputType = 'checkbox'; break;
                             default:            inputtype = 'text';     break;
                         }*/
-                        let i = tag('input', t,'', { type: 'text'})//inputType })
+                        let i = tag('input', tdId[ idx ],'', { type: 'text' })
+                        getElxId( i ).setAttribute('onchange','updateRecord('+i+');')
+
                         document.getElementById( i ).value = pRecordSetObj.userList[ rowIdx ][ hdr ] 
+                        idx++
                     }
 					let t = tag('td', row[ rowIdx ], '', {} )
 					tag('a', t, '...',{href:'www.google.com'})
                 }
+            }
+            let updateRecord = function( pId ){
+                cl( 'updateRecord(' + pId + ')')
             }
 
 
