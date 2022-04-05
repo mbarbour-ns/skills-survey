@@ -4,14 +4,25 @@
 	--blueDeep: #000080
 }
   
-body {
+.body1 {
 	/*background-image:linear-gradient(to bottom right, #000044, #000088);*/
-	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006688, #888888);
+	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006699, #888888);
 	background-size: 300% 100%;
     /*animation: gradientBG 40s ease infinite;*/
 }
-.ocean {
+.body2 {
+	/*background-image:linear-gradient(to bottom right, #000044, #000088);*/
+	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #660088, #006699, #888888);
+	background-size: 300% 100%;
+    /*animation: gradientBG 40s ease infinite;*/
+}
+.ocean1 {
 	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006688, #888888);
+	background-size: 300% 100%;
+    /*animation: gradientBG 20s ease infinite;*/
+}
+.ocean2 {
+	background: linear-gradient(-45deg, #888888,#880000, #ff8500,  #660088, #006688, #0000cc);
 	background-size: 300% 100%;
     /*animation: gradientBG 20s ease infinite;*/
 }
