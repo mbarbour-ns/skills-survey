@@ -69,7 +69,7 @@ let makeSurveySubject = function( pOBJ ){
 
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pOBJ.pParentId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table', pOBJ.parentId, '', {'width':"100%"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
 	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,

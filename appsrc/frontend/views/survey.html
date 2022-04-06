@@ -170,10 +170,6 @@
             }
 
 
-
-
-
-
 			let buildSurveyLayout = function( targetParentId ){				
 				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',
 					{'style':"color:white; text-align: center;"} )
@@ -201,107 +197,95 @@
                 tag('text',d1,'Education History',{})
                 tag('textarea',d1,'',{})
 
-				makeSurveyList( 
-                {   parentId:targetParentId, 
-                    index:'3', 
+				makeSurveyList( {   
+                    parentId:targetParentId, 
+                    index:'1', 
                     title:'AWSCertificationsTable',
                     label:'AWS Certifications', 
                     list:dbResults.certList,
-                    pct:"35%",
-                    'pParentId':targetParentId,
-                    'index':'3',
-                    'dbList':dbResults.certList,
-                    'percentage':"35%"
+                    percentage:"35%",
                  } )
-				makeSurveyList( 
-                {   parentId:targetParentId, 
-                    index:'8', 
+				makeSurveyList( {   
+                    parentId:targetParentId, 
+                    index:'2', 
                     title:'ConsultingExpertise',
                     label:'Consulting Expertise', 
                     list:dbResults.consultingList,
-                    pct:"35%",
-                    'pParentId':targetParentId,
-                    'index':'8',
-                    'dbList':dbResults.consultingList,
-                    'percentage':"35%"
+                    percentage:"35%",
                  } )				
 				makeSurveyList( 
                 {   parentId:targetParentId, 
-                    index:'9', 
+                    index:'3', 
                     title:'DevOpsAutomatedIntegration',
                     label:'DevOps Automated Integration', 
                     list:dbResults.DevOpsAutoIntegrationList,
-                    pct:"25%",
-                    'pParentId':targetParentId,
-                    'index':'8',
-                    'dbList':dbResults.DevOpsAutoIntegrationList,
-                    'percentage':"25%"
+                    percentage:"25%",
                  } )				
 
 
                 makeSurveySubject({
-                    'title':'RolesTable',
-                    'label':'Roles',
-                    'pParentId':targetParentId,
-                    'index':'1',
+                    title:'RolesTable',
+                    label:'Roles',
+                    parentId:targetParentId,
+                    index:'4',
                     list:dbResults.rolesList,
-                    'percentage':"30%"
+                    percentage:"30%"
                 })                    
                 makeSurveySubject({
-                    'title':'DevToolsTable',
-                    'label':'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
-                    'pParentId':targetParentId,
-                    'index':'2',
+                    title:'DevToolsTable',
+                    label:'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
+                    parentId:targetParentId,
+                    index:'5',
                     list:dbResults.devToolList,
-                    'percentage':"30%"
+                    percentage:"30%"
                 })                    
                 makeSurveySubject({
-                    'title':'AWSServicesTable',
-                    'label':'AWS Services',
-                    'pParentId':targetParentId,
-                    'index':'1',
+                    title:'AWSServicesTable',
+                    label:'AWS Services',
+                    parentId:targetParentId,
+                    index:'6',
                     list:dbResults.serviceList,
-                    'percentage':"100%"
+                    percentage:"100%"
                 })                    
                 makeSurveySubject({
-                    'title':'DevLangTable',
-                    'label':'Dev Language Expertise (language sets and Operating Systems)',
-                    'pParentId':targetParentId,
-                    'index':'4',
+                    title:'DevLangTable',
+                    label:'Dev Language Expertise (language sets and Operating Systems)',
+                    parentId:targetParentId,
+                    index:'7',
                     list:dbResults.devLanguageList,
-                    'percentage':"100%"
+                    percentage:"100%"
                 })                    
                 makeSurveySubject({
-                    'title':'DevOpsTable',
-                    'label':'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)',
-                    'pParentId':targetParentId,
-                    'index':'4',
+                    title:'DevOpsTable',
+                    label:'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)',
+                    parentId:targetParentId,
+                    index:'8',
                     list:dbResults.devOpsList,
-                    'percentage':"100%"
+                    percentage:"100%"
                 })                    
                 makeSurveySubject({
-                    'title':'DevSecOpsTable',
-                    'label':'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)',
-                    'pParentId':targetParentId,
-                    'index':'4',
+                    title:'DevSecOpsTable',
+                    label:'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)',
+                    parentId:targetParentId,
+                    index:'9',
                     list:dbResults.devSecOpsList,
-                    'percentage':"100%"
+                    percentage:"100%"
                 })                    
                 makeSurveySubject({
-                    'title':'DataOpsTable',
-                    'label':'DataOps Expertise',
-                    'pParentId':targetParentId,
-                    'index':'4',
+                    title:'DataOpsTable',
+                    label:'DataOps Expertise',
+                    parentId:targetParentId,
+                    index:'10',
                     list:dbResults.dataOpsList,
-                    'percentage':"100%"
+                    percentage:"100%"
                 })                    
                 makeSurveySubject({
-                    'title':'MLOpsTable',
-                    'label':'MLOps Expertise',
-                    'pParentId':targetParentId,
-                    'index':'4',
+                    title:'MLOpsTable',
+                    label:'MLOps Expertise',
+                    parentId:targetParentId,
+                    index:'11',
                     list:dbResults.mlOpsList,
-                    'percentage':"100%"
+                    percentage:"100%"
                 })                    
 
 				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );

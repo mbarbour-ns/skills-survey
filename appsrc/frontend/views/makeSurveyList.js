@@ -25,5 +25,5 @@ let makeSurveyList = function( pObj ){
 	}
 	tbl[ pObj.index ].Tr1Td2 = tag('td', tbl[ pObj.index ].Tr1Id, '', {'width':"25%"} )
 	let pgBar = tag('div',tbl[ pObj.index ].Tr1Td2,'',{'class':"w3-light-grey w3-round-xlarge;"})
-	tag('div',pgBar, pObj.pct, {'class':"w3-container w3-blue w3-round-xlarge", 'style':"width:" + pObj.pct })
+	tag('div',pgBar, pObj.percentage, {'class':"w3-container w3-blue w3-round-xlarge", 'style':"width:" + pObj.percentage })
 }
