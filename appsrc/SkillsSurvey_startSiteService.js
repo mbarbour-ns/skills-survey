@@ -36,18 +36,8 @@ let configServer = function( port )
 		{ title:'DropDownCheckBoxListJS', mime:'text/javascript',  filepath:"frontend/views/DropDownCheckBoxList.js" },
 
 		{ title:'makeSurveyListJS', mime:'text/javascript',  filepath:"frontend/views/makeSurveyList.js" },
-		{ title:'makeAWSServicesTableJS', mime:'text/javascript',  filepath:"frontend/views/makeAWSServicesTable.js" },
-		{ title:'makeAWSCertificationsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeAWSCertificationsTable.js" },
-		{ title:'makeDevLangTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevLangTable.js" },
-		{ title:'makeDevToolTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevToolTable.js" },
-		{ title:'makeDevOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsTable.js" },
-		{ title:'makeDevSecOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevSecOpsTable.js" },
-		{ title:'makeDataOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDataOpsTable.js" },
-		{ title:'makeMLOpsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeMLOpsTable.js" },
-		{ title:'makeConsultingTableJS', mime:'text/javascript',  filepath:"frontend/views/makeConsultingTable.js" },
-		{ title:'makeRolesTableJS', mime:'text/javascript',  filepath:"frontend/views/makeRolesTable.js" },
+        { title:'makeSurveySubjectJS', mime:'text/javascript',  filepath:"frontend/views/makeSurveySubject.js" },
 		{ title:'makeDevOpsImplementationMatrixJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsImplementationMatrix.js" },
-		{ title:'makeDevOpsAutoIntegrationTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevOpsAutoIntegrationTable.js" },
 
         { title:'XHR', mime:'text/javascript',  filepath:"frontend/XHR.js" },
 

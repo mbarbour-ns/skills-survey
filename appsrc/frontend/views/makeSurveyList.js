@@ -1,12 +1,10 @@
 let makeSurveyList = function( pObj ){
-//    pObj.pId, pObj.index, pObj.title, pObj.checkList, pObj.pct ){
 	let tbl = []
-	//console.log( pObj.checkList + "(" + typeof pObj.checkList + ")" )
 	tbl[ pObj.index ] = {}
 	tbl[ pObj.index ].Id = tag('table', pObj.parentId, '', {'width':"100%"})
 	tbl[ pObj.index ].Tr1Id = tag('tr', tbl[ pObj.index ].Id, '', {'width':"100%"})
 	tbl[ pObj.index ].Tr1Td1 = tag('td', tbl[ pObj.index ].Tr1Id, '', {'width':"75%"} )
-	let btn = tag('button', tbl[ pObj.index ].Tr1Td1, pObj.title,
+	let btn = tag('button', tbl[ pObj.index ].Tr1Td1, pObj.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[ pObj.index ].Tr1Td1, '', {'class':"content"})
 	let p = []

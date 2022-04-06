@@ -1,5 +1,4 @@
-let makeDevOpsAutoIntegrationTable = function( pId, idx, title, checkList, pct )
-{
+let makeDevOpsAutoIntegrationTable = function( pId, idx, title, checkList, pct ){
 	let tbl = []
 	tbl[idx] = {}
 	tbl[idx].Id = tag('table', pId, '', {'width':"100%"})
