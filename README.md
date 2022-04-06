@@ -30,6 +30,45 @@ The best architecture will be using distributed tables:
 Since it is not going to be a large table, since there will only be one recoprd for each 
 survey taken, there won't be searching performance problems.
 datetime, version, subject1, measureMap1, measureMap1, measureMap1, measureMap1, measureMap1, measureMap1, ...
+- OR -
+The individual table could have N records perr table, where each record has a:
+datetime    = NOW()
+subject     = Dev Tools Expertise
+version     = ?.?
+type        = "3Dim"
+item        = Docker
+label       = NULL
+level       = value
+method      = value
+acquiredBy  = value
+list        = NULL
+currency    = value
+- OR - 
+datetime    = NOW()
+subject     = Certifications
+version     = ?.?
+type        = "1Dim"
+item        = AWS Certifications
+label       = NULL
+level       = NULL
+method      = NULL
+acquiredBy  = NULL
+list        = value
+currency    = value
+- OR -
+datetime    = NOW()
+subject     = Certifications
+version     = ?.?
+type        = "Matrix"
+item        = Implementation Matrix
+label       = 'API Gateway'
+level       = NULL
+method      = value
+acquiredBy  = NULL
+list        = NULL
+currency    = value
+- OR OR OR -
+I use BLOB or NoSQL to build an object that fills the page
 
 - This will allow the database to be managed better for load, as well.  In the future, as set 
 of user/subjects can be moved to separate databases.  The main directory can have a record for

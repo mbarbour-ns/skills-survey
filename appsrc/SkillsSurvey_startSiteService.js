@@ -34,6 +34,8 @@ let configServer = function( port )
         { title:'logoPNG', mime:'img/png', filepath: "static/logo.png" },
 		{ title:'databaseListsJS', mime:'text/javascript',  filepath:"frontend/views/databaseLists.js" },
 		{ title:'DropDownCheckBoxListJS', mime:'text/javascript',  filepath:"frontend/views/DropDownCheckBoxList.js" },
+
+		{ title:'makeSurveyListJS', mime:'text/javascript',  filepath:"frontend/views/makeSurveyList.js" },
 		{ title:'makeAWSServicesTableJS', mime:'text/javascript',  filepath:"frontend/views/makeAWSServicesTable.js" },
 		{ title:'makeAWSCertificationsTableJS', mime:'text/javascript',  filepath:"frontend/views/makeAWSCertificationsTable.js" },
 		{ title:'makeDevLangTableJS', mime:'text/javascript',  filepath:"frontend/views/makeDevLangTable.js" },

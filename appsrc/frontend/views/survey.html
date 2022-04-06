@@ -7,6 +7,9 @@
 		<script src="tagJS"></script>
 		<script src="databaseListsJS"></script>
 		<script src="DropDownCheckBoxListJS"></script>
+
+		<script src="makeSurveyListJS"></script>
+
 		<script src="makeAWSServicesTableJS"></script>
 		<script src="makeAWSCertificationsTableJS"></script>
 		<script src="makeDevLangTableJS"></script>
@@ -26,6 +29,12 @@
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 		<script>            
+            let gApp = {
+                // This is the global data capture, both build and results of the survey
+                // which will be the main data blob saved to the mysql BLOB field for
+                // each engineer
+                blob:{}
+            }
 			// route table
 			let gotoDashboard = function(){			location.href = "reportsHTML";}
 			let gotoUserCRUD = function(){			location.href = "userCRUDHTML";}
@@ -200,8 +209,34 @@
 				tag('br',p1,'Education',{} )
                 tag('text',d1,'Education History',{})
                 tag('textarea',d1,'',{})
-				
-				makeAWSCertificationsTable( targetParentId, '3', 'AWS Certifications', dbResults.certList,"35%",{
+
+				makeSurveyList( 
+                {   parentId:targetParentId, 
+                    index:'3', 
+                    label:'AWS Certifications', 
+                    list:dbResults.certList,
+                    pct:"35%",
+                    'title':'AWSCertificationsTable',
+                    'label':'AWS Certifications',
+                    'pParentId':targetParentId,
+                    'index':'3',
+                    'dbList':dbResults.certList,
+                    'percentage':"35%"
+                 } )
+				makeSurveyList( 
+                {   parentId:targetParentId, 
+                    index:'8', 
+                    label:'Consulting Expertise', 
+                    list:dbResults.consultingList,
+                    pct:"35%",
+                    'title':'ConsultingExpertise',
+                    'label':'Consulting Expertise',
+                    'pParentId':targetParentId,
+                    'index':'8',
+                    'dbList':dbResults.consultingList,
+                    'percentage':"35%"
+                 } )				
+/*				makeAWSCertificationsTable( targetParentId, '3', 'AWS Certifications', dbResults.certList,"35%",{
                     'title':'AWSCertificationsTable',
                     'label':'AWS Certifications',
                     'pParentId':targetParentId,
@@ -217,7 +252,7 @@
                     'index':'1',
                     'dbList':dbResults.rolesList,
                     'percentage':"100%"
-                } )
+                } )*/
 				makeDevToolsTable({
                     'title':'DevToolsTable',
                     'label':'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
