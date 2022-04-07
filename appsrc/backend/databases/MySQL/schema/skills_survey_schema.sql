@@ -158,8 +158,10 @@ CREATE TABLE `harvest_temp` (
 -- MASTER CONTROL FOR ALL SURVEYS: DIRECTORY OF SURVEYS
 DROP TABLE IF EXISTS `survey_control`;
 CREATE TABLE `survey_control` (
-	rid			integer unsigned AUTO_INCREMENT,
-
+	rid			    integer unsigned AUTO_INCREMENT,
+    adm_user_rid    integer unsigned,
+    surveyDate      DATETIME,
+    
 	PRIMARY KEY(`rid`)
 );
 

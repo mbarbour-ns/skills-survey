@@ -2,8 +2,10 @@
 let sessionStorage = {}
 let sourceData = {}
 /* IMPORTANT NOTE!!!
-All of the return values MUST use single quotes too obound them, or mysql will NOT execute the query
+All of the return values MUST use single quotes to bound them, or mysql will NOT execute the query
 */
+let cl = console.log
+
 exports.QueryList = {// handlers
     "show all databases":{
         func:function(){
@@ -41,9 +43,22 @@ exports.QueryList = {// handlers
     },
     "getUserData":{
         func:function(){
-            let retString = 'SELECT * FROM adm_user WHERE active=' + sessionStorage['filter'] + ' ORDER BY name_first ASC;'
-            if( sessionStorage['filter'] === 'ALL' || sessionStorage['filter'] === '' ){
-                retString ='SELECT * FROM adm_user ORDER BY name_first ASC;'
+            let retString =""
+            if( sessionStorage['trg'] !== '' ){
+                let names = sessionStorage['trg'].split(' ');                                
+                retString = 'SELECT * FROM adm_user WHERE name_first="'+names[0]+'" AND name_last="'+names[1]+'";'
+            }else{
+
+                switch( sessionStorage['filter'] ){
+                    case 'ALL':
+                    case '':
+                        retString ='SELECT * FROM adm_user ORDER BY name_first ASC;'
+                        break;
+                    default:
+                        retString = 'SELECT * FROM adm_user WHERE active=' + sessionStorage['filter'] + ' ORDER BY name_first ASC;'
+                        break;
+                }
+
             }
             return retString;
         }

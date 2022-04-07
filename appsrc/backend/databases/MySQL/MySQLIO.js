@@ -93,6 +93,8 @@ let fpGetMySQLConnection = function( callback, pParameterObject, response, postD
 let extractAndDecode = function ( postData ) 
 {   console.log( "@extractAndDecode(" + postData + ")" )
     let tokenParameters = postData.split('&')// knock'em into parameters
+    sessionStorage[ 'trg' ] = '' // initialize this
+    sessionStorage[ 'filter' ] = '' // initialize this
     for( let t in tokenParameters ){
         let token = tokenParameters[ t ].split('=');
         sessionStorage[ token[ 0 ] ] = token[ 1 ]

@@ -30,6 +30,7 @@
 			let gotoHealthCheck = function(){		location.href = "healthCheckHTML";}
 			let gotoCertManger = function(){		location.href = "certManagerHTML";}
 			let gotoSearchForSkills = function(){	location.href = "searchSkillsHTML";}
+
             let gLevels = {}
             let gMethods = {}
             let gAcquiredBy = {}
@@ -50,7 +51,31 @@
 			let loadConsultant = function(){ 
 				cl("Loading " + getElxId( gSelectId ).value )
 				getElxId( consultantId ).innerHTML = getElxId( gSelectId ).value + " Survey"
+                gApp.blob[ getElxId( gSelectId ).value ] = {
+                    name:getElxId( gSelectId ).value,
+                    basic:1
+                }
+                cl("Put " + getElxId( gSelectId ).value + " in the " + gApp.blob[ getElxId( gSelectId ).value ].name + " space ... ")
+                // hit database to get this user's survey history and update the UI 
+                // with latest survey date or status.
+                
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserData" 
+                        +"&trg=" + getElxId( gSelectId ).value
+                    ,callback:function(obj){ parseOneUsersDBData( obj ) }
+                })
 			}
+            let parseOneUsersDBData = function( pObj ){
+                let userData = JSON.parse( pObj )
+                cl("One Users data: " + JSON.stringify( userData ) )
+            }
+
 
 			let bulidMainMenu = function( targetParentId ){
 				mainTableId = tag('table', targetParentId, '', {width:"95%;"} )
@@ -97,6 +122,8 @@
 					class:"menuButton2", 
 					onclick:"gotoHealthCheck();"
 				})
+
+
 
 				tag('br',menuAreaId,'',{} )
 				tag('label',menuAreaId,'Select Consultant for Survey data loading:',{} )
