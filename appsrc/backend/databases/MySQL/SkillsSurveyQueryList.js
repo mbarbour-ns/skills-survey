@@ -1,8 +1,13 @@
 'use strict';
 let sessionStorage = {}
 let sourceData = {}
-/* IMPORTANT NOTE!!!
-All of the return values MUST use single quotes to bound them, or mysql will NOT execute the query
+/* IMPORTANT NOTES!!!
+#1. All of the return values MUST use single quotes to bound them, or mysql will NOT execute the query
+
+#2. This line works through the CLI, fails through xfer because needs \\ instead of just one \
+//FAIL 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\"subject1\":{\"item1\":\"123\", \"item2\":\"123\", \"item3\":\"123\"}}");'
+//PASS 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
+
 */
 let cl = console.log
 
