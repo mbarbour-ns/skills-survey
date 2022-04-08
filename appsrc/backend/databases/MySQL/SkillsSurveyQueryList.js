@@ -76,7 +76,7 @@ exports.QueryList = {// handlers
         func:function(){
             // This line works through the CLI, fails through xfer because needs \\ instead of just one \
             //INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\"subject1\":{\"item1\":\"123\", \"item2\":\"123\", \"item3\":\"123\"}}");
-            let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
+            let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (299, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
             //PASS let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{}");'
             return retString;
         }

@@ -34,13 +34,14 @@
             let gLevels = {}
             let gMethods = {}
             let gAcquiredBy = {}
+            
             let levels = {}
             let methods = {}
 
 			var mainTableId = ''
 			var gSelectId = 0
             var gFilterId = 0
-
+            var gDateStampId = ''
             var gCells = {}
             
 			var consultantId
@@ -72,9 +73,11 @@
                 })
 			}
             let parseOneUsersDBData = function( pObj ){
-                let userData = JSON.parse( pObj )
+                let returnData = JSON.parse( pObj )
+                let userData = returnData[0]
                 cl("One Users data: " + JSON.stringify( userData ) )
-
+				getElxId( gDateStampId ).innerHTML = "created(date), last update( "+ userData.surveyDate + " )"
+                /* This is just practice code for writing SQL/JSON out
                 XHR({
                     method:"POST",
                     url:"/MySQLIO",// this should be "endpoint" not "url"
@@ -85,12 +88,8 @@
                         "&query=saveUserData" 
                         +"&trg=" + getElxId( gSelectId ).value
                     ,callback:function(obj){ }
-                })
+                })*/
             }
-
-
-
-
 
 			let bulidMainMenu = function( targetParentId ){
 				mainTableId = tag('table', targetParentId, '', {width:"95%;"} )
@@ -215,7 +214,7 @@
 			let buildSurveyLayout = function( targetParentId ){				
 				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',
 					{'style':"color:white; text-align: center;"} )
-				tag('h5', targetParentId, 'created(date), last update(date) ',
+				gDateStampId = tag('h5', targetParentId, 'created(date), last update(date) ',
 					{'style':"color:white;"} )
 				let startSurveyButtonId = tag('button', targetParentId, 'Start New Survey',{class:'menuButton'})
 				getElxId( startSurveyButtonId ).visible
