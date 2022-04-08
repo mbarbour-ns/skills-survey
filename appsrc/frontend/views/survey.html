@@ -31,20 +31,16 @@
 			let gotoHealthCheck = function(){		location.href = "healthCheckHTML";}
 			let gotoCertManger = function(){		location.href = "certManagerHTML";}
 			let gotoSearchForSkills = function(){	location.href = "searchSkillsHTML";}
-
-            let gLevels = {}
-            let gMethods = {}
-            let gAcquiredBy = {}
-            let gUserData = {}
             
-            let levels = {}
-            let methods = {}
-
-			var mainTableId = ''
+			var gMainTableId = ''
 			var gSelectId = 0
             var gFilterId = 0
             var gDateStampId = ''
             var gCells = {}
+            var gLevels = {}
+            var gMethods = {}
+            var gAcquiredBy = {}
+            var gUserData = {}
             
 			var consultantId
 
@@ -82,8 +78,8 @@
             }
 
 			let bulidMainMenu = function( targetParentId ){
-				mainTableId = tag('table', targetParentId, '', {width:"95%;"} )
-				let tr1Id = tag('tr', mainTableId, '', {} )
+				gMainTableId = tag('table', targetParentId, '', {width:"95%;"} )
+				let tr1Id = tag('tr', gMainTableId, '', {} )
 				let tdr1td1Id =tag('td', tr1Id, '', {} )
 				let menuAreaId = tag('td', tr1Id, '', {} )
 				tag('td', tr1Id, '', {} )
@@ -148,7 +144,7 @@
                 tag('option', gFilterId, 'only active',{    'value': '1' })
                 tag('option', gFilterId, 'only inactive',{  'value': '0' })
 
-				let tr2Id = tag('tr', mainTableId, '', {} )
+				let tr2Id = tag('tr', gMainTableId, '', {} )
 				tag('td', tr2Id, '', {} )
 				let surveyAreaId = tag('td', tr2Id, '', { class:'ocean1'} )
 				tag('td', tr2Id, '', {} )
@@ -200,6 +196,103 @@
 				}
             }
 
+            let collectResultsFromUI = function(){
+                gApp.longText[ getElxId( gSelectId ).value ] = {
+                    name: getElxId( gSelectId ).value,
+                    id: gUserdata.id,
+                }
+                // sequence through the UI sections and collect results
+                for( let item in gListOfSubjects ){
+                    gListOfSubjects[ item ].func( {
+                        title:      gListOfSubjects[ item ].title,
+                        label:      gListOfSubjects[ item ].label,
+                        list:       gListOfSubjects[ item ].list,
+                        parentId:   targetParentId,
+                        percentage: "35%",
+                        index:      idx,
+                    } )
+                }
+            }
+
+            var gListOfSubjects = {
+                'AWSCertificationsTable':{
+                    type:'list',
+                    title:'AWSCertificationsTable',
+                    label:'AWS Certifications', 
+                    list:dbResults.certList,
+                    func:makeSurveyList,
+                },
+                'ConsultingExpertise':{                    
+                    type:'list',
+                    title:'ConsultingExpertise',
+                    label:'Consulting Expertise', 
+                    list:dbResults.consultingList,
+                    func:makeSurveyList,                    
+                },
+                'DevOpsAutomatedIntegration':{
+                    type:'list',
+                    title:'DevOpsAutomatedIntegration',
+                    label:'DevOps Automated Integration', 
+                    list:dbResults.DevOpsAutoIntegrationList,
+                    func:makeSurveyList,
+                },
+                'RolesTable':{
+                    type:'subject',
+                    title:'RolesTable',
+                    label:'Roles',
+                    list:dbResults.rolesList,
+                    func:makeSurveySubject,
+                },
+                'DevToolsTable':{
+                    type:'subject',
+                    title:'DevToolsTable',
+                    label:'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
+                    list:dbResults.devToolList,
+                    func:makeSurveySubject,
+                },
+                'AWSServicesTable':{
+                    type:'subject',
+                    title:'AWSServicesTable',
+                    label:'AWS Services',
+                    list:dbResults.serviceList,
+                    func:makeSurveySubject,
+                },
+                'DevLangTable':{
+                    type:'subject',
+                    title:'DevLangTable',
+                    label:'Dev Language Expertise (language sets and Operating Systems)',
+                    list:dbResults.devLanguageList,
+                    func:makeSurveySubject,
+                },
+                'DevOpsTable':{
+                    type:'subject',
+                    title:'DevOpsTable',
+                    label:'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)',
+                    list:dbResults.devOpsList,
+                    func:makeSurveySubject,
+                },
+                'DevSecOpsTable':{
+                    type:'subject',
+                    title:'DevSecOpsTable',
+                    label:'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)',
+                    list:dbResults.devSecOpsList,
+                    func:makeSurveySubject,
+                },
+                'DataOpsTable':{
+                    type:'subject',
+                    title:'DataOpsTable',
+                    label:'DataOps Expertise',
+                    list:dbResults.dataOpsList,
+                    func:makeSurveySubject,
+                },
+                'MLOpsTable':{
+                    type:'subject',
+                    title:'MLOpsTable',
+                    label:'MLOps Expertise',
+                    list:dbResults.mlOpsList,
+                    func:makeSurveySubject,
+                },
+            }
 
 			let buildSurveyLayout = function( targetParentId ){				
 				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',
@@ -228,96 +321,19 @@
                 tag('text',d1,'Education History',{})
                 tag('textarea',d1,'',{})
 
-				makeSurveyList( {   
-                    parentId:targetParentId, 
-                    index:'1', 
-                    title:'AWSCertificationsTable',
-                    label:'AWS Certifications', 
-                    list:dbResults.certList,
-                    percentage:"35%",
-                 } )
-				makeSurveyList( {   
-                    parentId:targetParentId, 
-                    index:'2', 
-                    title:'ConsultingExpertise',
-                    label:'Consulting Expertise', 
-                    list:dbResults.consultingList,
-                    percentage:"35%",
-                 } )				
-				makeSurveyList( 
-                {   parentId:targetParentId, 
-                    index:'3', 
-                    title:'DevOpsAutomatedIntegration',
-                    label:'DevOps Automated Integration', 
-                    list:dbResults.DevOpsAutoIntegrationList,
-                    percentage:"25%",
-                 } )				
-
-
-                makeSurveySubject({
-                    title:'RolesTable',
-                    label:'Roles',
-                    parentId:targetParentId,
-                    index:'4',
-                    list:dbResults.rolesList,
-                    percentage:"30%"
-                })                    
-                makeSurveySubject({
-                    title:'DevToolsTable',
-                    label:'Dev Tools Expertise (containerized IDE, basic repo, secrets management)',
-                    parentId:targetParentId,
-                    index:'5',
-                    list:dbResults.devToolList,
-                    percentage:"30%"
-                })                    
-                makeSurveySubject({
-                    title:'AWSServicesTable',
-                    label:'AWS Services',
-                    parentId:targetParentId,
-                    index:'6',
-                    list:dbResults.serviceList,
-                    percentage:"100%"
-                })                    
-                makeSurveySubject({
-                    title:'DevLangTable',
-                    label:'Dev Language Expertise (language sets and Operating Systems)',
-                    parentId:targetParentId,
-                    index:'7',
-                    list:dbResults.devLanguageList,
-                    percentage:"100%"
-                })                    
-                makeSurveySubject({
-                    title:'DevOpsTable',
-                    label:'DevOps Expertise (UI/CLI/IaC progressions for pipelines and basic account LeastPrivilegedAccess)',
-                    parentId:targetParentId,
-                    index:'8',
-                    list:dbResults.devOpsList,
-                    percentage:"100%"
-                })                    
-                makeSurveySubject({
-                    title:'DevSecOpsTable',
-                    label:'DevSecOps Expertise (standards, best practices, security frameworks, guardrails, tooling)',
-                    parentId:targetParentId,
-                    index:'9',
-                    list:dbResults.devSecOpsList,
-                    percentage:"100%"
-                })                    
-                makeSurveySubject({
-                    title:'DataOpsTable',
-                    label:'DataOps Expertise',
-                    parentId:targetParentId,
-                    index:'10',
-                    list:dbResults.dataOpsList,
-                    percentage:"100%"
-                })                    
-                makeSurveySubject({
-                    title:'MLOpsTable',
-                    label:'MLOps Expertise',
-                    parentId:targetParentId,
-                    index:'11',
-                    list:dbResults.mlOpsList,
-                    percentage:"100%"
-                })                    
+                // Make the UI section controls
+                let idx = 0;
+                for( let item in gListOfSubjects ){
+                    idx++;
+                    gListOfSubjects[ item ].func( {
+                        title:      gListOfSubjects[ item ].title,
+                        label:      gListOfSubjects[ item ].label,
+                        list:       gListOfSubjects[ item ].list,
+                        parentId:   targetParentId,
+                        percentage: "35%",
+                        index:      idx,
+                    } )
+                }
 
 				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );
 				setupCollapsibles()// apply collapsible to all of the newly created elements
