@@ -161,29 +161,15 @@ CREATE TABLE `survey_control` (
 	rid			    integer unsigned AUTO_INCREMENT,
     adm_user_rid    integer unsigned,
     surveyDate      DATETIME,
-    
+    j               JSON,
+    CHECK (JSON_VALID(j)),
 	PRIMARY KEY(`rid`)
 );
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES ('279', NOW(), "{\"subject1\":{\"item1\":\"123\", \"item2\":\"123\", \"item3\":\"123\"}}");
+SELECT 
+    au.rid, sc.surveyDate, sc.j
+FROM adm_user au
+LEFT JOIN survey_control sc ON sc.adm_user_rid=au.rid 
+WHERE name_first="Barrett" AND name_last="Harber";

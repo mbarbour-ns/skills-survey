@@ -74,7 +74,22 @@
             let parseOneUsersDBData = function( pObj ){
                 let userData = JSON.parse( pObj )
                 cl("One Users data: " + JSON.stringify( userData ) )
+
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=saveUserData" 
+                        +"&trg=" + getElxId( gSelectId ).value
+                    ,callback:function(obj){ }
+                })
             }
+
+
+
 
 
 			let bulidMainMenu = function( targetParentId ){

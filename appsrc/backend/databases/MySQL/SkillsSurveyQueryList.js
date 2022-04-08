@@ -44,9 +44,13 @@ exports.QueryList = {// handlers
     "getUserData":{
         func:function(){
             let retString =""
-            if( sessionStorage['trg'] !== '' ){
+            if( sessionStorage['trg'] !== '' ){// GET ONE USERs DATA
                 let names = sessionStorage['trg'].split(' ');                                
-                retString = 'SELECT * FROM adm_user WHERE name_first="'+names[0]+'" AND name_last="'+names[1]+'";'
+                retString = //'SELECT rid FROM adm_user WHERE name_first="'+names[0]+'" AND name_last="'+names[1]+'";'
+                    'SELECT  au.rid, sc.surveyDate, sc.j \
+                    FROM adm_user au \
+                    LEFT JOIN survey_control sc ON sc.adm_user_rid=au.rid \
+                    WHERE name_first="'+names[0]+'" AND name_last="'+names[1]+'";'
             }else{
 
                 switch( sessionStorage['filter'] ){
@@ -60,6 +64,15 @@ exports.QueryList = {// handlers
                 }
 
             }
+            return retString;
+        }
+    },
+    "saveUserData":{
+        func:function(){
+            // This line works through the CLI, fails through xfer because needs \\ instead of just one \
+            //INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\"subject1\":{\"item1\":\"123\", \"item2\":\"123\", \"item3\":\"123\"}}");
+            let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
+            //PASS let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{}");'
             return retString;
         }
     },
