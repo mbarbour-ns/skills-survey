@@ -67,16 +67,24 @@ exports.QueryList = {// handlers
                         retString = 'SELECT * FROM adm_user WHERE active=' + sessionStorage['filter'] + ' ORDER BY name_first ASC;'
                         break;
                 }
-
             }
             return retString;
         }
     },
     "saveUserData":{
         func:function(){
+            let id = sessionStorage['trg']//.split(' ');
+            let json = sessionStorage['survey']
+            console.log( "\n\nNEED TO FORMAT THE JSON FOR MYSQL: " + JSON.stringify( json) )
+            //name_first="'+names[0]+'" AND name_last="'+names[1]
+            let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES ('
+                + id
+                + ', NOW(), '
+                + JSON.stringify( json) + ');'
+
             // This line works through the CLI, fails through xfer because needs \\ instead of just one \
             //INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\"subject1\":{\"item1\":\"123\", \"item2\":\"123\", \"item3\":\"123\"}}");
-            let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (299, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
+            //let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (299, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
             //PASS let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{}");'
             return retString;
         }
