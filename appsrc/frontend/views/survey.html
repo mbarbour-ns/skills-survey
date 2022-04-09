@@ -239,7 +239,22 @@
                     id: gUserData.id,
                     surveyResults: collectedResults
                 }
+
                 cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
+
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=saveSurveyResults" 
+                        +"&trg=" + gUserData.rid 
+                        +"&results=" + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] )
+                    ,callback:function(obj){ }
+                })
+
             }
 
             var gListOfSubjects = {

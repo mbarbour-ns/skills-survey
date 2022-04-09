@@ -73,11 +73,11 @@ exports.QueryList = {// handlers
     },
     "saveUserData":{
         func:function(){
-            let id = sessionStorage['trg']//.split(' ');
+            let id = sessionStorage['trg']
             let json = sessionStorage['survey']
             console.log( "\n\nNEED TO FORMAT THE JSON FOR MYSQL: " + JSON.stringify( json) )
             //name_first="'+names[0]+'" AND name_last="'+names[1]
-            let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES ('
+            let query = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES ('
                 + id
                 + ', NOW(), '
                 + JSON.stringify( json) + ');'
@@ -86,7 +86,22 @@ exports.QueryList = {// handlers
             //INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{\"subject1\":{\"item1\":\"123\", \"item2\":\"123\", \"item3\":\"123\"}}");
             //let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (299, NOW(), "{\\"subject1\\":{\\"item1\\":\\"123\\", \\"item2\\":\\"123\\", \\"item3\\":\\"123\\"}}");'
             //PASS let retString = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES (279, NOW(), "{}");'
-            return retString;
+            return query;
+        }
+    },
+    "saveSurveyResults":{
+        func:function(){
+            let id = sessionStorage['trg']
+            let json = sessionStorage['results']
+            console.log("saveSurveyResults: TYPEOF userData: " + typeof json )
+            console.log("json: " + JSON.stringify( json ) )
+
+            let query = 'INSERT INTO survey_control (adm_user_rid, surveyDate, j ) VALUES ('
+                + id
+                + ', NOW(), '
+                + JSON.stringify( json) + ');'
+
+            return query;
         }
     },
     "saveAPIUserData":{
