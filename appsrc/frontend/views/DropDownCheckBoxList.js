@@ -7,7 +7,8 @@ class DropDownCheckBoxList
         this.domName = pOBJ.domName
         this.listHeader = pOBJ.listHeader
         this.list = pOBJ.list
-
+        this.title = pOBJ.title
+        
         this.setDropDown({
             'listHeader': pOBJ.listHeader, 
             'list': pOBJ.list

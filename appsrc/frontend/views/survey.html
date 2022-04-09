@@ -197,21 +197,49 @@
             }
 
             let collectResultsFromUI = function(){
+                cl('\ncollectResultsFromUI():LEVELS -  ' + JSON.stringify( gLevels) ) 
+                cl('\ncollectResultsFromUI():METHODS - ' + JSON.stringify( gMethods) ) 
+                cl('\ncollectResultsFromUI():ACQUIREDBY - ' + JSON.stringify( gAcquiredBy) ) 
+                // sequence through the UI sections and collect results
+                let collectedResults = {}
+                for( let subject in gListOfSubjects ){
+                    cl("Collecting: " + subject )
+                    collectedResults[ subject ] = {}
+
+                    for( let idx in gLevels[ subject ] ){
+                        cl(subject + "[" + idx + "] Levels = " 
+                            + gLevels[ subject ][ idx ][ 'title'] + " " 
+                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ] = {}
+                        collectedResults[ subject ][ idx ]['level'] = {}
+                        collectedResults[ subject ][ idx ]['level'][ 'title' ] = gLevels[ subject ][ idx ][ 'title']
+                        collectedResults[ subject ][ idx ]['level'][ 'bitmap' ] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }
+                    for( let idx in gMethods[ subject ] ){
+                        cl(subject + "[" + idx + "] Methods = " 
+                            + gMethods[ subject ][ idx ][ 'title'] + " " 
+                            + gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ]['method'] = {}
+                        collectedResults[ subject ][ idx ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }
+                    for( let idx in gAcquiredBy[ subject ] ){
+                        cl(subject + "[" + idx + "] AcquiredBy = " 
+                            + gAcquiredBy[ subject ][ idx ][ 'title'] + " " 
+                            + gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ]['acquiredby'] = {}
+                        collectedResults[ subject ][ idx ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }
+                    
+                }
                 gApp.longText[ getElxId( gSelectId ).value ] = {
                     name: getElxId( gSelectId ).value,
-                    id: gUserdata.id,
+                    id: gUserData.id,
+                    surveyResults: collectedResults
                 }
-                // sequence through the UI sections and collect results
-                for( let item in gListOfSubjects ){
-                    gListOfSubjects[ item ].func( {
-                        title:      gListOfSubjects[ item ].title,
-                        label:      gListOfSubjects[ item ].label,
-                        list:       gListOfSubjects[ item ].list,
-                        parentId:   targetParentId,
-                        percentage: "35%",
-                        index:      idx,
-                    } )
-                }
+                cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
             }
 
             var gListOfSubjects = {
@@ -299,8 +327,8 @@
 					{'style':"color:white; text-align: center;"} )
 				gDateStampId = tag('h5', targetParentId, 'created(date), last update(date) ',
 					{'style':"color:white;"} )
-//				let startSurveyButtonId = tag('button', targetParentId, 'Start New Survey',{class:'menuButton'})
-//				getElxId( startSurveyButtonId ).visible
+//				let submitSurveyButtonId = tag('button', targetParentId, 'Start New Survey',{class:'menuButton'})
+//				getElxId( submitSurveyButtonId ).visible
 
 				tag('button', targetParentId, '[Resource Name Details]',{'class':"collapsible"} )
 
@@ -340,11 +368,11 @@
 //				showSummaryGraph( targetParentId, dbResults )
 //				makeChart( targetParentId )
 
-				let startSurveyButtonId = tag('button', targetParentId, 'Submit this Survey',{
+				let submitSurveyButtonId = tag('button', targetParentId, 'Submit this Survey',{
                     class:'menuButton',
                     onclick:'saveThisSurveyToDB();'
                 })
-				getElxId( startSurveyButtonId ).visible
+				getElxId( submitSurveyButtonId ).visible
 			}
 
             let saveThisSurveyToDB = function(){
@@ -359,7 +387,7 @@
                         "&query=saveUserData" 
                         +"&trg=" + gUserData.rid    //getElxId( gSelectId ).value
                         +"&survey="+JSON.stringify(gApp.longText)
-                    ,callback:function(obj){ }
+                    ,callback:function(obj){ collectResultsFromUI() }
                 })
             }
 

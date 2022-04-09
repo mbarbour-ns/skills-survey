@@ -92,6 +92,7 @@ let makeSurveySubject = function( pOBJ ){
 
 		gCells[ pOBJ.title ].row[ idx ].Td2 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id,'', {'width':"25%"} )
 		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'title': itemList[ idx ],
             'pParentId': gCells[ pOBJ.title ].row[ idx ].Td2,
             'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
@@ -100,6 +101,7 @@ let makeSurveySubject = function( pOBJ ){
 
 		gCells[ pOBJ.title ].row[ idx ].Td3 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, '', {'width':"25%"} )
 		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'title': itemList[ idx ],
             'pParentId': gCells[ pOBJ.title ].row[ idx ].Td3,
             'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
@@ -108,6 +110,7 @@ let makeSurveySubject = function( pOBJ ){
 
 		gCells[ pOBJ.title ].row[ idx ].Td4 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, '', {'width':"25%"} )
 		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'title': itemList[ idx ],
 			'pParentId': gCells[ pOBJ.title ].row[ idx ].Td4,
 			'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
 			'listHeader':'acquiredBy', 
