@@ -104,6 +104,26 @@ exports.QueryList = {// handlers
             return query;
         }
     },
+    "getSurveyResults":{
+        func:function(){
+            let id = sessionStorage['trg']
+
+            let query = 'SELECT * FROM survey_control WHERE adm_user_rid='+id+';'
+
+            return query;
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
     "saveAPIUserData":{
         func:function(){
             let userData = sessionStorage['data']

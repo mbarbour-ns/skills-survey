@@ -75,7 +75,37 @@
                 gUserData = returnData[0]
                 cl("One Users data: " + JSON.stringify( gUserData ) )
 				getElxId( gDateStampId ).innerHTML = "created(date), last update( "+ gUserData.surveyDate + " )"
+
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getSurveyResults" 
+                        +"&trg=" + gUserData.rid
+                    ,callback:function( obj ){ parseResultsSet( obj ) }
+                })
             }
+            let parseResultsSet = function( pObj ){
+                let tmp1 = pObj.replaceAll('\\','')// clean the controls out of the JSON results
+                pObj = tmp1
+                let tmp2 = pObj.replaceAll(':"{',':{')// make it parse-able
+                pObj = tmp2
+                let tmp3 = pObj.replaceAll('}"}','}}')// make it parse-able
+                pObj = tmp3                
+                cl("parseResultsSet(): " + pObj )
+                let thisResultsRecord = JSON.parse( pObj )
+                cl( ">>" + thisResultsRecord[ 0 ][ 'j' ]['name'] )
+            }
+
+
+
+
+
+
+
 
 			let bulidMainMenu = function( targetParentId ){
 				gMainTableId = tag('table', targetParentId, '', {width:"95%;"} )
