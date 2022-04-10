@@ -231,8 +231,7 @@
                         )
                         collectedResults[ subject ][ idx ]['acquiredby'] = {}
                         collectedResults[ subject ][ idx ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                    }
-                    
+                    }   
                 }
                 gApp.longText[ getElxId( gSelectId ).value ] = {
                     name: getElxId( gSelectId ).value,
@@ -252,9 +251,8 @@
                         "&query=saveSurveyResults" 
                         +"&trg=" + gUserData.rid 
                         +"&results=" + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] )
-                    ,callback:function(obj){ }
+                    ,callback:function(obj){ console.log( JSON.parse( JSON.stringify( obj ))) }
                 })
-
             }
 
             var gListOfSubjects = {
@@ -385,27 +383,10 @@
 
 				let submitSurveyButtonId = tag('button', targetParentId, 'Submit this Survey',{
                     class:'menuButton',
-                    onclick:'saveThisSurveyToDB();'
+                    onclick:'collectResultsFromUI();'
                 })
 				getElxId( submitSurveyButtonId ).visible
 			}
-
-            let saveThisSurveyToDB = function(){
-                cl( "Saving info for " + gUserData.rid + ": " + JSON.stringify( gApp.longText ) )
-                XHR({
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=saveUserData" 
-                        +"&trg=" + gUserData.rid    //getElxId( gSelectId ).value
-                        +"&survey="+JSON.stringify(gApp.longText)
-                    ,callback:function(obj){ collectResultsFromUI() }
-                })
-            }
-
 			let setupCollapsibles = function(){
 				let coll = document.getElementsByClassName("collapsible");
 				for (let i = 0; i < coll.length; i++) {
