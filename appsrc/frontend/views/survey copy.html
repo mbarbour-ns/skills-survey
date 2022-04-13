@@ -97,7 +97,7 @@
                 pObj = tmp3                
                 cl("parseResultsSet(): " + pObj )
                 let thisResultsRecord = JSON.parse( pObj )
-//                cl( ">>" + thisResultsRecord[ 0 ][ 'j' ]['name'] )
+                cl( ">>" + thisResultsRecord[ 0 ][ 'j' ]['name'] )
             }
 
 
@@ -230,7 +230,7 @@
                 cl('\ncollectResultsFromUI():LEVELS -  ' + JSON.stringify( gLevels) ) 
                 cl('\ncollectResultsFromUI():METHODS - ' + JSON.stringify( gMethods) ) 
                 cl('\ncollectResultsFromUI():ACQUIREDBY - ' + JSON.stringify( gAcquiredBy) ) 
-
+                // sequence through the UI sections and collect results
                 let collectedResults = {}
                 for( let subject in gListOfSubjects ){
                     cl("Collecting: " + subject )
@@ -238,16 +238,25 @@
                     collectedResults[ subject ][ 'title' ] = subject
 
                     for( let idx in gLevels[ subject ] ){
-/*                        cl(">" + subject + "[" + idx + "] Levels = " 
+                        //collectedResults[ subject ][ 'title' ] = gLevels[ subject ][ idx ][ 'title']
+                        collectedResults[ subject ][ 'index' ] = idx
+                        collectedResults[ subject ]['level'] = {}
+                        collectedResults[ subject ]['level'][ 'bitmap' ] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+//                        collectedResults[ subject ]['level'][ 'title' ] = gLevels[ subject ][ idx ][ 'title']
+
+                        cl(">" + subject + "[" + idx + "] Levels = " 
                             + gLevels[ subject ][ idx ][ 'title'] + " " 
-                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] )*/
-                        collectedResults[ subject ][idx] = {}
-                        collectedResults[ subject ][idx]['title'] = gLevels[ subject ][ idx ][ 'title']
-                        collectedResults[ subject ][idx]['index'] = idx
-                        collectedResults[ subject ][idx]['level'] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] )
+
+/*                        collectedResults[ subject ][ idx ] = {}
+                        collectedResults[ subject ][ idx ]['title'] = gLevels[ subject ][ idx ][ 'title']
+                        collectedResults[ subject ][ idx ]['level'] = {}
+                        collectedResults[ subject ][ idx ]['level'][ 'title' ] = gLevels[ subject ][ idx ][ 'title']
+                        collectedResults[ subject ][ idx ]['level'][ 'bitmap' ] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']*/
                     }
                     for( let idx in gMethods[ subject ] ){
-                        collectedResults[ subject ]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        collectedResults[ subject ]['method'] = {}
+                        collectedResults[ subject ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
 /*
                         cl(">" +subject + "[" + idx + "] Methods = " 
                             + gMethods[ subject ][ idx ][ 'title'] + " " 
@@ -257,7 +266,8 @@
                         collectedResults[ subject ][ idx ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']*/
                     }
                     for( let idx in gAcquiredBy[ subject ] ){
-                        collectedResults[ subject ]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        collectedResults[ subject ]['acquiredby'] = {}
+                        collectedResults[ subject ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
 /*                        cl(">" +subject + "[" + idx + "] AcquiredBy = " 
                             + gAcquiredBy[ subject ][ idx ][ 'title'] + " " 
                             + gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
@@ -271,6 +281,7 @@
                     id: gUserData.id,
                     surveyResults: collectedResults
                 }
+
                 cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
 
                 XHR({
