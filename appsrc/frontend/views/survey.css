@@ -6,7 +6,7 @@
   
 .body1 {
 	/*background-image:linear-gradient(to bottom right, #000044, #000088);*/
-	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006699, #888888);
+	background: linear-gradient(-45deg, #888888,#880000, #bb6500, #444443, #2fb164, #004477, #888888);
 	background-size: 300% 100%;
     /*animation: gradientBG 40s ease infinite;*/
 }
@@ -17,7 +17,7 @@
     /*animation: gradientBG 40s ease infinite;*/
 }
 .ocean1 {
-	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #4fe164, #006688, #888888);
+	background: linear-gradient(-45deg, #888888,#880000, #ff8500, #444443, #2fb164, #004477, #888888);
 	background-size: 300% 100%;
     /*animation: gradientBG 20s ease infinite;*/
 }
@@ -52,8 +52,8 @@ h1 {
 }
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {
-	background-color: #eee;
-	color: #444;
+	background: linear-gradient(-45deg, #111111,#002288); /*  #00c */
+	color: #bbb;
 	cursor: pointer;
 	padding: 18px;
 	width: 100%;
@@ -65,7 +65,7 @@ h1 {
   
   /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
   .active, .collapsible:hover {
-	background-color: #ccc;
+	background: linear-gradient(-45deg, #000000,#002266); /* #009; */
   }
   
   /* Style the collapsible content. Note: hidden by default */
@@ -73,7 +73,7 @@ h1 {
 	padding: 0 18px;
 	display: none;
 	overflow: hidden;
-	background-color: #f1f1f1;
+	background-color: #005588;/*f1f1f1;*/
   }
 
   .collapsible:after {
@@ -89,11 +89,13 @@ h1 {
   }
 
   tr:nth-child(even) {
-	background-color: #dddddd;
+	background-color: #002255;
   }
   td, th {
 	border: 1px solid #dddddd; 
 	text-align: left; 
+    color: white;
+    background-color: #003366;
 	padding: 8px;
 }
 tr {

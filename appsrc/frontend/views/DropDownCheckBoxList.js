@@ -8,6 +8,7 @@ class DropDownCheckBoxList
         this.listHeader = pOBJ.listHeader
         this.list = pOBJ.list
         this.title = pOBJ.title
+        console.log('pOBJ.title: ' + pOBJ.title)
         
         this.setDropDown({
             'listHeader': pOBJ.listHeader, 
@@ -16,6 +17,10 @@ class DropDownCheckBoxList
 
         this.makeCheckBoxList(pOBJ.pParentId)
         this.dropDownSet.showCheckBoxList()
+    }
+
+    getElxId( pId ){
+        return document.getElementById( pId )
     }
 
     makeCheckBoxList(pParentId) 
@@ -53,6 +58,17 @@ class DropDownCheckBoxList
     getBitmap() {
         return this.dropDownSet.bitmap;
     }
+    setBitmap( pBitMap ) {
+        this.dropDownSet.bitmap = pBitMap;
+        // update the checkboxes
+        for( let i in this.dropDownSet.checkboxIds ){
+            getElxId( this.dropDownSet.checkboxIds[ i ]).checked = false
+            if( (pBitMap >> i )& 0x0001 === 1 ){
+                getElxId( this.dropDownSet.checkboxIds[ i ]).checked = true
+            }
+        }
+    }
+
 
     setDropDown(pList)
     {

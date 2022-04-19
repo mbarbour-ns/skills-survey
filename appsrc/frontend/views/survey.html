@@ -36,6 +36,7 @@
 			var gSelectId = 0
             var gFilterId = 0
             var gDateStampId = ''
+
             var gCells = {}
             var gLevels = {}
             var gMethods = {}
@@ -43,249 +44,6 @@
             var gUserData = {}
             
 			var consultantId
-
-			let cl = console.log
-			let getElxId = function( pId ){ return document.getElementById( pId ) }
-
-			let loadConsultant = function(){ 
-				cl("Loading " + getElxId( gSelectId ).value )
-				getElxId( consultantId ).innerHTML = getElxId( gSelectId ).value + " Survey"
-                gApp.longText[ getElxId( gSelectId ).value ] = {
-                    name:getElxId( gSelectId ).value,
-                    basic:1
-                }
-                cl("Put " + getElxId( gSelectId ).value + " in the " + gApp.longText[ getElxId( gSelectId ).value ].name + " space ... ")
-                // hit database to get this user's survey history and update the UI 
-                // with latest survey date or status.
-                
-                XHR({
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=getUserData" 
-                        +"&trg=" + getElxId( gSelectId ).value
-                    ,callback:function(obj){ parseOneUsersDBData( obj ) }
-                })
-			}
-            let parseOneUsersDBData = function( pObj ){
-                let returnData = JSON.parse( pObj )
-                gUserData = returnData[0]
-                cl("One Users data: " + JSON.stringify( gUserData ) )
-				getElxId( gDateStampId ).innerHTML = "created(date), last update( "+ gUserData.surveyDate + " )"
-
-                XHR({
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=getSurveyResults" 
-                        +"&trg=" + gUserData.rid
-                    ,callback:function( obj ){ parseResultsSet( obj ) }
-                })
-            }
-            let parseResultsSet = function( pObj ){
-                let tmp1 = pObj.replaceAll('\\','')// clean the controls out of the JSON results
-                pObj = tmp1
-                let tmp2 = pObj.replaceAll(':"{',':{')// make it parse-able
-                pObj = tmp2
-                let tmp3 = pObj.replaceAll('}"}','}}')// make it parse-able
-                pObj = tmp3                
-                cl("parseResultsSet(): " + pObj )
-                let thisResultsRecord = JSON.parse( pObj )
-//                cl( ">>" + thisResultsRecord[ 0 ][ 'j' ]['name'] )
-            }
-
-
-            let updateUIfromDBRead = function( ) {
-
-            }
-
-
-
-			let bulidMainMenu = function( targetParentId ){
-				gMainTableId = tag('table', targetParentId, '', {width:"95%;"} )
-				let tr1Id = tag('tr', gMainTableId, '', {} )
-				let tdr1td1Id =tag('td', tr1Id, '', {} )
-				let menuAreaId = tag('td', tr1Id, '', {} )
-				tag('td', tr1Id, '', {} )
-                let logoId = tag('button',menuAreaId,'',{class:'logo', style:"width:185px; height:80px;"})
-                tag('img',logoId,'',{src:'logoPNG', alt:"Girl in a jacket", width:"165", height:"60" })
-                tag('text',menuAreaId,"SKILLS SURVEY",{ style:'font-size:35px; float:right;' })
-                tag('p',menuAreaId,'',{})
-				tag('button', menuAreaId, 'Search for Skills',{
-					style:" width: 25%;", 
-					class:"menuButton",
-					onclick:"gotoSearchForSkills();",
-				})
-				tag('button', menuAreaId, 'Customize JDs',{
-					style:" width: 25%;", 
-					class:"menuButton",
-					onclick:"gotoUserCRUD();",
-				})
-				tag('button', menuAreaId, 'Generate Profiles',{
-					style:" width: 25%;", 
-					class:"menuButton", 
-					onclick:"gotoGenerateProfile();"
-				})
-				tag('button', menuAreaId, 'Reports',{
-					style:" width: 25%;", 
-					class:"menuButton", 
-					onclick:"gotoDashboard();"
-				})
-				tag('button', menuAreaId, 'Certifications Manager',{
-					style:" width: 25%;", 
-					class:"menuButton", 
-					onclick:"gotoCertManger();"
-				})
-				tag('button', menuAreaId, 'User CRUD',{
-					style:" width: 25%;", 
-					class:"menuButton",
-					onclick:"gotoUserCRUD();",
-				})
-				tag('button', menuAreaId, 'HealthCheck',{
-					style:" width: 25%;", 
-					class:"menuButton2", 
-					onclick:"gotoHealthCheck();"
-				})
-
-
-
-				tag('br',menuAreaId,'',{} )
-				tag('label',menuAreaId,'Select Consultant for Survey data loading:',{} )
-				gSelectId = tag('select',menuAreaId,'',{
-					class:"menuButton",
-					width:"25%",
-					onchange:"loadConsultant();"
-				})
-                getUsersFromDB('all')
-
-				tag('label',menuAreaId,'Filter:',{} )
-				gFilterId = tag('select',menuAreaId,'',{
-					class:"menuButton",
-					width:"25%",
-                    onchange:'getUsersFromDB();'
-				})
-                tag('option', gFilterId, 'all',{            'value': 'ALL' })
-                tag('option', gFilterId, 'only active',{    'value': '1' })
-                tag('option', gFilterId, 'only inactive',{  'value': '0' })
-
-				let tr2Id = tag('tr', gMainTableId, '', {} )
-				tag('td', tr2Id, '', {} )
-				let surveyAreaId = tag('td', tr2Id, '', { class:'ocean1'} )
-				tag('td', tr2Id, '', {} )
-
-				return surveyAreaId
-			}
-
-
-            let getUsersFromDB = function(){
-                // YET ANOTHER Fn MYSTERY I can't reference getElxId( gFilterId ).value here ... but I can in the loop. 
-                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).value )
-                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).['value'] )
-                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).getAttribute('value') )
-                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).getAttribute(value) )
-                // FOR WHATEVER GOD FORSAKEN REASON, I HAVE TO SEARCH AND REFERENCE 'VALUE' THIS WAY.  FUCK!!!!!
-                let filter = ''
-                for(let i in getElxId( gFilterId ) ){
-                    cl("  " + i )
-                    if( i === 'value' ){
-                        cl("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + getElxId( gFilterId )[ i ] );
-                        filter = getElxId( gFilterId )[ i ]
-                    }
-                }
-                let cfg = {
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=getUserData" 
-                        +"&filter=" + filter
-                    ,callback:function(obj){ parseUserDBData( obj ) }
-                }
-                XHR( cfg )
-            }
-            let parseUserDBData = function( pObj ){
-                let users = JSON.parse( pObj )
-                // remove the old list
-                while ( getElxId( gSelectId ).lastChild ) {
-                    cl( ".. removing an entry") 
-                    getElxId( gSelectId ).removeChild( getElxId( gSelectId ).lastChild);
-                }
-                // add the new list
-				for( let i in users ){
-					tag('option', gSelectId, users[ i ]['name_first'] + " " + users[ i ]['name_last'],{ 
-						'value': users[ i ]['name_first'] + " " + users[ i ]['name_last']
-					})
-				}
-            }
-
-            let collectResultsFromUI = function(){
-                cl('\ncollectResultsFromUI():LEVELS -  ' + JSON.stringify( gLevels) ) 
-                cl('\ncollectResultsFromUI():METHODS - ' + JSON.stringify( gMethods) ) 
-                cl('\ncollectResultsFromUI():ACQUIREDBY - ' + JSON.stringify( gAcquiredBy) ) 
-
-                let collectedResults = {}
-                for( let subject in gListOfSubjects ){
-                    cl("Collecting: " + subject )
-                    collectedResults[ subject ] = {}
-                    collectedResults[ subject ][ 'title' ] = subject
-
-                    for( let idx in gLevels[ subject ] ){
-/*                        cl(">" + subject + "[" + idx + "] Levels = " 
-                            + gLevels[ subject ][ idx ][ 'title'] + " " 
-                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] )*/
-                        collectedResults[ subject ][idx] = {}
-                        collectedResults[ subject ][idx]['title'] = gLevels[ subject ][ idx ][ 'title']
-                        collectedResults[ subject ][idx]['index'] = idx
-                        collectedResults[ subject ][idx]['level'] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                    }
-                    for( let idx in gMethods[ subject ] ){
-                        collectedResults[ subject ]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-/*
-                        cl(">" +subject + "[" + idx + "] Methods = " 
-                            + gMethods[ subject ][ idx ][ 'title'] + " " 
-                            + gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
-                        )
-                        collectedResults[ subject ][ idx ]['method'] = {}
-                        collectedResults[ subject ][ idx ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']*/
-                    }
-                    for( let idx in gAcquiredBy[ subject ] ){
-                        collectedResults[ subject ]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-/*                        cl(">" +subject + "[" + idx + "] AcquiredBy = " 
-                            + gAcquiredBy[ subject ][ idx ][ 'title'] + " " 
-                            + gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
-                        )
-                        collectedResults[ subject ][ idx ]['acquiredby'] = {}
-                        collectedResults[ subject ][ idx ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']*/
-                    }   
-                }
-                gApp.longText[ getElxId( gSelectId ).value ] = {
-                    name: getElxId( gSelectId ).value,
-                    id: gUserData.id,
-                    surveyResults: collectedResults
-                }
-                cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
-
-                XHR({
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=saveSurveyResults" 
-                        +"&trg=" + gUserData.rid 
-                        +"&results=" + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] )
-                    ,callback:function(obj){ console.log( JSON.parse( JSON.stringify( obj ))) }
-                })
-            }
 
             var gListOfSubjects = {
                 'AWSCertificationsTable':{
@@ -367,6 +125,306 @@
                 },
             }
 
+			let cl = console.log
+			let getElxId = function( pId ){ return document.getElementById( pId ) }
+
+            let getUsersFromDB = function(){
+                // YET ANOTHER Fn MYSTERY I can't reference getElxId( gFilterId ).value here ... but I can in the loop. 
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).value )
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).['value'] )
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).getAttribute('value') )
+                //cl( "getUsersFromDB(): What is typeof getElxId( gFilterId )" + typeof getElxId( gFilterId ) + " and " + getElxId( gFilterId ).getAttribute(value) )
+                // FOR WHATEVER GOD FORSAKEN REASON, I HAVE TO SEARCH AND REFERENCE 'VALUE' THIS WAY.  FUCK!!!!!
+                let filter = ''
+                for(let i in getElxId( gFilterId ) ){
+                    cl("  " + i )
+                    if( i === 'value' ){
+                        cl("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + getElxId( gFilterId )[ i ] );
+                        filter = getElxId( gFilterId )[ i ]
+                    }
+                }
+                let cfg = {
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserData" 
+                        +"&filter=" + filter
+                    ,callback:function(obj){ parseUserDBData( obj ) }
+                }
+                XHR( cfg )
+            }
+            let parseUserDBData = function( pObj ){
+                let users = JSON.parse( pObj )
+                // remove the old list
+                while ( getElxId( gSelectId ).lastChild ) {
+                    cl( ".. removing an entry") 
+                    getElxId( gSelectId ).removeChild( getElxId( gSelectId ).lastChild);
+                }
+                // add the new list
+				for( let i in users ){
+					tag('option', gSelectId, users[ i ]['name_first'] + " " + users[ i ]['name_last'],{ 
+						'value': users[ i ]['name_first'] + " " + users[ i ]['name_last']
+					})
+				}
+            }
+
+			let loadConsultant = function(){ 
+				cl("Loading " + getElxId( gSelectId ).value )
+				getElxId( consultantId ).innerHTML = getElxId( gSelectId ).value + " Survey"
+                gApp.longText[ getElxId( gSelectId ).value ] = {
+                    name:getElxId( gSelectId ).value,
+                    basic:1
+                }
+                cl("Put " + getElxId( gSelectId ).value + " in the " + gApp.longText[ getElxId( gSelectId ).value ].name + " space ... ")
+                // hit database to get this user's survey history and update the UI 
+                // with latest survey date or status.
+                
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getUserData" 
+                        +"&trg=" + getElxId( gSelectId ).value
+                    ,callback:function(obj){ parseOneUsersDBData( obj ) }
+                })
+			}
+            let parseOneUsersDBData = function( pObj ){
+                let returnData = JSON.parse( pObj )
+                gUserData = returnData[0]
+                cl("One Users data: " + JSON.stringify( gUserData ) )
+				getElxId( gDateStampId ).innerHTML = "created(date), last update( "+ gUserData.surveyDate + " )"
+
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=getSurveyResults" 
+                        +"&trg=" + gUserData.rid
+                    ,callback:function( obj ){ parseResultsSet( obj ) }
+                })
+            }
+            let parseResultsSet = function( pObj ){
+                let tmp1 = pObj.replaceAll('\\','')// clean the controls out of the JSON results
+                pObj = tmp1
+                let tmp2 = pObj.replaceAll(':"{',':{')// make it parse-able
+                pObj = tmp2
+                let tmp3 = pObj.replaceAll('}"}','}}')// make it parse-able
+                pObj = tmp3                
+                cl("parseResultsSet(): " + pObj )
+                let thisResultsRecord = JSON.parse( pObj )
+//                cl( ">>" + thisResultsRecord[ 0 ][ 'j' ]['name'] )
+                updateUIfromDBRead( thisResultsRecord )
+            }
+            let updateUIfromDBRead = function( pObj ) {
+                let firstDBRecord = 0
+
+                // DB Record components
+                // title.
+                //gLevels[ pOBJ.title ][ idx ].dropDownSet.checkboxIds[ i ] =
+                cl( JSON.stringify( pObj ) )
+
+                for( let subject in gListOfSubjects ){
+                    cl( "for " + subject )
+                    for( let idx in pObj[0]['j']['surveyResults'][subject] ){
+                        // DONT WORK if( parseInt( idx ) !== 'NaN' ){
+                        if( idx !== "title" ){
+                            cl( "idx: " + idx
+                                + " title: " + 
+                                pObj[0]['j']['surveyResults'][subject][ idx ]['title']
+                                + " level: " + 
+                                pObj[0]['j']['surveyResults'][subject][ idx ]['level']//"AppDev - Desktop"
+                                + " method: " + 
+                                pObj[0]['j']['surveyResults'][subject][ idx ]['method']//"AppDev - Desktop"
+                                + " acquiredby: " +
+                                pObj[0]['j']['surveyResults'][subject][ idx ]['acquiredby']//"AppDev - Desktop"
+                            )
+                            gLevels[subject][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['level'] ) 
+                            gMethods[subject][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['method'] ) 
+                            gAcquiredBy[subject][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['acquiredby'] ) 
+                        }else{
+                            cl("TITLE IS A " + parseInt( idx ) + " typeof= " + typeof  parseInt( idx ) )
+                        }
+                    }
+                }                
+                
+                
+                // UI components
+                //gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+                //  this.dropDownSet.checkboxIds[ i ]
+
+                // THE MAP
+                //gLevels['RolesTable']['0'] = pObj[0]['j']['surveyResults']['RolesTable']['0']
+
+                //gLevels['RolesTable']['0'] .dropDownSet.checkboxIds[ i ]
+                //= pObj[0]['j']['surveyResults']['RolesTable']['0']['level']
+                for( let i in gLevels['RolesTable']['0'].dropDownSet.checkboxIds ){
+                    cl(" cb "+i )
+                }
+                gLevels['RolesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['0']['level'] ) 
+                gMethods['RolesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['0']['method'] ) 
+                gAcquiredBy['RolesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['0']['acquiredby'] ) 
+
+                gLevels['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['level'] ) 
+                gMethods['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['method'] ) 
+                gAcquiredBy['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['acquiredby'] ) 
+
+            }
+
+			let bulidMainMenu = function( targetParentId ){
+				gMainTableId = tag('table', targetParentId, '', {width:"95%;"} )
+				let tr1Id = tag('tr', gMainTableId, '', {} )
+				let tdr1td1Id =tag('td', tr1Id, '', {} )
+				let menuAreaId = tag('td', tr1Id, '', {} )
+				tag('td', tr1Id, '', {} )
+                let logoId = tag('button',menuAreaId,'',{class:'logo', style:"width:185px; height:80px;"})
+                tag('img',logoId,'',{src:'logoPNG', alt:"Girl in a jacket", width:"165", height:"60" })
+                tag('text',menuAreaId,"SKILLS SURVEY",{ style:'font-size:35px; float:right;' })
+                tag('p',menuAreaId,'',{})
+				tag('button', menuAreaId, 'Search for Skills',{
+					style:" width: 25%;", 
+					class:"menuButton",
+					onclick:"gotoSearchForSkills();",
+				})
+				tag('button', menuAreaId, 'Customize JDs',{
+					style:" width: 25%;", 
+					class:"menuButton",
+					onclick:"gotoUserCRUD();",
+				})
+				tag('button', menuAreaId, 'Generate Profiles',{
+					style:" width: 25%;", 
+					class:"menuButton", 
+					onclick:"gotoGenerateProfile();"
+				})
+				tag('button', menuAreaId, 'Reports',{
+					style:" width: 25%;", 
+					class:"menuButton", 
+					onclick:"gotoDashboard();"
+				})
+				tag('button', menuAreaId, 'Certifications Manager',{
+					style:" width: 25%;", 
+					class:"menuButton", 
+					onclick:"gotoCertManger();"
+				})
+				tag('button', menuAreaId, 'User CRUD',{
+					style:" width: 25%;", 
+					class:"menuButton",
+					onclick:"gotoUserCRUD();",
+				})
+				tag('button', menuAreaId, 'HealthCheck',{
+					style:" width: 25%;", 
+					class:"menuButton2", 
+					onclick:"gotoHealthCheck();"
+				})
+
+
+
+				tag('br',menuAreaId,'',{} )
+				tag('label',menuAreaId,'Select Consultant for Survey data loading:',{} )
+				gSelectId = tag('select',menuAreaId,'',{
+					class:"menuButton",
+					width:"25%",
+					onchange:"loadConsultant();"
+				})
+                getUsersFromDB('all')
+
+				tag('label',menuAreaId,'Filter:',{} )
+				gFilterId = tag('select',menuAreaId,'',{
+					class:"menuButton",
+					width:"25%",
+                    onchange:'getUsersFromDB();'
+				})
+                tag('option', gFilterId, 'all',{            'value': 'ALL' })
+                tag('option', gFilterId, 'only active',{    'value': '1' })
+                tag('option', gFilterId, 'only inactive',{  'value': '0' })
+
+				let tr2Id = tag('tr', gMainTableId, '', {} )
+				tag('td', tr2Id, '', {} )
+				let surveyAreaId = tag('td', tr2Id, '', { class:'ocean1'} )
+				tag('td', tr2Id, '', {} )
+
+				return surveyAreaId
+			}
+
+
+            let collectResultsFromUIandSave = function(){
+                cl('\n\ncollectResultsFromUIandSave():LEVELS -  ' + JSON.stringify( gLevels) ) 
+                cl('\ncollectResultsFromUIandSave():METHODS - ' + JSON.stringify( gMethods) ) 
+                cl('\ncollectResultsFromUIandSave():ACQUIREDBY - ' + JSON.stringify( gAcquiredBy) ) 
+
+                let collectedResults = {}
+                for( let subject in gListOfSubjects ){ // like rolestable
+                    cl("\nCollecting: " + subject )
+                    collectedResults[ subject ] = {}
+                    collectedResults[ subject ][ 'title' ] = subject  // like rolestable
+
+                    for( let idx in gLevels[ subject ] ){ // like App - Dev
+                        cl(">" + subject + "[" + idx + "] gLevels = " 
+                            + gLevels[ subject ][ idx ][ 'title'] + " " 
+                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] )
+                        collectedResults[ subject ][idx] = {}
+                        collectedResults[ subject ][idx]['title'] = gLevels[ subject ][ idx ][ 'title'] // like App - Dev
+                        collectedResults[ subject ][idx]['index'] = idx
+                        collectedResults[ subject ][idx]['level'] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        // NEW
+                        collectedResults[ subject ][idx]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        collectedResults[ subject ][idx]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        cl("  " 
+                            + collectedResults[ subject ][idx]['level'] + " "
+                            + collectedResults[ subject ][idx]['method'] + " "
+                            + collectedResults[ subject ][idx]['acquiredby'] + " "
+                        )
+                    }
+/*                    for( let idx in gMethods[ subject ] ){
+                        collectedResults[ subject ]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+
+                        cl(">" +subject + "[" + idx + "] gMethods = " 
+                            + gMethods[ subject ][ idx ][ 'title'] + " " 
+                            + gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ]['method'] = {}
+                        collectedResults[ subject ][ idx ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }
+                    for( let idx in gAcquiredBy[ subject ] ){
+                        collectedResults[ subject ]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        cl(">" +subject + "[" + idx + "] gAcquiredBy = " 
+                            + gAcquiredBy[ subject ][ idx ][ 'title'] + " " 
+                            + gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ]['acquiredby'] = {}
+                        collectedResults[ subject ][ idx ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }   */
+                }
+                gApp.longText[ getElxId( gSelectId ).value ] = {
+                    name: getElxId( gSelectId ).value,
+                    id: gUserData.id,
+                    surveyResults: collectedResults
+                }
+                cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
+
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=saveSurveyResults" 
+                        +"&trg=" + gUserData.rid 
+                        +"&results=" + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] )
+                    ,callback:function(obj){ console.log( JSON.parse( JSON.stringify( obj ))) }
+                })
+            }
+
+
 			let buildSurveyLayout = function( targetParentId ){				
 				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',
 					{'style':"color:white; text-align: center;"} )
@@ -415,7 +473,7 @@
 
 				let submitSurveyButtonId = tag('button', targetParentId, 'Submit this Survey',{
                     class:'menuButton',
-                    onclick:'collectResultsFromUI();'
+                    onclick:'collectResultsFromUIandSave();'
                 })
 				getElxId( submitSurveyButtonId ).visible
 			}

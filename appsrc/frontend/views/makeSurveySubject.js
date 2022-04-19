@@ -69,15 +69,16 @@ let makeSurveySubject = function( pOBJ ){
 
 	let tbl = []
 	tbl[idx] = {}
-	tbl[idx].Id = tag('table', pOBJ.parentId, '', {'width':"100%"})
+	tbl[idx].Id = tag('table', pOBJ.parentId, '', {'width':"100%", 'style':"color: white; background-color:#002266;"})
 	tbl[idx].Tr1Id = tag('tr', tbl[idx].Id, '', {'width':"100%"})
 	tbl[idx].Tr1Td1 = tag('td', tbl[idx].Tr1Id, '', {'width':"75%"} )
 	let btn = tag('button', tbl[idx].Tr1Td1, pOBJ.label,
 		{'class':"collapsible"})
 	let div1 = tag('div', tbl[idx].Tr1Td1, '', {'class':"content"})
 
-	gCells[ pOBJ.title ].Id = tag('table', div1, '', {'width':"100%"})
-	gCells[ pOBJ.title ].Th1Id = tag('tr', gCells[ pOBJ.title ].Id, '', {'width':"100%"})
+//	gCells[ pOBJ.title ].Id = tag('table', div1, '', {'width':"100%"})
+	gCells[ pOBJ.title ].tableId = tag('table', div1, '', {'width':"100%", 'style':"color:white;"})
+	gCells[ pOBJ.title ].Th1Id = tag('tr', gCells[ pOBJ.title ].tableId, '', {'width':"100%"})
 	gCells[ pOBJ.title ].Th1Td1 = tag('th', gCells[ pOBJ.title ].Th1Id, 'DevTool', {'width':"25%", 'align':'left'} )
 	gCells[ pOBJ.title ].Th1Td2 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	gCells[ pOBJ.title ].Th1Td3 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Method', {'width':"15%", 'align':'left'} )
@@ -87,39 +88,39 @@ let makeSurveySubject = function( pOBJ ){
 
 	for( let idx in itemList ){
 		gCells[ pOBJ.title ].row[ idx ] = {}
-		gCells[ pOBJ.title ].row[ idx ].Id = tag('tr', gCells[ pOBJ.title ].Id, '', {'width':"100%",style:'vertical-align: top;'})
-		gCells[ pOBJ.title ].row[ idx ].Td1 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, itemList[ idx ], {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].rowId = tag('tr', gCells[ pOBJ.title ].tableId, '', {'width':"100%",style:'vertical-align: top;'})
+		gCells[ pOBJ.title ].row[ idx ].Td1 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, itemList[ idx ], {'width':"25%"} )
 
-		gCells[ pOBJ.title ].row[ idx ].Td2 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id,'', {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td2 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId,'', {'width':"25%"} )
 		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'title': itemList[ idx ],
             'pParentId': gCells[ pOBJ.title ].row[ idx ].Td2,
             'domName': "gLevels['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'level', 
-            'list': dbResults.levelList
+            'list': dbResults.levelList// checkbox names
         })
 
-		gCells[ pOBJ.title ].row[ idx ].Td3 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, '', {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td3 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"25%"} )
 		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'title': itemList[ idx ],
             'pParentId': gCells[ pOBJ.title ].row[ idx ].Td3,
             'domName': "gMethods['"+pOBJ.title+"']['"+idx+"']",
             'listHeader':'method', 
-            'list': dbResults.methodList
+            'list': dbResults.methodList// checkbox names
         })
 
-		gCells[ pOBJ.title ].row[ idx ].Td4 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, '', {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td4 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"25%"} )
 		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'title': itemList[ idx ],
 			'pParentId': gCells[ pOBJ.title ].row[ idx ].Td4,
 			'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
 			'listHeader':'acquiredBy', 
-			'list': dbResults.acquiredByList
+			'list': dbResults.acquiredByList// checkbox names
 		})
 
-		gCells[ pOBJ.title ].row[ idx ].Td5 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, '', {'width':"15%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td5 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
 		gCells[ pOBJ.title ].row[ idx ].Td5dataId = addCurrencySelector( gCells[ pOBJ.title ].row[ idx ].Td5, idx ) 
-		gCells[ pOBJ.title ].row[ idx ].Td6 = tag('td', gCells[ pOBJ.title ].row[ idx ].Id, '', {'width':"15%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td6 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
 		gCells[ pOBJ.title ].row[ idx ].Td6dataId = addScore( gCells[ pOBJ.title ].row[ idx ].Td6, pOBJ.percentage )
 	}
 }
