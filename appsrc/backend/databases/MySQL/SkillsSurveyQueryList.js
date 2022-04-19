@@ -108,7 +108,7 @@ exports.QueryList = {// handlers
         func:function(){
             let id = sessionStorage['trg']
 
-            let query = 'SELECT * FROM survey_control WHERE adm_user_rid='+id+';'
+            let query = 'SELECT * FROM survey_control WHERE adm_user_rid='+id+'  ORDER BY surveyDate DESC LIMIT 1;'
 
             return query;
         }

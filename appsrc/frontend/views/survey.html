@@ -226,10 +226,6 @@
             }
             let updateUIfromDBRead = function( pObj ) {
                 let firstDBRecord = 0
-
-                // DB Record components
-                // title.
-                //gLevels[ pOBJ.title ][ idx ].dropDownSet.checkboxIds[ i ] =
                 cl( JSON.stringify( pObj ) )
 
                 for( let subject in gListOfSubjects ){
@@ -255,7 +251,7 @@
                         }
                     }
                 }                
-                
+                /*
                 
                 // UI components
                 //gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
@@ -276,7 +272,7 @@
                 gLevels['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['level'] ) 
                 gMethods['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['method'] ) 
                 gAcquiredBy['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['acquiredby'] ) 
-
+*/
             }
 
 			let bulidMainMenu = function( targetParentId ){
