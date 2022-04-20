@@ -8,31 +8,25 @@ let recalcAll = function(){
 	ind++
 	console.log(" serviceSkillSum: " + serviceSkillSum + "/("+ind+")*100)*100)) = " + (serviceSkillSum/(ind*100))*100 )
 }
-let recalcIdx = function( idx ){
-	/*console.log('RECALC!' + pId + ' @ ' + idx + ":", 
-		document.getElementById( devToolCells.row[ idx ].Td2dataId ).value,
-		document.getElementById( devToolCells.row[ idx ].Td3dataId ).value,
-		document.getElementById( devToolCells.row[ idx ].Td4dataId ).value
-	)*/
-	let newScore = 
-		document.getElementById( devToolCells.row[ idx ].Td2dataId ).value *
-		document.getElementById( devToolCells.row[ idx ].Td3dataId ).value *
-		document.getElementById( devToolCells.row[ idx ].Td4dataId ).value;
-	newScore = newScore/60*100;
-	document.getElementById( devToolCells.row[ idx ].Td5dataId ).setAttribute('style',"width:"+newScore+"%")
-	document.getElementById( devToolCells.row[ idx ].Td5dataId ).innerHTML=newScore+"%"
-	return newScore
+let recalcIdx = function( pIdx, pTitle, pScore ){
+    //score = (levels + methods) * acquiredBy * (currency/4)
+
+    cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
+	pScore = parseInt( pScore )/60*100;
+
+
+
+
+
+    getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).setAttribute('style',"width:"+parseInt( pScore )+"%")
+    getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).innerHTML=parseInt( pScore )+"%"
+	return parseInt( pScore )
 }
-let recalc = function( idx ){
-	recalcIdx( idx )
-	recalcAll()
-}
-let addLevelSelector = function( pId, idx ){
-	let thisId = tag('select',pId,'',{'onchange':"recalc('" + idx + "');"})
-	for( let idx in dbResults.levelList ){
-		tag('option',thisId, dbResults.levelList[ idx ],{'value':idx})
-	}
-	return thisId;
+let recalc = function( pIdx, pTitle, pScore ){
+    cl( 'recalc( "' + pIdx + '","' + pTitle + '","' + parseInt( pScore) + '") ...');// idx likee 'AppDev - Desktop'
+    cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
+	recalcIdx( pIdx, pTitle, pScore )
+//	recalcAll()
 }
 let addMethodSelector = function( pId, idx ){
 	let thisId = tag('select',pId,'',{'onchange':"recalc('" + idx +"');"})
@@ -41,17 +35,10 @@ let addMethodSelector = function( pId, idx ){
 	}
 	return thisId;
 }
-let addCurrencySelector = function( pId, idx ){
-	let thisId = tag('select',pId,'',{'onchange':"recalc('" + idx +"');"})
-	for( let idx in dbResults.currencyList ){
-		tag('option',thisId, dbResults.currencyList[ idx ],{'value':idx})
-	}
-	return thisId;
-}
 
 let addScore = function( pId, score ){
-	let thisId = tag('div',pId,'',{'class':"w3-light-grey w3-round-xlarge;"})
-	let pgrBarId = tag('div',thisId,score,{'class':"w3-container w3-blue w3-round-xlarge", 'style':"width:"+score })
+	let thisId = tag('div', pId, '',{'class':"w3-light-grey w3-round-xlarge;"})
+	let pgrBarId = tag('div', thisId, score,{'class':"w3-container w3-blue w3-round-xlarge", 'style':"width:"+score })
 	return pgrBarId;
 }
 
@@ -119,7 +106,17 @@ let makeSurveySubject = function( pOBJ ){
 		})
 
 		gCells[ pOBJ.title ].row[ idx ].Td5 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
-		gCells[ pOBJ.title ].row[ idx ].Td5dataId = addCurrencySelector( gCells[ pOBJ.title ].row[ idx ].Td5, idx ) 
+		gCells[ pOBJ.title ].row[ idx ].Td5dataId = tag('select',gCells[ pOBJ.title ].row[ idx ].Td5,'',{
+            'onchange':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');"
+        })
+        for( let idx2 in dbResults.currencyList ){
+            tag(    'option', 
+                    gCells[ pOBJ.title ].row[ idx ].Td5dataId, 
+                    dbResults.currencyList[ idx2 ],
+                    {'value':idx2}
+            )
+        }
+        
 		gCells[ pOBJ.title ].row[ idx ].Td6 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
 		gCells[ pOBJ.title ].row[ idx ].Td6dataId = addScore( gCells[ pOBJ.title ].row[ idx ].Td6, pOBJ.percentage )
 	}

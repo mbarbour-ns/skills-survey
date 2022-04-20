@@ -41,18 +41,18 @@ let dbResults = {
 	],
 	acquiredByList : [
 		'none',
-		'personal/tutorial',
-		'OJT',
-		'BootCamp',
-		'Stelligent U',
-		'Certificate',
-		'Degree'
+		'observation',//'personal/tutorial',// study
+		'study',//'BootCamp',// training
+		'usage',//'OJT',// usage
+		'training',//'Stelligent U',
+		'certification',
+		'degree'
 	],
 	currencyList : [
 		'never',
 		'stale',
 		'fresh',
-		'current',
+		'active',
 	],
 	serviceList : [
 		'API Gateway',
