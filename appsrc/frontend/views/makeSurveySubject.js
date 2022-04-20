@@ -26,8 +26,8 @@ let recalcIdx = function( pIdx, pTitle, pScore ){
         " gMethods: " + parseInt( gMethods[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
         " gAcquiredBy: " + parseInt( gAcquiredBy[ pTitle ][ pIdx ].dropDownSet.bitmap ) )
 
-    getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).setAttribute('style',"width:"+parseInt( pScore )+"%")
-    getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).innerHTML=parseInt( pScore )+"%"
+    getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).setAttribute('style',"width:"+parseInt( pScore ))
+    getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).innerHTML=parseInt( pScore )
 	return parseInt( pScore )
 }
 let recalc = function( pIdx, pTitle, pScore ){
@@ -84,9 +84,15 @@ let makeSurveySubject = function( pOBJ ){
 	for( let idx in itemList ){
 		gCells[ pOBJ.title ].row[ idx ] = {}
 		gCells[ pOBJ.title ].row[ idx ].rowId = tag('tr', gCells[ pOBJ.title ].tableId, '', {'width':"100%",style:'vertical-align: top;'})
-		gCells[ pOBJ.title ].row[ idx ].Td1 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, itemList[ idx ], {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td1 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, itemList[ idx ], {
+            'width':"25%",
+            'onmouseover':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
+        } )
 
-		gCells[ pOBJ.title ].row[ idx ].Td2 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId,'', {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td2 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId,'', {
+            'width':"25%",
+            'onmouseover':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
+        } )
 		gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'title': itemList[ idx ],
             'pParentId': gCells[ pOBJ.title ].row[ idx ].Td2,
@@ -95,7 +101,10 @@ let makeSurveySubject = function( pOBJ ){
             'list': dbResults.levelList// checkbox names
         })
 
-		gCells[ pOBJ.title ].row[ idx ].Td3 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td3 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {
+            'width':"25%",
+            'onmouseover':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",    
+        } )
 		gMethods[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'title': itemList[ idx ],
             'pParentId': gCells[ pOBJ.title ].row[ idx ].Td3,
@@ -104,7 +113,10 @@ let makeSurveySubject = function( pOBJ ){
             'list': dbResults.methodList// checkbox names
         })
 
-		gCells[ pOBJ.title ].row[ idx ].Td4 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"25%"} )
+		gCells[ pOBJ.title ].row[ idx ].Td4 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {
+            'width':"25%",
+            'onmouseover':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
+        } )
 		gAcquiredBy[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
             'title': itemList[ idx ],
 			'pParentId': gCells[ pOBJ.title ].row[ idx ].Td4,
@@ -115,7 +127,8 @@ let makeSurveySubject = function( pOBJ ){
 
 		gCells[ pOBJ.title ].row[ idx ].Td5 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
 		gCells[ pOBJ.title ].row[ idx ].Td5dataId = tag('select',gCells[ pOBJ.title ].row[ idx ].Td5,'',{
-            'onchange':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');"
+            'onchange':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
+            'onfocus':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
         })
         for( let idx2 in dbResults.currencyList ){
             tag(    'option', 
@@ -126,7 +139,15 @@ let makeSurveySubject = function( pOBJ ){
         }
         
 		gCells[ pOBJ.title ].row[ idx ].Td6 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
-		gCells[ pOBJ.title ].row[ idx ].Td6dataId = addScore( gCells[ pOBJ.title ].row[ idx ].Td6, pOBJ.percentage )
+//		gCells[ pOBJ.title ].row[ idx ].Td6dataId = addScore( gCells[ pOBJ.title ].row[ idx ].Td6, pOBJ.percentage )
+        let thisId = tag('div', gCells[ pOBJ.title ].row[ idx ].Td6, '',{'class':"w3-light-grey w3-round-xlarge;"})
+        gCells[ pOBJ.title ].row[ idx ].Td6dataId = tag('div', thisId, pOBJ.percentage,{
+            'class':"w3-container w3-blue w3-round-xlarge", 
+            'style':"width:"+pOBJ.percentage,
+            'onmouseover':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
+        })
+
+
 	}
 }
 
