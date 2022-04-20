@@ -25,7 +25,8 @@ let dbResults = {
 		'used_in_custom_project',
 		'used_frequently',
 		'used_frequently_and_in_depth',
-		'can_teach_the_subject',
+		'mentored_others',
+		'taught_the_subject',
 	],
 	methodList : [
 		'unused',

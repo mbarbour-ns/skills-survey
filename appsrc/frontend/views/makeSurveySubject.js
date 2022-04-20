@@ -10,13 +10,21 @@ let recalcAll = function(){
 }
 let recalcIdx = function( pIdx, pTitle, pScore ){
     //score = (levels + methods) * acquiredBy * (currency/4)
+    cl('currency=  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
 
-    cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
-	pScore = parseInt( pScore )/60*100;
+    let currency = parseInt( getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
+    let newScore = 
+        parseInt( gLevels[ pTitle ][ pIdx ].dropDownSet.bitmap )
+        + parseInt( gMethods[ pTitle ][ pIdx ].dropDownSet.bitmap )
+        + parseInt( gAcquiredBy[ pTitle ][ pIdx ].dropDownSet.bitmap )
+        * (currency/3);
 
+    pScore = parseInt( newScore )
 
-
-
+    cl( 'currency: ' + currency +
+        " gLevels: " + parseInt( gLevels[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
+        " gMethods: " + parseInt( gMethods[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
+        " gAcquiredBy: " + parseInt( gAcquiredBy[ pTitle ][ pIdx ].dropDownSet.bitmap ) )
 
     getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).setAttribute('style',"width:"+parseInt( pScore )+"%")
     getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).innerHTML=parseInt( pScore )+"%"
