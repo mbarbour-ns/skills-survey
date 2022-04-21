@@ -2,13 +2,14 @@ class DropDownCheckBoxList
 {
     constructor(pOBJ) 
     {
-        console.log('pOBJ.domName: ' + pOBJ.domName)
+        this.mode = "quiet"
+        cl('pOBJ.domName: ' + pOBJ.domName, this.mode )
         this.dropDownSet
         this.domName = pOBJ.domName
         this.listHeader = pOBJ.listHeader
         this.list = pOBJ.list
         this.title = pOBJ.title
-        console.log('pOBJ.title: ' + pOBJ.title)
+        cl('pOBJ.title: ' + pOBJ.title, this.mode )
         
         this.setDropDown({
             'listHeader': pOBJ.listHeader, 
@@ -25,10 +26,10 @@ class DropDownCheckBoxList
 
     makeCheckBoxList(pParentId) 
     {
-        console.log('pParentId' + pParentId)
+        cl('pParentId' + pParentId, this.mode)
         this.dropDownSet.parentId = pParentId
 
-        console.log("makeCheckBoxList:" + this.dropDownSet);
+        cl("makeCheckBoxList:" + this.dropDownSet, this.mode);
 
         this.divIds = tag('div', this.dropDownSet.parentId, '',
         { 
@@ -47,7 +48,7 @@ class DropDownCheckBoxList
             li[ i ] = tag( 'li', ulId,'',{})
             this.dropDownSet.checkboxIds[ i ] = tag( 'input', li[ i ], '', { 
                 type:"checkbox",
-                //THIS WORKS: onclick:'console.log("ping");'
+                //THIS WORKS: onclick:'cl("ping");'
                 // THIS WORKS: onclick:"this.dropDownSet[ 'fruit ' ].getValues();"
                 onclick:this.domName + '.dropDownSet.getValues();'
             })
@@ -92,16 +93,17 @@ class DropDownCheckBoxList
                         this.bitmap = this.bitmap + (1<<i)
                     }
                 }
-                console.log( tag + "." + this.type + ": "+ this.bitmap )
+                cl( tag + "." + this.type + ": "+ this.bitmap, this.mode )
             },
             showCheckBoxList:function()
             {
-                console.log('showCheckBoxList: ' + this.id )
-                console.log('show checkBoxListId: ' + this.checkBoxListSpanId )
-                console.log('show checkBoxList ulId: ' +this.checkBoxListUlId )
+                this.mode = 'quiet'
+                cl('showCheckBoxList: ' + this.id , this.mode)
+                cl('show checkBoxListId: ' + this.checkBoxListSpanId , this.mode)
+                cl('show checkBoxList ulId: ' +this.checkBoxListUlId , this.mode)
 
                 let tid = document.getElementById( this.checkBoxListUlId )
-                console.log( 'show tid: ' + tid.id )
+                cl( 'show tid: ' + tid.id, this.mode )
 
                 document.getElementById( this.checkBoxListSpanId ).onclick = function(evt) 
                 {

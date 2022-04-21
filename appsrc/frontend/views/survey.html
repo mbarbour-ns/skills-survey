@@ -129,7 +129,12 @@
                 },
             }
 
-			let cl = console.log
+			let cl = function( pText, pMode ){
+                //mode = "quiet"
+                if( pMode !== "quiet" ){
+                    console.log( pText )
+                }
+            }
 			let getElxId = function( pId ){ return document.getElementById( pId ) }
 
             let getUsersFromDB = function(){
