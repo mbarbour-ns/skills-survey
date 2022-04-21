@@ -21,18 +21,14 @@ let dbResults = {
 	levelList : [
 		'unknown',
 		'know_what_its_for',
-		'used_and_understood',
-		'used_in_custom_project',
+		'operationally_understood',
 		'used_frequently',
 		'used_frequently_and_in_depth',
-		'mentored_others',
-		'taught_the_subject',
 	],
 	methodList : [
 		'unused',
 		'can_use_via_console',
 		'can_use_via_CLI',
-		'can_use_via_IaC',
 		'can_integrate_with_Tooling',
 		'can_configure_via_console',
 		'can_configure_via_CLI',
@@ -49,6 +45,14 @@ let dbResults = {
 		'certification',
 		'degree'
 	],
+    roleList : [
+        'none',
+        'technician',
+        'engineer',
+        'team lead',
+        'architect',
+        'SME',
+    ],
 	currencyList : [
 		'never',
 		'stale',
@@ -188,7 +192,7 @@ let dbResults = {
 		'Security Assessment',
 	],
 
-	rolesList : [
+	specialtiesList : [// specialties
 		'AppDev - Desktop',
 		'FirmwareDev',
 		'IoT Dev',
@@ -202,14 +206,6 @@ let dbResults = {
 		'SysAdmin',
 		'Site Reliability Engineer',
 		'NetworkAdmin',
-	],
-
-	roleList : [// NEW LIST 20220124
-		'SoloResource',
-		'TeamMember',
-		'TeamLead',
-		'ProjectManager',
-		'MissionManager',
 	],
 
 	DevOpsImplementationList : [

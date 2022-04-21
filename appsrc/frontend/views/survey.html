@@ -41,6 +41,7 @@
             var gLevels = {}
             var gMethods = {}
             var gAcquiredBy = {}
+            var gRole = {}
             var gUserData = {}
             
 			var consultantId
@@ -67,11 +68,11 @@
                     list:dbResults.DevOpsAutoIntegrationList,
                     func:makeSurveyList,
                 },
-                'RolesTable':{
+                'SpecialtiesTable':{
                     type:'subject',
-                    title:'RolesTable',
-                    label:'Roles',
-                    list:dbResults.rolesList,
+                    title:'SpecialtiesTable',
+                    label:'Specialties',
+                    list:dbResults.specialtiesList,
                     func:makeSurveySubject,
                 },
                 'DevToolsTable':{
@@ -258,20 +259,20 @@
                 //  this.dropDownSet.checkboxIds[ i ]
 
                 // THE MAP
-                //gLevels['RolesTable']['0'] = pObj[0]['j']['surveyResults']['RolesTable']['0']
+                //gLevels['SpecialtiesTable']['0'] = pObj[0]['j']['surveyResults']['SpecialtiesTable']['0']
 
-                //gLevels['RolesTable']['0'] .dropDownSet.checkboxIds[ i ]
-                //= pObj[0]['j']['surveyResults']['RolesTable']['0']['level']
-                for( let i in gLevels['RolesTable']['0'].dropDownSet.checkboxIds ){
+                //gLevels['SpecialtiesTable']['0'] .dropDownSet.checkboxIds[ i ]
+                //= pObj[0]['j']['surveyResults']['SpecialtiesTable']['0']['level']
+                for( let i in gLevels['SpecialtiesTable']['0'].dropDownSet.checkboxIds ){
                     cl(" cb "+i )
                 }
-                gLevels['RolesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['0']['level'] ) 
-                gMethods['RolesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['0']['method'] ) 
-                gAcquiredBy['RolesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['0']['acquiredby'] ) 
+                gLevels['SpecialtiesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['0']['level'] ) 
+                gMethods['SpecialtiesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['0']['method'] ) 
+                gAcquiredBy['SpecialtiesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['0']['acquiredby'] ) 
 
-                gLevels['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['level'] ) 
-                gMethods['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['method'] ) 
-                gAcquiredBy['RolesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['RolesTable']['6']['acquiredby'] ) 
+                gLevels['SpecialtiesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['6']['level'] ) 
+                gMethods['SpecialtiesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['6']['method'] ) 
+                gAcquiredBy['SpecialtiesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['6']['acquiredby'] ) 
 */
             }
 

@@ -1,13 +1,3 @@
-let recalcAll = function(){
-	let serviceSkillSum = 0
-	let ind = 0
-	for( let idx in dbResults.serviceList ){
-		serviceSkillSum += recalcIdx( idx )
-		ind = idx
-	}
-	ind++
-	console.log(" serviceSkillSum: " + serviceSkillSum + "/("+ind+")*100)*100)) = " + (serviceSkillSum/(ind*100))*100 )
-}
 let recalcIdx = function( pIdx, pTitle, pScore ){
     //score = (levels + methods) * acquiredBy * (currency/4)
     cl('currency=  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
@@ -17,6 +7,7 @@ let recalcIdx = function( pIdx, pTitle, pScore ){
         parseInt( gLevels[ pTitle ][ pIdx ].dropDownSet.bitmap )
         + parseInt( gMethods[ pTitle ][ pIdx ].dropDownSet.bitmap )
         + parseInt( gAcquiredBy[ pTitle ][ pIdx ].dropDownSet.bitmap )
+        + parseInt( gRole[ pTitle ][ pIdx ].dropDownSet.bitmap )
         * (currency/3);
 
     pScore = parseInt( newScore )
@@ -24,7 +15,9 @@ let recalcIdx = function( pIdx, pTitle, pScore ){
     cl( 'currency: ' + currency +
         " gLevels: " + parseInt( gLevels[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
         " gMethods: " + parseInt( gMethods[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
-        " gAcquiredBy: " + parseInt( gAcquiredBy[ pTitle ][ pIdx ].dropDownSet.bitmap ) )
+        " gAcquiredBy: " + parseInt( gAcquiredBy[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
+        " gRole: " + parseInt( gRole[ pTitle ][ pIdx ].dropDownSet.bitmap ) 
+         )
 
     getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).setAttribute('style',"width:"+parseInt( pScore ))
     getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).innerHTML=parseInt( pScore )
@@ -34,7 +27,6 @@ let recalc = function( pIdx, pTitle, pScore ){
     cl( 'recalc( "' + pIdx + '","' + pTitle + '","' + parseInt( pScore) + '") ...');// idx likee 'AppDev - Desktop'
     cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
 	recalcIdx( pIdx, pTitle, pScore )
-//	recalcAll()
 }
 let addMethodSelector = function( pId, idx ){
 	let thisId = tag('select',pId,'',{'onchange':"recalc('" + idx +"');"})
@@ -58,6 +50,7 @@ let makeSurveySubject = function( pOBJ ){
     gLevels[ pOBJ.title ] = []
     gMethods[ pOBJ.title ] = []
     gAcquiredBy[ pOBJ.title ] = []
+    gRole[ pOBJ.title ] = []
 
     gCells[ pOBJ.title ] = []
     gCells[ pOBJ.title ].row = []
@@ -78,6 +71,7 @@ let makeSurveySubject = function( pOBJ ){
 	gCells[ pOBJ.title ].Th1Td2 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Level', {'width':"25%", 'align':'left'} )
 	gCells[ pOBJ.title ].Th1Td3 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Method', {'width':"15%", 'align':'left'} )
 	gCells[ pOBJ.title ].Th1Td4 = tag('th', gCells[ pOBJ.title ].Th1Id, 'AcquiredBy', {'width':"15%", 'align':'left'} )
+	gCells[ pOBJ.title ].Th1Td7 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Role', {'width':"15%", 'align':'left'} )
 	gCells[ pOBJ.title ].Th1Td5 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Currency', {'width':"15%", 'align':'left'} )
 	gCells[ pOBJ.title ].Th1Td6 = tag('th', gCells[ pOBJ.title ].Th1Id, 'Score', {'width':"15%", 'align':'left'} )
 
@@ -123,6 +117,18 @@ let makeSurveySubject = function( pOBJ ){
 			'domName': "gAcquiredBy['"+pOBJ.title+"']['"+idx+"']",
 			'listHeader':'acquiredBy', 
 			'list': dbResults.acquiredByList// checkbox names
+		})
+
+		gCells[ pOBJ.title ].row[ idx ].Td7 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {
+            'width':"25%",
+            'onmouseover':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
+        } )
+		gRole[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
+            'title': itemList[ idx ],
+			'pParentId': gCells[ pOBJ.title ].row[ idx ].Td7,
+			'domName': "gRole['"+pOBJ.title+"']['"+idx+"']",
+			'listHeader':'role', 
+			'list': dbResults.roleList// checkbox names
 		})
 
 		gCells[ pOBJ.title ].row[ idx ].Td5 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
