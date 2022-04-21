@@ -30,8 +30,6 @@
             let gMethods = {}
             let gAcquiredBy = {}
             let gRole = {}
-            let levels = {}
-            let methods = {}
 
 			var mainTableId = ''
 			var gSelectId = 0
@@ -189,7 +187,7 @@
                     title:'AWSCertificationsTable',
                     label:'AWS Certifications', 
                     list:dbResults.certList,
-                    percentage:"35%",
+                    percentage:"0",
                  } )
 				makeSurveyList( {   
                     parentId:targetParentId, 
@@ -197,7 +195,7 @@
                     title:'ConsultingExpertise',
                     label:'Consulting Expertise', 
                     list:dbResults.consultingList,
-                    percentage:"35%",
+                    percentage:"0",
                  } )				
 				makeSurveyList( 
                 {   parentId:targetParentId, 
@@ -205,7 +203,7 @@
                     title:'DevOpsAutomatedIntegration',
                     label:'DevOps Automated Integration', 
                     list:dbResults.DevOpsAutoIntegrationList,
-                    percentage:"25%",
+                    percentage:"0",
                  } )				
 
 
@@ -215,7 +213,7 @@
                     parentId:targetParentId,
                     index:'4',
                     list:dbResults.specialtiesList,
-                    percentage:"30%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'DevToolsTable',
@@ -223,7 +221,7 @@
                     parentId:targetParentId,
                     index:'5',
                     list:dbResults.devToolList,
-                    percentage:"30%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'AWSServicesTable',
@@ -231,7 +229,7 @@
                     parentId:targetParentId,
                     index:'6',
                     list:dbResults.serviceList,
-                    percentage:"100%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'DevLangTable',
@@ -239,7 +237,7 @@
                     parentId:targetParentId,
                     index:'7',
                     list:dbResults.devLanguageList,
-                    percentage:"100%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'DevOpsTable',
@@ -247,7 +245,7 @@
                     parentId:targetParentId,
                     index:'8',
                     list:dbResults.devOpsList,
-                    percentage:"100%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'DevSecOpsTable',
@@ -255,7 +253,7 @@
                     parentId:targetParentId,
                     index:'9',
                     list:dbResults.devSecOpsList,
-                    percentage:"100%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'DataOpsTable',
@@ -263,7 +261,7 @@
                     parentId:targetParentId,
                     index:'10',
                     list:dbResults.dataOpsList,
-                    percentage:"100%"
+                    percentage:"0"
                 })                    
                 makeSurveySubject({
                     title:'MLOpsTable',
@@ -271,7 +269,7 @@
                     parentId:targetParentId,
                     index:'11',
                     list:dbResults.mlOpsList,
-                    percentage:"100%"
+                    percentage:"0"
                 })                    
 
 				makeDevOpsImplementationMatrix( targetParentId,"DevOps Implmentation Matrix", dbResults.DevOpsImplementationList );

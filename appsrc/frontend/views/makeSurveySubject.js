@@ -1,8 +1,8 @@
 let recalcIdx = function( pIdx, pTitle, pScore ){
     //score = (levels + methods) * acquiredBy * (currency/4)
-    cl('currency=  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
+    cl('currency=  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value )
 
-    let currency = parseInt( getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
+    let currency = parseInt( getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value )
     let newScore = 
         parseInt( gLevels[ pTitle ][ pIdx ].dropDownSet.bitmap )
         + parseInt( gMethods[ pTitle ][ pIdx ].dropDownSet.bitmap )
@@ -25,7 +25,7 @@ let recalcIdx = function( pIdx, pTitle, pScore ){
 }
 let recalc = function( pIdx, pTitle, pScore ){
     cl( 'recalc( "' + pIdx + '","' + pTitle + '","' + parseInt( pScore) + '") ...');// idx likee 'AppDev - Desktop'
-    cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5dataId ).value )
+    cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value )
 	recalcIdx( pIdx, pTitle, pScore )
 }
 let addMethodSelector = function( pId, idx ){
@@ -51,6 +51,7 @@ let makeSurveySubject = function( pOBJ ){
     gMethods[ pOBJ.title ] = []
     gAcquiredBy[ pOBJ.title ] = []
     gRole[ pOBJ.title ] = []
+    gCurrency[ pOBJ.title ] = []
 
     gCells[ pOBJ.title ] = []
     gCells[ pOBJ.title ].row = []
@@ -132,18 +133,20 @@ let makeSurveySubject = function( pOBJ ){
 		})
 
 		gCells[ pOBJ.title ].row[ idx ].Td5 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
-		gCells[ pOBJ.title ].row[ idx ].Td5dataId = tag('select',gCells[ pOBJ.title ].row[ idx ].Td5,'',{
+		gCells[ pOBJ.title ].row[ idx ].Td5SelectId = tag('select', gCells[ pOBJ.title ].row[ idx ].Td5, '',{
             'onchange':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
             'onfocus':"recalc('" + idx + "','" + pOBJ.title + "','" + pOBJ.percentage +"');",
         })
         for( let idx2 in dbResults.currencyList ){
             tag(    'option', 
-                    gCells[ pOBJ.title ].row[ idx ].Td5dataId, 
+                    gCells[ pOBJ.title ].row[ idx ].Td5SelectId, 
                     dbResults.currencyList[ idx2 ],
                     {'value':idx2}
             )
         }
-        
+		gCurrency[ pOBJ.title ][ idx ] = getElxId( gCells[ pOBJ.title ].row[ idx ].Td5SelectId ).value 
+
+
 		gCells[ pOBJ.title ].row[ idx ].Td6 = tag('td', gCells[ pOBJ.title ].row[ idx ].rowId, '', {'width':"15%"} )
 //		gCells[ pOBJ.title ].row[ idx ].Td6dataId = addScore( gCells[ pOBJ.title ].row[ idx ].Td6, pOBJ.percentage )
         let thisId = tag('div', gCells[ pOBJ.title ].row[ idx ].Td6, '',{'class':"w3-light-grey w3-round-xlarge;"})

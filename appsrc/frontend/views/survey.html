@@ -38,10 +38,13 @@
             var gDateStampId = ''
 
             var gCells = {}
+
             var gLevels = {}
             var gMethods = {}
             var gAcquiredBy = {}
             var gRole = {}
+            var gCurrency = {}
+
             var gUserData = {}
             
 			var consultantId
@@ -172,7 +175,7 @@
 				}
             }
 
-			let loadConsultant = function(){ 
+			let loadConsultantsSurveyData = function(){ 
 				cl("Loading " + getElxId( gSelectId ).value )
 				getElxId( consultantId ).innerHTML = getElxId( gSelectId ).value + " Survey"
                 gApp.longText[ getElxId( gSelectId ).value ] = {
@@ -234,7 +237,7 @@
                     for( let idx in pObj[0]['j']['surveyResults'][subject] ){
                         // DONT WORK if( parseInt( idx ) !== 'NaN' ){
                         if( idx !== "title" ){
-                            cl( "idx: " + idx
+                            /*cl( "idx: " + idx
                                 + " title: " + 
                                 pObj[0]['j']['surveyResults'][subject][ idx ]['title']
                                 + " level: " + 
@@ -243,18 +246,23 @@
                                 pObj[0]['j']['surveyResults'][subject][ idx ]['method']//"AppDev - Desktop"
                                 + " acquiredby: " +
                                 pObj[0]['j']['surveyResults'][subject][ idx ]['acquiredby']//"AppDev - Desktop"
-                            )
-                            gLevels[subject][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['level'] ) 
-                            gMethods[subject][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['method'] ) 
-                            gAcquiredBy[subject][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['acquiredby'] ) 
+                                + " role: " +
+                                pObj[0]['j']['surveyResults'][subject][ idx ]['role']//"AppDev - Desktop"
+                            )*/
+                            gLevels[ subject ][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['level'] ) 
+                            gMethods[ subject ][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['method'] ) 
+                            gAcquiredBy[ subject ][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['acquiredby'] ) 
+                            gRole[ subject ][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['role'] ) 
+
+                            getElxId( gCells[ subject ].row[ idx ].Td5SelectId ).value = pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['currency'] 
+
+                            //cl(" CURRENCY = " + pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['currency'] )
                         }else{
                             cl("TITLE IS A " + parseInt( idx ) + " typeof= " + typeof  parseInt( idx ) )
                         }
                     }
                 }                
-                /*
-                
-                // UI components
+                /* UI components
                 //gLevels[ pOBJ.title ][ idx ] = new DropDownCheckBoxList({
                 //  this.dropDownSet.checkboxIds[ i ]
 
@@ -262,19 +270,88 @@
                 //gLevels['SpecialtiesTable']['0'] = pObj[0]['j']['surveyResults']['SpecialtiesTable']['0']
 
                 //gLevels['SpecialtiesTable']['0'] .dropDownSet.checkboxIds[ i ]
-                //= pObj[0]['j']['surveyResults']['SpecialtiesTable']['0']['level']
+                    //= pObj[0]['j']['surveyResults']['SpecialtiesTable']['0']['level']
                 for( let i in gLevels['SpecialtiesTable']['0'].dropDownSet.checkboxIds ){
                     cl(" cb "+i )
-                }
-                gLevels['SpecialtiesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['0']['level'] ) 
-                gMethods['SpecialtiesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['0']['method'] ) 
-                gAcquiredBy['SpecialtiesTable']['0'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['0']['acquiredby'] ) 
-
-                gLevels['SpecialtiesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['6']['level'] ) 
-                gMethods['SpecialtiesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['6']['method'] ) 
-                gAcquiredBy['SpecialtiesTable']['6'].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults']['SpecialtiesTable']['6']['acquiredby'] ) 
-*/
+                }*/
             }
+
+
+            let collectResultsFromUIandSave = function(){
+                cl('\n\ncollectResultsFromUIandSave():LEVELS -  ' + JSON.stringify( gLevels) ) 
+                cl('\ncollectResultsFromUIandSave():METHODS - ' + JSON.stringify( gMethods) ) 
+                cl('\ncollectResultsFromUIandSave():ACQUIREDBY - ' + JSON.stringify( gAcquiredBy) ) 
+                cl('\ncollectResultsFromUIandSave():ROLE - ' + JSON.stringify( gRole) ) 
+
+                let collectedResults = {}
+                for( let subject in gListOfSubjects ){ // like rolestable
+                    cl("\nCollecting: " + subject )
+                    collectedResults[ subject ] = {}
+                    collectedResults[ subject ][ 'title' ] = subject  // like rolestable
+
+                    for( let idx in gLevels[ subject ] ){ // like App - Dev
+                        cl(">" + subject + "[" + idx + "] gLevels = " 
+                            + gLevels[ subject ][ idx ][ 'title'] + " " 
+                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] )
+                        collectedResults[ subject ][idx] = {}
+                        collectedResults[ subject ][idx]['title'] = gLevels[ subject ][ idx ][ 'title'] // like App - Dev
+                        collectedResults[ subject ][idx]['index'] = idx
+                        collectedResults[ subject ][idx]['level'] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        // NEW
+                        collectedResults[ subject ][idx]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        collectedResults[ subject ][idx]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        collectedResults[ subject ][idx]['role'] = gRole[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        collectedResults[ subject ][idx]['currency'] = getElxId( gCells[ subject ].row[ idx ].Td5SelectId ).value
+
+                        cl("  " 
+                            + collectedResults[ subject ][idx]['level'] + " "
+                            + collectedResults[ subject ][idx]['method'] + " "
+                            + collectedResults[ subject ][idx]['acquiredby'] + " "
+                            + collectedResults[ subject ][idx]['role'] + " "
+                            + collectedResults[ subject ][idx]['currency'] + " "
+                        )
+                    }
+/*                    for( let idx in gMethods[ subject ] ){
+                        collectedResults[ subject ]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+
+                        cl(">" +subject + "[" + idx + "] gMethods = " 
+                            + gMethods[ subject ][ idx ][ 'title'] + " " 
+                            + gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ]['method'] = {}
+                        collectedResults[ subject ][ idx ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }
+                    for( let idx in gAcquiredBy[ subject ] ){
+                        collectedResults[ subject ]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                        cl(">" +subject + "[" + idx + "] gAcquiredBy = " 
+                            + gAcquiredBy[ subject ][ idx ][ 'title'] + " " 
+                            + gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
+                        )
+                        collectedResults[ subject ][ idx ]['acquiredby'] = {}
+                        collectedResults[ subject ][ idx ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
+                    }   */
+                }
+                gApp.longText[ getElxId( gSelectId ).value ] = {
+                    name: getElxId( gSelectId ).value,
+                    id: gUserData.id,
+                    surveyResults: collectedResults
+                }
+                cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
+
+                XHR({
+                    method:"POST",
+                    url:"/MySQLIO",// this should be "endpoint" not "url"
+                    syncMode:true,
+                    log:'quiet',
+                    dataPackage:
+                        // put session auth here
+                        "&query=saveSurveyResults" 
+                        +"&trg=" + gUserData.rid 
+                        +"&results=" + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] )
+                    ,callback:function(obj){ console.log( JSON.parse( JSON.stringify( obj ))) }
+                })
+            }
+
 
 			let bulidMainMenu = function( targetParentId ){
 				gMainTableId = tag('table', targetParentId, '', {width:"95%;"} )
@@ -329,7 +406,7 @@
 				gSelectId = tag('select',menuAreaId,'',{
 					class:"menuButton",
 					width:"25%",
-					onchange:"loadConsultant();"
+					onchange:"loadConsultantsSurveyData();"
 				})
                 getUsersFromDB('all')
 
@@ -350,78 +427,6 @@
 
 				return surveyAreaId
 			}
-
-
-            let collectResultsFromUIandSave = function(){
-                cl('\n\ncollectResultsFromUIandSave():LEVELS -  ' + JSON.stringify( gLevels) ) 
-                cl('\ncollectResultsFromUIandSave():METHODS - ' + JSON.stringify( gMethods) ) 
-                cl('\ncollectResultsFromUIandSave():ACQUIREDBY - ' + JSON.stringify( gAcquiredBy) ) 
-
-                let collectedResults = {}
-                for( let subject in gListOfSubjects ){ // like rolestable
-                    cl("\nCollecting: " + subject )
-                    collectedResults[ subject ] = {}
-                    collectedResults[ subject ][ 'title' ] = subject  // like rolestable
-
-                    for( let idx in gLevels[ subject ] ){ // like App - Dev
-                        cl(">" + subject + "[" + idx + "] gLevels = " 
-                            + gLevels[ subject ][ idx ][ 'title'] + " " 
-                            + gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] )
-                        collectedResults[ subject ][idx] = {}
-                        collectedResults[ subject ][idx]['title'] = gLevels[ subject ][ idx ][ 'title'] // like App - Dev
-                        collectedResults[ subject ][idx]['index'] = idx
-                        collectedResults[ subject ][idx]['level'] = gLevels[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                        // NEW
-                        collectedResults[ subject ][idx]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                        collectedResults[ subject ][idx]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                        cl("  " 
-                            + collectedResults[ subject ][idx]['level'] + " "
-                            + collectedResults[ subject ][idx]['method'] + " "
-                            + collectedResults[ subject ][idx]['acquiredby'] + " "
-                        )
-                    }
-/*                    for( let idx in gMethods[ subject ] ){
-                        collectedResults[ subject ]['method'] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-
-                        cl(">" +subject + "[" + idx + "] gMethods = " 
-                            + gMethods[ subject ][ idx ][ 'title'] + " " 
-                            + gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
-                        )
-                        collectedResults[ subject ][ idx ]['method'] = {}
-                        collectedResults[ subject ][ idx ]['method'][ 'bitmap' ] = gMethods[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                    }
-                    for( let idx in gAcquiredBy[ subject ] ){
-                        collectedResults[ subject ]['acquiredby'] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                        cl(">" +subject + "[" + idx + "] gAcquiredBy = " 
-                            + gAcquiredBy[ subject ][ idx ][ 'title'] + " " 
-                            + gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap'] 
-                        )
-                        collectedResults[ subject ][ idx ]['acquiredby'] = {}
-                        collectedResults[ subject ][ idx ]['acquiredby'][ 'bitmap' ] = gAcquiredBy[ subject ][ idx ][ 'dropDownSet' ]['bitmap']
-                    }   */
-                }
-                gApp.longText[ getElxId( gSelectId ).value ] = {
-                    name: getElxId( gSelectId ).value,
-                    id: gUserData.id,
-                    surveyResults: collectedResults
-                }
-                cl( "\n\n\ncollectedResults = " + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] ) )
-
-                XHR({
-                    method:"POST",
-                    url:"/MySQLIO",// this should be "endpoint" not "url"
-                    syncMode:true,
-                    log:'quiet',
-                    dataPackage:
-                        // put session auth here
-                        "&query=saveSurveyResults" 
-                        +"&trg=" + gUserData.rid 
-                        +"&results=" + JSON.stringify( gApp.longText[ getElxId( gSelectId ).value ] )
-                    ,callback:function(obj){ console.log( JSON.parse( JSON.stringify( obj ))) }
-                })
-            }
-
-
 			let buildSurveyLayout = function( targetParentId ){				
 				consultantId = tag('h3', targetParentId, '[Select a Consultant Name above]',
 					{'style':"color:white; text-align: center;"} )
