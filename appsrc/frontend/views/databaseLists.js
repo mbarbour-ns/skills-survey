@@ -74,6 +74,7 @@ let dbResults = {
 		'EBS',
 		'EC2',
 		'ECR',
+        'ECS',
 		'EFS',
 		'EKS',
 		'ElastiCache',
@@ -134,19 +135,31 @@ let dbResults = {
 	],
 
 	devToolList : [
+        'Ansible',
+        'Behave',
+        'CircleCI',
 		'Code*',
+        'Cucumber',
 		'Docker',
+        'Gherkin',
 		'GitLab',
 		'GitHub',
 		'Jasmine',
+        'Jenkins',
 		'Parameter Store',
 		'PyLint',
 		'PyTest',
 		'Secrets Manager',
+        'TeamCity',
 		'TDD/BDD Method',
 		'Vault',
 		'VSCode',
 	],
+
+    devSecToolList : [ 
+        'Black Duck',
+        'CheckMarx',
+    ],
 
 	devOpsList : [
 		'Terraform',
@@ -172,6 +185,10 @@ let dbResults = {
 		'Checkmarx',
 		'Tooling',
 		'Custom',
+        'HIPPA',
+        'PCI',
+        'SOC',
+
 	],
 
 	dataOpsList : [
@@ -229,7 +246,7 @@ let dbResults = {
 		'App Testing',
 		'Infrastructure Testing',
 		'Logging',
-		'A&E Notifications',
+		'AnE Notifications',
 		'Dashboards',
 		'Least Privileged SCPs',
 		'AutoScaling',
@@ -237,6 +254,7 @@ let dbResults = {
 		'PipeLine Factories'
 	],
 
+/*
 	ConsultantsList : [
 		"- Consultant -",
 		"John Ulick",
@@ -250,5 +268,5 @@ let dbResults = {
 		"Shawn Aucoin",
 		"Zachary Job",
 		"Zachery Cox",
-	],
+	],*/
 }

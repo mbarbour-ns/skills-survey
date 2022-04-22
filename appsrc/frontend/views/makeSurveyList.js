@@ -3,6 +3,7 @@ let update = function(){
 }
 
 let makeSurveyList = function( pObj ){
+    gCells[ pObj.title ] = {}
 	let tbl = []
 	tbl[ pObj.index ] = {}
 	tbl[ pObj.index ].Id = tag('table', pObj.parentId, '', {'width':"100%"})
@@ -14,13 +15,14 @@ let makeSurveyList = function( pObj ){
 	let cnt = 0
 	for( let s in pObj.list ){
 		p[ cnt ] = tag('p',div1,'',{})
-		tag('input', p[ cnt ], '',{
-            'id': pObj.list[ s ],
-            'type':'checkbox', 
-            'value':true,
-            'name': pObj.list[ s ],
-            'onclick':"update('"+ pObj.list[ s ] + "');" // can't send the pObj.checkList objext here
-		})
+        gCells[ pObj.title ][ pObj.list[ s ]] = 
+            tag('input', p[ cnt ], '',{
+                'id': pObj.list[ s ],
+                'type':'checkbox', 
+                'value':true,
+                'name': pObj.list[ s ],
+                //'onclick':"update('"+ pObj.list[ s ] + "');" // can't send the pObj.checkList objext here
+            })
 		tag('label', p[ cnt ], pObj.list[ s ], {})
 		cnt++
 	}
