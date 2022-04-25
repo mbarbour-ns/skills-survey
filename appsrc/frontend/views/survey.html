@@ -132,6 +132,10 @@
                 }
             }
 			let getElxId = function( pId ){ return document.getElementById( pId ) }
+            function isEmpty(obj) { 
+                for (var x in obj) { return false; }
+                return true;
+            }
 
             let getUserListFromDB = function(){
                 // YET ANOTHER Fn MYSTERY I can't reference getElxId( gFilterId ).value here ... but I can in the loop. 
@@ -226,12 +230,17 @@
                 pObj = tmp3                
                 cl("parseResultsSet(): " + pObj )
                 let thisResultsRecord = JSON.parse( pObj )
-//                cl( ">>" + thisResultsRecord[ 0 ][ 'j' ]['name'] )
+                
                 updateUIfromDBRead( thisResultsRecord )
             }
             let updateUIfromDBRead = function( pObj ) {
+                if( isEmpty( pObj ) ){
+                    cl( "Got back an empty object.", "")
+                    return;
+                }
+
                 let firstDBRecord = 0
-                cl( JSON.stringify( pObj ) )
+                cl( JSON.stringify( pObj ), "" )
 
                 for( let subject in gListOfSubjects ){
                     cl( "SUBJECT: " + subject )
@@ -254,7 +263,7 @@
                                     gRole[ subject ][ idx ].setBitmap( pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['role'] ) 
 
                                     getElxId( gCells[ subject ].row[ idx ].Td5SelectId ).value = pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['currency'] 
-
+                                    recalcIdx( idx , subject)
                                     cl(" CURRENCY = " + pObj[ firstDBRecord ]['j']['surveyResults'][subject][ idx ]['currency'] )
                                 }else{
                                     cl("TITLE IS A " + parseInt( idx ) + " typeof= " + typeof  parseInt( idx ) )
@@ -262,6 +271,7 @@
                             }
                             break;
                         case 'list':
+                            /*
                             for( let idx in pObj[ 0 ][ 'j' ][ 'surveyResults' ][ subject ] ){
                                 cl( JSON.stringify())
                                 if( idx !== "title" ){
@@ -271,7 +281,7 @@
                                 }else{
                                     cl("TITLE IS A " + parseInt( idx ) + " typeof= " + typeof  parseInt( idx ) )
                                 }
-                            }
+                            }*/
                             break;
                         default:
                             break;
@@ -289,6 +299,7 @@
                 for( let i in gLevels['SpecialtiesTable']['0'].dropDownSet.checkboxIds ){
                     cl(" cb "+i )
                 }*/
+
             }
 
 

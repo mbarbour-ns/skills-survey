@@ -1,5 +1,6 @@
-let recalcIdx = function( pIdx, pTitle, pScore ){
+let recalcIdx = function( pIdx, pTitle ){
     //score = (levels + methods) * acquiredBy * (currency/4)
+    cl( "recalcIdx( " + pIdx + ", " + pTitle + ")" )
     cl('currency=  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value, 'quiet' )
 
     let currency = parseInt( getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value )
@@ -10,7 +11,7 @@ let recalcIdx = function( pIdx, pTitle, pScore ){
         + parseInt( gRole[ pTitle ][ pIdx ].dropDownSet.bitmap )
         * (currency/3);
 
-    pScore = parseInt( newScore )
+    let score = parseInt( newScore )
 
     cl( 'currency: ' + currency +
         " gLevels: " + parseInt( gLevels[ pTitle ][ pIdx ].dropDownSet.bitmap ) +
@@ -20,14 +21,19 @@ let recalcIdx = function( pIdx, pTitle, pScore ){
         , 'quiet' ) 
          )
 
+    updateBar( pTitle, pIdx, score )
+	return parseInt( score )
+}
+
+let updateBar = function( pTitle, pIdx, pScore ){
     getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).setAttribute('style',"width:"+parseInt( pScore ))
     getElxId( gCells[ pTitle ].row[ pIdx ].Td6dataId ).innerHTML=parseInt( pScore )
-	return parseInt( pScore )
 }
+
 let recalc = function( pIdx, pTitle, pScore ){
-    cl( 'recalc( "' + pIdx + '","' + pTitle + '","' + parseInt( pScore) + '") ...', 'quiet');// idx likee 'AppDev - Desktop'
-    cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value, 'quiet' )
-	recalcIdx( pIdx, pTitle, pScore )
+    //cl( 'recalc( "' + pIdx + '","' + pTitle + '","' + parseInt( pScore) + '") ...', 'quiet');// idx likee 'AppDev - Desktop'
+    //cl('  ' + getElxId( gCells[ pTitle ].row[ pIdx ].Td5SelectId ).value, 'quiet' )
+	recalcIdx( pIdx, pTitle )
 }
 let addMethodSelector = function( pId, idx ){
 	let thisId = tag('select',pId,'',{'onchange':"recalc('" + idx +"');"})
